@@ -1,0 +1,43 @@
+{% extends 'main_app/base.html' %}
+{% block content %}
+
+
+{% if available %}
+  <h1 class="display-4">Question</h1>
+  <p class="lead">{{question | safe}}</p>
+  <hr class="my-4">
+
+  <p class="lead">Answer</p>
+  <p>{{answer}}</p>
+
+  <p>
+    <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+      Show / Hide Solution
+    </button>
+  </p>
+  <div class="collapse" id="collapseExample">
+    <div class="card card-body">
+      <p class="lead">Solution</p>
+      <p>$${{solution}}$$</p>
+    </div>
+  </div>
+
+<form  action="{% url 'question_customize_reroll' %}" method="POST">
+  <button type="submit" class="btn btn-primary m-1">Next</button>
+  <input type="hidden" name="reroll" value="{{subtopic_reroll}}">
+  {% csrf_token %}
+</form>
+
+<a class="btn btn-primary btn m-1" href="{%url 'question_customize'%}" role="button">Topic Select</a>
+
+{% else %}
+
+<div class="alert alert-info" role="alert">
+  No available questions for this selection.
+</div>
+
+{% endif %}
+
+
+
+{% endblock %}
