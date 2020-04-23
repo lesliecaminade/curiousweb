@@ -1,0 +1,28 @@
+{% extends 'main_app/base.html' %}
+{% block content %}
+
+<div class="jumbotron">
+  <h1 class="display-4">Customize Question</h1>
+  <p class="lead">Click the topic or subtopic that you want the questions to come from</p>
+  <hr class="my-4">
+
+<form action="{%url 'question_customize' %}" method="POST">
+
+  <div class="form-group">
+    <label for="exampleFormControlSelect1">Subtopic</label>
+    <select class="form-control" id="exampleFormControlSelect1" name="subtopic">
+      {% for subtopic in subtopics %}
+        <option>{{ subtopic }}</option>
+      {% endfor %}
+    </select>
+  </div>
+
+  <button type="submit" class="btn btn-primary">Go</button>
+{% csrf_token %}
+</form>
+
+
+
+
+
+{% endblock %}
