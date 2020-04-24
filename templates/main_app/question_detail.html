@@ -3,19 +3,37 @@
 
 
 {% if available %}
+
+<!-- jquery scriipt -->
+<script src="/static/js/jquery-3.5.0.min.js" type="text/javascript"></script>
+
+
   <h1 class="display-4">Question</h1>
   <p class="lead">{{question | safe}}</p>
   <hr class="my-4">
 
-  <p class="lead">Answer</p>
-  <p>{{answer}}</p>
+
 
   <p>
-    <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-      Show / Hide Solution
-    </button>
+    <button id="answerButton" class="btn btn-primary btn-block" type="button" data-toggle="collapse" data-target="#collapseAnswer" aria-expanded="false" aria-controls="collapseAnswer" disabled> <span id="spinner1" class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span></button>
   </p>
-  <div class="collapse" id="collapseExample">
+
+  <div class="collapse" id="collapseAnswer">
+    <div class="card card-body">
+      <p class="lead">Answer</p>
+      <p>{{answer}}</p>
+    </div>
+  </div>
+
+  <p>
+    <button id="solutionButton" class="btn btn-info btn-block" type="button" data-toggle="collapse" data-target="#collapseSolution" aria-expanded="false" aria-controls="collapseSolution" disabled><span id="spinner2" class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span></button>
+  </p>
+
+  <div class="progress">
+    <div id="solutionProgressBar" class="progress-bar mt-1 mb-1" role="progressbar" style="width: 0%;" aria-valuemin="0" aria-valuemax="100"></div>
+  </div>
+
+  <div class="collapse" id="collapseSolution">
     <div class="card card-body">
       <p class="lead">Solution</p>
       <p>$${{solution}}$$</p>
@@ -23,12 +41,12 @@
   </div>
 
 <form  action="{% url 'question_customize_reroll' %}" method="POST">
-  <button type="submit" class="btn btn-primary m-1">Next</button>
+  <button type="submit" class="btn btn-primary mt-1 mb-1">Next</button>
   <input type="hidden" name="reroll" value="{{subtopic_reroll}}">
   {% csrf_token %}
 </form>
 
-<a class="btn btn-primary btn m-1" href="{%url 'question_customize'%}" role="button">Topic Select</a>
+<a class="btn btn-primary btn mt-1 mb-1" href="{%url 'question_customize'%}" role="button">Topic Select</a>
 
 {% else %}
 
@@ -38,6 +56,51 @@
 
 {% endif %}
 
+<script type="text/javascript">
+var timeout = 60000;
+var timeout2 = 60000;
+var progressbartimer = 0
+
+setTimeout(function() {
+        $("#answerButton").removeAttr("disabled"); // or removeAttr("disabled");
+        $("#answerButton").text("Answer");
+      }, timeout);
+
+setTimeout(function() {
+        $("#solutionButton").removeAttr("disabled"); // or removeAttr("disabled");
+        $("#solutionButton").text("Solution");
+
+      }, timeout2);
+
+$(document).ready(function () {
+
+function barLoop() {
+  setTimeout(function(){
+    progressbartimer = progressbartimer + Math.floor((Math.random() * 5) + 1);;
+    width_string = progressbartimer.toString() +"%"
+    $("#solutionProgressBar").css("width", width_string);
+    $("#solutionProgressBar").attr("aria-valuenow", width_string);
+    if (progressbartimer < 100){
+      barLoop();
+    }else{
+      $("#solutionButton").removeAttr("disabled"); // or removeAttr("disabled");
+      $("#solutionButton").text("Solution");
+      $("#answerButton").removeAttr("disabled"); // or removeAttr("disabled");
+      $("#answerButton").text("Answer");
+      $("#solutionProgressBar").css("visibility", 'hidden');
+    }
+  }, 600)
+
+
+}
+
+barLoop();
+
+})
+
+
+
+</script>
 
 
 {% endblock %}

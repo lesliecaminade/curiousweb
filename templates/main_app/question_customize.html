@@ -11,6 +11,7 @@
   <div class="form-group">
     <label for="exampleFormControlSelect1">Subtopic</label>
     <select class="form-control" id="exampleFormControlSelect1" name="subtopic">
+        <option>Select a topic</option>
       {% for subtopic in subtopics %}
         <option>{{ subtopic }}</option>
       {% endfor %}
