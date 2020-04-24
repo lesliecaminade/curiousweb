@@ -25,9 +25,12 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 SECRET_KEY = '-k)w3)n6$h#i*(b!kp8(y0+145syat&(&a3v&i-ptij-mla4h#'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ['siliconcortex.pythonanywhere.com']
+ALLOWED_HOSTS = [
+'siliconcortex.pythonanywhere.com',
+'127.0.0.1'
+]
 
 
 # Application definition

@@ -48,6 +48,7 @@ def question_detail(request):
     return render(request, 'main_app/question_detail.html', context)
 
 def question_customize(request):
+    subtopic_found = False
     if request.method == "POST":
         for subtopic in subtopics_keys:
             if request.POST['subtopic'] == str(subtopic):
@@ -55,6 +56,18 @@ def question_customize(request):
                 print(request.POST)
                 print(request.POST['subtopic'])
                 subtopic_found = subtopic
+
+
+        if subtopic_found == False:
+            #this code runs if the default combobx value was not changed
+            #topics = topics_keys
+            subtopics = subtopics_keys
+
+            context = {
+                #'topics':topics,
+                'subtopics':subtopics,
+            }
+            return render(request, 'main_app/question_customize.html', context)
 
         #retrieve the proper set of questions
         question_pool = questions_by_subtopic[subtopic_found]
