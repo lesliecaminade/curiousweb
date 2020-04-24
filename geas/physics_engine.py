@@ -98,7 +98,7 @@ class example_2_4:
 		time = c.time(random_handler.main(20),'s')
 		ask = ['the average speed', 'the average acceleration', 'the distance travelled']
 		variation = random.randint(0, len(ask) - 1)
-		self.question = f"""A truck's speed increases uniformly from {round(velocity1.kmperh,2)} km/h to {round(velocity2.kmperh,2)} km/h in {round(time.s,2)} s. Determine a) the average speed, b) the average acceleration, c) the distance traveled, all in units of meters and seconds."""
+		self.question = f"""A truck's speed increases uniformly from {round(velocity1.kmperh,2)} km/h to {round(velocity2.kmperh,2)} km/h in {round(time.s,2)} s. Determine {ask[variation]}, all in units of meters and seconds."""
 
 		vAverage = c.velocity(0.5*(velocity1.mpers + velocity2.mpers))
 		aAverage = c.acceleration((velocity2.mpers - velocity1.mpers)/2)
