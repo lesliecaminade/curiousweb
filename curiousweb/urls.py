@@ -32,8 +32,8 @@ urlpatterns = [
     path('', views.landing, name='landing'),
     path('question/', views.question_detail, name='question_detail'),
     path('question/custom/', views.question_customize, name='question_customize'),
-    path('question/reroll/', views.question_customize_reroll, name='question_customize_reroll')
-
+    path('question/reroll/', views.question_customize_reroll, name='question_customize_reroll'),
+    path('report-error/', views.report_error, name='report_error'),
 
 
     # path('login/', auth_views.LoginView.as_view(),{'template_name':'registration/login.html'},name='login'),

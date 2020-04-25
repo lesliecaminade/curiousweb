@@ -6,8 +6,7 @@
 
 <!-- jquery scriipt -->
 <script src="/static/js/jquery-3.5.0.min.js" type="text/javascript"></script>
-
-
+<div class="container">
   <h1 class="display-4">Question</h1>
   <p class="lead">{{question | safe}}</p>
   <hr class="my-4">
@@ -39,14 +38,23 @@
       <p>$${{solution}}$$</p>
     </div>
   </div>
+</div>
 
-<form  action="{% url 'question_customize_reroll' %}" method="POST">
-  <button type="submit" class="btn btn-primary mt-1 mb-1">Next</button>
-  <input type="hidden" name="reroll" value="{{subtopic_reroll}}">
-  {% csrf_token %}
-</form>
 
-<a class="btn btn-primary btn mt-1 mb-1" href="{%url 'question_customize'%}" role="button">Topic Select</a>
+
+<div class="container">
+  <form  action="{% url 'question_customize_reroll' %}" method="POST">
+    <button type="submit" class="btn btn-primary mt-1 mb-1">Next</button>
+    <input type="hidden" name="reroll" value="{{subtopic_reroll}}">
+    {% csrf_token %}
+  </form>
+
+  <a class="btn btn-primary btn mt-1 mb-1" href="{%url 'question_customize'%}" role="button">Topic Select</a>
+  <a class="btn btn-danger btn mt-1 mb-1" href="{%url 'report_error'%}" role="button">Report Error</a>
+</div>
+
+
+
 
 {% else %}
 
@@ -69,25 +77,29 @@ setTimeout(function() {
 setTimeout(function() {
         $("#solutionButton").removeAttr("disabled"); // or removeAttr("disabled");
         $("#solutionButton").text("Solution");
-
       }, timeout2);
 
 $(document).ready(function () {
 
 function barLoop() {
   setTimeout(function(){
-    progressbartimer = progressbartimer + Math.floor((Math.random() * 5) + 1);;
+    progressbartimer = progressbartimer + Math.floor((Math.random() * 10) + 1);;
     width_string = progressbartimer.toString() +"%"
     $("#solutionProgressBar").css("width", width_string);
     $("#solutionProgressBar").attr("aria-valuenow", width_string);
     if (progressbartimer < 100){
       barLoop();
     }else{
-      $("#solutionButton").removeAttr("disabled"); // or removeAttr("disabled");
-      $("#solutionButton").text("Solution");
       $("#answerButton").removeAttr("disabled"); // or removeAttr("disabled");
       $("#answerButton").text("Answer");
-      $("#solutionProgressBar").css("visibility", 'hidden');
+
+      setTimeout(function() {
+              $("#solutionButton").removeAttr("disabled"); // or removeAttr("disabled");
+              $("#solutionButton").text("Solution");
+              $("#solutionProgressBar").css("visibility", 'hidden');
+            }, 2500);
+
+
     }
   }, 600)
 
@@ -97,9 +109,6 @@ function barLoop() {
 barLoop();
 
 })
-
-
-
 </script>
 
 

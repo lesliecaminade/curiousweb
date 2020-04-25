@@ -1,13 +1,17 @@
 {% extends 'main_app/base.html' %}
 {% block content %}
 
-<div class="jumbotron">
+<div class="container">
   <h1 class="display-4">Welcome To Project Curious Web</h1>
   <p class="lead">This is a site wherein you can find most common questions asked in the PRC Engineering Board Exams. You can find here problem solving questions with their corresponding solutions.</p>
   <hr class="my-4">
   <p>This is an ongoing project of CERTC <img src="/static/main_logo.png" width="30" height="30" class="d-inline-block align-top" alt=""></p>
 
   <a class="btn btn-primary btn-lg" href="{%url 'question_customize' %}" role="button">Try Demo</a>
+
+
+  <img src="/static/cover_photo_certc_1000p.png" class="img-fluid mt-4" alt="Responsive image">
 </div>
+
 
 {% endblock %}

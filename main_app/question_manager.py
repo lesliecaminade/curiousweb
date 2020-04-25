@@ -10,10 +10,11 @@ topics_keys = [
 
 subtopics_keys = [
     'Electronics: Power Electronics',
-    'Sciences: Constant Acceleration in One Dimension',
+    'Sciences: One Dimension Kinematics',
+    'Sciences: Kinetics'
 ]
 
-constant_acceleration_in_one_dimension = [
+one_dimension_kinematics = [
     example_2_1,
     example_2_2,
     example_2_3,
@@ -34,6 +35,35 @@ constant_acceleration_in_one_dimension = [
     example_2_21,
 ]
 
+kinetics = [
+    example_3_1,
+    example_3_2,
+    example_3_3,
+    example_3_4,
+    example_3_5,
+    example_3_6,
+    example_3_7,
+    example_3_8,
+    example_3_9,
+    example_3_10,
+    example_3_11,
+    example_3_13,
+    example_3_14,
+    example_3_15,
+    example_3_16,
+    example_3_17,
+    example_3_18,
+    example_3_19,
+    example_3_20,
+    example_3_21,
+    example_3_22,
+    example_3_23,
+    example_3_24,
+    example_3_25,
+    example_3_26,
+]
+
+
 power_electronics = [
     fewson_2_1,
     fewson_2_2,
@@ -50,10 +80,11 @@ power_electronics = [
 
 questions_by_subtopic = {
     subtopics_keys[0]:power_electronics,
-    subtopics_keys[1]:constant_acceleration_in_one_dimension,
+    subtopics_keys[1]:one_dimension_kinematics,
+    subtopics_keys[2]:kinetics,
 }
 
 questions_by_topic ={
     topics_keys[3]: power_electronics,
-    topics_keys[2]: constant_acceleration_in_one_dimension,
+    topics_keys[2]: one_dimension_kinematics + kinetics,
 }
