@@ -9,4 +9,4 @@ from uuid import uuid4
 class ErrorReport(models.Model):
     email = models.EmailField()
     description = models.CharField(max_length = 1000)
-    image = models.ImageField()
+    image = models.ImageField(blank = True)
