@@ -1,8 +1,8 @@
 """Importing models """
-from main_app.models import Topic, SubTopic, Question
+from main_app.models import ErrorReport
 
 """Import the forms"""
-from main_app.forms import QuestionCustomizeForm
+#from main_app.forms import QuestionCustomizeForm
 
 """Import the class-based-view login required
 Import the function-based-view login required"""
@@ -24,6 +24,7 @@ from django.utils import timezone
 import random
 from electronics.power_electronics_engine import *
 from main_app.question_manager import topics_keys, subtopics_keys, questions_by_subtopic, questions_by_topic
+import requests as requests_library
 
 def landing(request):
     return render(request, 'main_app/landing.html')
@@ -131,3 +132,22 @@ def question_customize_reroll(request):
             'subtopics':subtopics,
         }
         return render(request, 'main_app/question_customize.html', context)
+
+def report_error(request):
+    if request.method =="POST":
+        email = request.POST['email']
+        description = request.POST['description']
+        image = request.POST['image']
+        recaptcha = request.POST['g-recaptcha-response']
+        recaptcha_data = {
+            'secret': '6Lc1CO4UAAAAACs9XqPf35SGvdtP-0QmDM0n0K6V',
+            'response': recaptcha,
+        }
+        google_captcha_response = requests_library.post('https://www.google.com/recaptcha/api/siteverify', recaptcha_data)
+        if 'true' in google_captcha_response.text:
+            #create and save the object
+            error_report = ErrorReport.objects.create(email = email, description = description, image = image)
+            error_report.save()
+        return render(request, 'main_app/landing.html')
+    else:
+        return render(request, 'main_app/report_error.html')

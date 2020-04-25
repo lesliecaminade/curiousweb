@@ -23,9 +23,9 @@ class example_2_1:
 
 		self.question = f"""Change the speed {round(velocity.cmpers,2)} cm/s to kilometers per year."""
 		self.answer = f"""{round(velocity.kmperyear,2)} km/year."""
-		self.latex_solution = f"""{LATEX_ITEM_PREFIX}
+		self.latex_solution = f"""{lpref}
 {round(velocity.cmpers,2)} \\frac{{	\\\text{{cm}}}}{{ \\text{{s}}}} \\frac{{\\text{{km}}}} {{100 \\text{{cm}}}} \\frac{{31556952 \\text{{s}}}}{{\\text{{year}}}} &= {round(velocity.kmperyear,2)} \\frac{{\\text{{km}}}}{{\\text{{year}}}} \\\\
-{LATEX_ITEM_SUFFIX}"""
+{lsuff}"""
 
 class example_2_2:
 	def __init__(self,*args,**kwargs):
@@ -43,16 +43,16 @@ class example_2_2:
 		if ask[variation] == 'speed':
 			self.latex_solution = f"""{lpref}
 |v| &= \\frac{{d}}{{t}} \\\\
-|v| &= \\frac{{	{distance.m:.4g}}} {{ {time.s:.4g} }} \\\\
-|v| &= {aveSpeed.mpers:.4g} \\frac{{m}}{{s}} \\\\
+&= \\frac{{	{distance.m:.4g}}} {{ {time.s:.4g} }} \\\\
+&= {aveSpeed.mpers:.4g} \\frac{{m}}{{s}} \\\\
 {lsuff}"""
 
 		else:
 			self.latex_solution = f"""{lpref}
 |v| &= \\frac{{s}}{{t}} \\\\
-|v| &= \\frac{{	0 }} {{ {time.s:.4g} }} \\\\
+&= \\frac{{	0 }} {{ {time.s:.4g} }} \\\\
 \\text{{The runner is back at the starting point, hence, zero displacement.}}
-|v| &= 0 \\frac{{m}}{{s}} \\\\
+&= 0 \\frac{{m}}{{s}} \\\\
 {lsuff}"""
 
 class example_2_3:
@@ -73,22 +73,22 @@ class example_2_3:
 		if variation == 0:
 			self.latex_solution = f"""{lpref}
 v &= at \\\\
-v &= \\left({acceleration.mpers2:.4g} \\right) \\left( 	{time.s:.4g} \\right)  \\\\
-v &= {velocity.mpers:.4g} \\frac{{m}}{{s}} \\\\
+&= \\left({acceleration.mpers2:.4g} \\right) \\left( 	{time.s:.4g} \\right)  \\\\
+&= {velocity.mpers:.4g} \\frac{{m}}{{s}} \\\\
 {lsuff}"""
 
 		elif variation == 1:
 			self.latex_solution = f"""{lpref}
 \\bar{{v}} &= \\frac{{v}}{{t}} \\\\
-\\bar{{v}} &= \\frac{{ {velocity.mpers:.4g}}}{{ 2 }} \\\\
-\\bar{{v}} &= {aveVelocity.mpers:.4g} \\frac{{m}}{{s}} \\\\
+ &= \\frac{{ {velocity.mpers:.4g}}}{{ 2 }} \\\\
+&= {aveVelocity.mpers:.4g} \\frac{{m}}{{s}} \\\\
 {lsuff}"""
 
 		else:
 			self.latex_solution = f"""{lpref}
 \\bar{{s}} &= \\frac{{1}}{{2}} a t^2 \\\\
-\\bar{{s}} &= \\frac{{1}}{{2}} \\left({acceleration.mpers2:.4g}\\right) \\left({time.s:.4g}\\right)^2 \\\\
-\\bar{{s}} &= {distance.m:.4g} \\text{{m}} \\\\
+&= \\frac{{1}}{{2}} \\left({acceleration.mpers2:.4g}\\right) \\left({time.s:.4g}\\right)^2 \\\\
+ &= {distance.m:.4g} \\text{{m}} \\\\
 {lsuff}"""
 
 class example_2_4:
@@ -109,22 +109,22 @@ class example_2_4:
 		if variation == 0:
 			self.latex_solution = f"""{lpref}
 \\bar{{v}} &= \\frac{{v_1 + v_2}}{{2}} \\\\
-\\bar{{v}} &= \\frac{{	{velocity1.mpers:.4g} + {velocity2.mpers:.4g}}}{{2}} \\\\
-\\bar{{v}} &= {vAverage.mpers:.4g} \\frac{{m}}{{s}} \\\\
+&= \\frac{{	{velocity1.mpers:.4g} + {velocity2.mpers:.4g}}}{{2}} \\\\
+&= {vAverage.mpers:.4g} \\frac{{m}}{{s}} \\\\
 {lsuff}"""
 
 		elif variation == 1:
 			self.latex_solution = f"""{lpref}
 \\bar{{a}} &= \\frac{{v_2 - v_1}}{{2}} \\\\
-\\bar{{a}} &= \\frac{{	{velocity2.mpers:.4g} - {velocity1.mpers:.4g}}}{{2}} \\\\
-\\bar{{a}} &= {aAverage.mpers2} \\frac{{m}}{{s^2}} \\\\
+&= \\frac{{	{velocity2.mpers:.4g} - {velocity1.mpers:.4g}}}{{2}} \\\\
+&= {aAverage.mpers2} \\frac{{m}}{{s^2}} \\\\
 {lsuff}"""
 
 		elif variation == 2:
 			self.latex_solution = f"""{lpref}
 |s| &= \\bar{{v}} \\left(t\\right) \\\\
-|s| &= \\left({vAverage.mpers:.4g}\\right)	\\left({time.s:.4g}\\right) \\\\
-|s| &= {distance.m:.4g} \\text{{m}} \\\\
+&= \\left({vAverage.mpers:.4g}\\right)	\\left({time.s:.4g}\\right) \\\\
+&= {distance.m:.4g} \\text{{m}} \\\\
 {lsuff}"""
 
 class example_2_8:
@@ -142,14 +142,14 @@ class example_2_8:
 		if variation == 0:
 			self.latex_solution = f"""{lpref}
 v_f &= \\sqrt{{	2 g h	}} \\\\
-v_f &= \\sqrt{{	2 \\left({gravity.mpers2:.4g}\\right) \\left({height.m:.4g}\\right)	}} \\\\
-v_f &= {velocityFinal.mpers:.4g} \\frac{{\\text{{m}}}}{{	\\text{{s}}}} \\\\
+&= \\sqrt{{	2 \\left({gravity.mpers2:.4g}\\right) \\left({height.m:.4g}\\right)	}} \\\\
+&= {velocityFinal.mpers:.4g} \\frac{{\\text{{m}}}}{{	\\text{{s}}}} \\\\
 {lsuff}"""
 		else:
 			self.latex_solution = f"""{lpref}
 t &= \\frac{{v_f}}{{g}} \\\\
-t &= \\frac{{	{velocityFinal.mpers:.4g}}}{{ {gravity.mpers2:.4g}}} \\\\
-t &= {time.s:.4g} \\text{{s}} \\\\
+&= \\frac{{	{velocityFinal.mpers:.4g}}}{{ {gravity.mpers2:.4g}}} \\\\
+&= {time.s:.4g} \\text{{s}} \\\\
 {lsuff}"""
 
 class example_2_9:
@@ -166,12 +166,12 @@ class example_2_9:
 		self.answer = f"""{round(time2.s,2)} s."""
 		self.latex_solution = f"""{lpref}
 a &= \\frac{{ 2 |s| }} {{t_1^2}} \\\\
-a &= \\frac{{2 \\left({distance.m:.4g}\\right)}}{{\\left({time1.s:.4g}\\right)^2}} \\\\
-a &= {acceleration.mpers2:.4g} \\frac{{m}}{{s^2}} \\\\
+&= \\frac{{2 \\left({distance.m:.4g}\\right)}}{{\\left({time1.s:.4g}\\right)^2}} \\\\
+&= {acceleration.mpers2:.4g} \\frac{{m}}{{s^2}} \\\\
 \\\\
 t_2 &= \\frac{{v}}{{a}} \\\\
-t_2 &= \\frac{{	{velocity.mpers:.4g} }}{{	{acceleration.mpers2:.4g}}} \\\\
-t_2 &= {time2.s:.4g} s \\\\
+&= \\frac{{	{velocity.mpers:.4g} }}{{	{acceleration.mpers2:.4g}}} \\\\
+&= {time2.s:.4g} s \\\\
 {lsuff}"""
 
 class example_2_10:
@@ -187,12 +187,9 @@ class example_2_10:
 
 		self.latex_solution = f"""{lpref}
 |s| &= \\frac{{v^2}}{{2a}} \\\\
-|s| &= -\\frac{{\\left(	{velocity.mpers:.4g}\\right)}}{{2 \\left({deceleration.mpers2:.4g}\\right)}} \\\\
-|s| &= {distance.m:.4g} m \\\\
+&= -\\frac{{\\left(	{velocity.mpers:.4g}\\right)}}{{2 \\left({deceleration.mpers2:.4g}\\right)}} \\\\
+&= {distance.m:.4g} m \\\\
 {lsuff}"""
-
-
-
 
 
 class example_2_11:
@@ -224,15 +221,15 @@ class example_2_11:
 		if variation == 0:
 			self.latex_solution = f"""{lpref}
 a &= \\frac{{v_f - v_i}} 	{{	t}} \\\\
-a &= \\frac{{ \\left({velocityFinal.mpers:.4g}\\right) - \\left({velocityInit.mpers:.4g}\\right)}} {{	{timeLarger.s:.4g}}} \\\\
-a &= {acceleration.mpers2:.4g} \\frac{{m}}{{s^2}} \\\\
+&= \\frac{{ \\left({velocityFinal.mpers:.4g}\\right) - \\left({velocityInit.mpers:.4g}\\right)}} {{	{timeLarger.s:.4g}}} \\\\
+&= {acceleration.mpers2:.4g} \\frac{{m}}{{s^2}} \\\\
 {lsuff}"""
 
 		else:
 			self.latex_solution = f"""{lpref}
 |s_3| &= \\Delta t v + \\frac{{1}}{{2}} g \\Delta t \\\\
-|s_3| &= \\left(3 - 2\\right) {velocityInit.mpers:.4g}+ \\frac{{1}}{{2}} \\left({gravity.mpers2:.4g} \\right) \\left(3-2\\right) \\\\
-|s_3| &= {distanceThirdSecond.m:.4g} m \\\\
+&= \\left(3 - 2\\right) {velocityInit.mpers:.4g}+ \\frac{{1}}{{2}} \\left({gravity.mpers2:.4g} \\right) \\left(3-2\\right) \\\\
+&= {distanceThirdSecond.m:.4g} m \\\\
 {lsuff}"""
 
 class example_2_12:
@@ -252,12 +249,12 @@ class example_2_12:
 			self.answer = f"""{round(restDistance.m,2)} m"""
 			self.latex_solution = f"""{lpref}
 a &= \\frac{{ v_f^2 - v_i^2 }} {{2 s}} \\\\
-a &= \\frac{{ {velocityFinal.mpers:.4g}^2 - {velocityInit.mpers:.4g}^2 }} {{ 2 \\left({distance.m:.4g}\\right)    }} \\\\
-a &= {acceleration.mpers2:.4g} \\frac{{m}}{{s^2}} \\\\
+&= \\frac{{ {velocityFinal.mpers:.4g}^2 - {velocityInit.mpers:.4g}^2 }} {{ 2 \\left({distance.m:.4g}\\right)    }} \\\\
+&= {acceleration.mpers2:.4g} \\frac{{m}}{{s^2}} \\\\
 \\\\
 s &= \\frac{{v_f^2 - v_i^2}} {{2 a}} \\\\
-s &= \\frac{{0 - {velocityInit.mpers:.4g}^2}} {{2 \\left({acceleration.mpers2:.4g}\\right)}} \\\\
-s &= {restDistance.m:.4g} m\\\\
+&= \\frac{{0 - {velocityInit.mpers:.4g}^2}} {{2 \\left({acceleration.mpers2:.4g}\\right)}} \\\\
+&= {restDistance.m:.4g} m\\\\
 {lsuff}"""
 			if velocityInit.mpers > velocityFinal.mpers:
 				regen = False
@@ -272,8 +269,8 @@ class example_2_13:
 		self.answer = f"""{round(velocityInit.mpers,2)} m/s"""
 		self.latex_solution = f"""{lpref}
 v_i &= \\sqrt{{ 2 g h}} \\\\
-v_i &= \\sqrt{{ 2 \\left({gravity.mpers2:.4g}\\right)  \\left({height.m:4g}\\right)}} \\\\
-v_i &= {velocityInit.mpers:.4g} \\frac{{m}}{{s}} \\\\
+&= \\sqrt{{ 2 \\left({gravity.mpers2:.4g}\\right)  \\left({height.m:4g}\\right)}} \\\\
+&= {velocityInit.mpers:.4g} \\frac{{m}}{{s}} \\\\
 {lsuff}"""
 
 class example_2_14:
@@ -291,12 +288,12 @@ class example_2_14:
 		self.answer = f"""{round(time.s,2)} s"""
 		self.latex_solution = f"""{lpref}
 v_f &= -\\sqrt{{v_i^2 - 2gh	}} \\\\
-v_f &= -\\sqrt{{\\left({velocityInit.mpers:.4g}\\right)^2 - 2 \\left({gravity.mpers2:.4g}\\right)	\\left({height.m:.4g}\\right)}} \\\\
-v_f &= {velocityFinal.mpers:.4g} \\frac{{m}}{{s}} \\\\
+&= -\\sqrt{{\\left({velocityInit.mpers:.4g}\\right)^2 - 2 \\left({gravity.mpers2:.4g}\\right)	\\left({height.m:.4g}\\right)}} \\\\
+&= {velocityFinal.mpers:.4g} \\frac{{m}}{{s}} \\\\
 \\\\
 t &= \\frac{{v_f - v_i}} / {{-g}} \\\\
-t &= \\frac{{	{velocityFinal.mpers:.4g} - {velocityInit.mpers:.4g}}} {{ -{gravity.mpers2:.4g}}} \\\\
-t &= {time.s:.4g} s \\\\
+&= \\frac{{	{velocityFinal.mpers:.4g} - {velocityInit.mpers:.4g}}} {{ -{gravity.mpers2:.4g}}} \\\\
+&= {time.s:.4g} s \\\\
 {lsuff}"""
 
 
@@ -314,8 +311,8 @@ class example_2_15:
 
 		self.latex_solution = f"""{lpref}
 v_i &= \\frac{{1}}{{2}}  g t \\\\
-v_i &= \\frac{{1}}{{2}} \\left({gravity.mpers2:.4g}\\right) \\left({returnTime.s:.4g}\\right) \\\\
-v_i &= {velocityInitial.mpers:.4g} \\frac{{m}}{{s}} \\\\
+&= \\frac{{1}}{{2}} \\left({gravity.mpers2:.4g}\\right) \\left({returnTime.s:.4g}\\right) \\\\
+&= {velocityInitial.mpers:.4g} \\frac{{m}}{{s}} \\\\
 {lsuff}"""
 
 
@@ -336,16 +333,16 @@ class example_2_16:
 
 		self.latex_solution = f"""{lpref}
 h_{{max}} &= \\frac{{v_i^2}}{{2g_{{moon}}}} \\\\
-h_{{max}} &= \\frac{{	{velocityInitial.mpers:.4g}^2}}{{2\\times {gravityMoon.mpers2:.4g}}} \\\\
-h_{{max}} &= {maxHeight.m:.4g} m \\\\
+&= \\frac{{	{velocityInitial.mpers:.4g}^2}}{{2\\times {gravityMoon.mpers2:.4g}}} \\\\
+&= {maxHeight.m:.4g} m \\\\
 \\\\
 t_{{h_{{max}}}} &= \\frac{{v_i}}{{g_{{moon}}}}\\\\
-t_{{h_{{max}}}} &= \\frac{{	{velocityInitial.mpers:.4g}}}{{	{gravityMoon.mpers2:.4g}}}\\\\
-t_{{h_{{max}}}} &= {timeMaxHeight.s:.4g} s\\\\
+&= \\frac{{	{velocityInitial.mpers:.4g}}}{{	{gravityMoon.mpers2:.4g}}}\\\\
+&= {timeMaxHeight.s:.4g} s\\\\
 \\\\
 v_f &= v_i - g_{{moon}} t \\\\
-v_f &= {velocityInitial.mpers:.4g} - {gravityMoon.mpers2:.4g} \\times {time.s:.4g}  \\\\
-v_f &= {velocityFinal.mpers:.4g} \\frac{{m}}{{s}} \\\\
+&= {velocityInitial.mpers:.4g} - {gravityMoon.mpers2:.4g} \\times {time.s:.4g}  \\\\
+&= {velocityFinal.mpers:.4g} \\frac{{m}}{{s}} \\\\
 \\\\
 \\text{{solve for}} t \\text{{in the nonlinear equation}}\\\\
 d_{{specified}} &= v_i t - \\frac{{1}}{{2}} g_{{moon}} t^2 \\\\
@@ -376,12 +373,12 @@ v_i^2 - 2 g h_{{max}} &= 0 \\\\
 h_{{max}} &= {maxHeight.m:.4g} m\\\\
 \\\\
 s_{{t = {timeSpecific.s:.2g}}} &= h + v_i t_{{specific}} - \\frac{{1}}{{2}} g t_{{specific}}^2 \\\\
-s_{{t = {timeSpecific.s:.2g}}} &= {height.m:.4g} + {velocityInitial.mpers:.4g} \\times  {timeSpecific.s:.4g} - \\frac{{1}}{{2}} \\times {gravity.mpers2:.4g} \\times {timeSpecific.s:.4g}^2 \\\\
-s_{{t = {timeSpecific.s:.2g}}} &= {positionAtTime.m:.4g} m \\\\
+&= {height.m:.4g} + {velocityInitial.mpers:.4g} \\times  {timeSpecific.s:.4g} - \\frac{{1}}{{2}} \\times {gravity.mpers2:.4g} \\times {timeSpecific.s:.4g}^2 \\\\
+&= {positionAtTime.m:.4g} m \\\\
 \\\\
 v_{{t = {timeSpecific.s:.2g}}} &= v_i  - g t_{{specific}} \\\\
-v_{{t = {timeSpecific.s:.2g}}} &= {velocityInitial.mpers:.4g}  - {gravity.mpers2:.4g} \\times  {timeSpecific.s:.2g} \\\\
-v_{{t = {timeSpecific.s:.2g}}} &= {velocityAtTime.mpers:.4g} \\frac{{m}}{{s}} \\\\
+ &= {velocityInitial.mpers:.4g}  - {gravity.mpers2:.4g} \\times  {timeSpecific.s:.2g} \\\\
+ &= {velocityAtTime.mpers:.4g} \\frac{{m}}{{s}} \\\\
 \\\\
 \\text{{solving for}} t \\{{which is larger}}\\\\
 h + v_i t - \\frac{{1}}{{2}} g t^2 &= 0\\\\
@@ -412,19 +409,19 @@ h_i + v_{{iy}} t - \\frac{{1}}{{2}} g t^2 &= 0 \\\\
 t_{{landing}} &= {timeToLand.s:.4g} s \\\\
 \\\\
 x &= v_{{ix}} t \\\\
-x &= {velocityInitialX.mpers:.4g} \\times {timeToLand.s:.4g} \\\\
-x &= {xDistance.m:.4g} m \\\\
+&= {velocityInitialX.mpers:.4g} \\times {timeToLand.s:.4g} \\\\
+&= {xDistance.m:.4g} m \\\\
 \\\\
 v_{{fx}} &= v_{{ix}} \\\\
-v_{{fx}} &= {velocityFinalX.mpers:.4g} \\frac{{m}}{{s}} \\\\
+&= {velocityFinalX.mpers:.4g} \\frac{{m}}{{s}} \\\\
 \\\\
 v_{{fy}} &= - g t \\\\
-v_{{fy}} &= - {gravity.mpers2:.4g} \\times {timeToLand.s:.4g} \\\\
-v_{{fy}} &= {velocityFinalY.mpers:.4g} \\frac{{m}}{{s}} \\\\
+&= - {gravity.mpers2:.4g} \\times {timeToLand.s:.4g} \\\\
+&= {velocityFinalY.mpers:.4g} \\frac{{m}}{{s}} \\\\
 \\\\
 v_f &= \\sqrt{{ v_{{fx}}^2 + v_{{fy}}^2 }} \\\\
-v_f &= \\sqrt{{ {velocityFinalX.mpers:.4g}^2 + {velocityFinalY.mpers:.4g}^2 }} \\\\
-v_f &= {velocityFinal.mpers:.4g} \\frac{{m}}{{s}} \\\\
+&= \\sqrt{{ {velocityFinalX.mpers:.4g}^2 + {velocityFinalY.mpers:.4g}^2 }} \\\\
+&= {velocityFinal.mpers:.4g} \\frac{{m}}{{s}} \\\\
 {lsuff}"""
 
 
@@ -446,8 +443,8 @@ h_i + v_{{iy}} t - \\frac{{1}}{{2}} g t^2 &= 0 \\\\
 t &= {t.s:.4g} s \\\\
 \\\\
 x &= v_{{ix}} t \\\\
-x &= {vix.mpers:.4g} \\times {t.s:.4g} \\\\
-x &= {xDistance:.4g} m \\\\
+&= {vix.mpers:.4g} \\times {t.s:.4g} \\\\
+&= {xDistance:.4g} m \\\\
 {lsuff}"""
 
 class example_2_20:
@@ -471,20 +468,20 @@ class example_2_20:
 
 		self.latex_solution = f"""{lpref}
 v_{{ix}} &= v_i \\cos \\theta \\\\
-v_{{ix}} &= {vi.mpers:.4g} \\cos {angle.degrees:.2g} \\\\
-v_{{ix}} &= {vix.mpers:.4g} \\frac{{m}}{{s}} \\\\
+&= {vi.mpers:.4g} \\cos {angle.degrees:.2g} \\\\
+&= {vix.mpers:.4g} \\frac{{m}}{{s}} \\\\
 \\\\
 v_{{iy}} &= v_i \\sin \\theta \\\\
-v_{{iy}} &= {vi.mpers:.4g} \\sin {angle.degrees:.2g} \\\\
-v_{{ix}} &= {viy.mpers:.4g} \\frac{{m}}{{s}} \\\\
+&= {vi.mpers:.4g} \\sin {angle.degrees:.2g} \\\\
+&= {viy.mpers:.4g} \\frac{{m}}{{s}} \\\\
 \\\\
 v_{{iy}} - \\frac{{1}}{{2}} g t^2 &= 0 \\\\
 {viy.mpers:.4g} - \\frac{{1}}{{2}} \\times {gravity.mpers2:.4g} \\times t^2 &= 0 \\\\
 t &= {t.s:.4g} s \\\\
 \\\\
 x &= v_{{ix}} t \\\\
-x &= {vix.mpers:.4g} \\times {t.s:.4g} \\\\
-x &= {xDistance.m:.4g} m \\\\
+&= {vix.mpers:.4g} \\times {t.s:.4g} \\\\
+&= {xDistance.m:.4g} m \\\\
 {lsuff}"""
 
 class example_2_21:
@@ -507,21 +504,21 @@ class example_2_21:
 
 		self.latex_solution = f"""{lpref}
 v_{{ix}} &= v_i \\cos \\theta \\\\
-v_{{ix}} &= {vi.mpers:.4g} \\cos {angle.degrees:.4g} \\\\
-v_{{ix}} &= {vix.mpers:4g} \\frac{{m}}{{s}} \\\\
+&= {vi.mpers:.4g} \\cos {angle.degrees:.4g} \\\\
+&= {vix.mpers:4g} \\frac{{m}}{{s}} \\\\
 \\\\
 v_{{iy}} &= v_i \\sin \\theta \\\\
-v_{{iy}} &= {vi.mpers:.4g} \\sin {angle.degrees:.4g} \\\\
-v_{{iy}} &= {viy.mpers:4g} \\frac{{m}}{{s}} \\\\
+&= {vi.mpers:.4g} \\sin {angle.degrees:.4g} \\\\
+&= {viy.mpers:4g} \\frac{{m}}{{s}} \\\\
 \\\\
 v_{{fx}} &= v_{{ix}} = {vfx.mpers:4g} \\frac{{m}}{{s}} \\\\
 t &= \\frac{{	s_{{building}} }}	{{ v_{{ix}} }} \\\\
-t &= \\frac{{	{distanceBuilding.m:.4g} }}	{{ {vix.mpers:4g} }} \\\\
-t &= {t.s:.4g} s\\\\
+&= \\frac{{	{distanceBuilding.m:.4g} }}	{{ {vix.mpers:4g} }} \\\\
+&= {t.s:.4g} s\\\\
 \\\\
 s_y &= v_{{iy}} t - \\frac{{1}}{{2}} g t^2 \\\\
-s_y &= {viy.mpers:4g} \\times {t.s:.4g} - \\frac{{1}}{{2}} \\times {gravity.mpers2:.4g} \\times {t.s:.4g}^2 \\\\
-s_y &= {yDistance.m:.4g} m \\\\
+&= {viy.mpers:4g} \\times {t.s:.4g} - \\frac{{1}}{{2}} \\times {gravity.mpers2:.4g} \\times {t.s:.4g}^2 \\\\
+&= {yDistance.m:.4g} m \\\\
 {lsuff}"""
 
 class example_3_1:
@@ -530,10 +527,13 @@ class example_3_1:
 
 
 		self.question = f"""Find the weight on earth of a body whose mass is {mass.kg} kg"""
-
 		weight = c.force(mass.kg * gravity.mpers2)
-
 		self.answer = f"""{round(weight.N,2)} N"""
+		self.latex_solution = f"""{lpref}
+w &= mg \\\\
+&= \\left({mass.kg:.4g}\\right)	\\left({gravity.mpers2:.4g}\\right) \\\\
+&= {weight.N:.4g} \\text{{N}} \\\\
+{lsuff}"""
 
 class example_3_2:
 	def __init__(self,*args,**kwargs):
@@ -541,18 +541,23 @@ class example_3_2:
 		force = c.force(random_handler.main(45), 'N')
 
 		self.question = f"""A {mass.kg} kg object that can move freely is subjected to a resultant force of {force.N} N in the -x direction. Find the acceleration of the object."""
-
 		acceleration = c.acceleration( - force.N / mass.kg)
-
 		self.answer = f"""{round(acceleration.mpers2,2)} m/s2"""
+		self.latex_solution = f"""{lpref}
+a &= \\frac{{	\\sum F }}{{m}} \\\\
+&= \\frac{{ - {force.N:.4g}	}}	{{	{mass.kg:.4g}}} \\\\
+&= {acceleration.mpers2:.4g} \\frac{{m}}{{s^2}} \\\\
+{lsuff}"""
 
 class example_3_3:
 	def __init__(self,*args,**kwargs):
 		weight = c.force(random_handler.main(50),'N')
 
 		self.question = f"""An object is hanging from a ceiling is supported by a cord and its weight is {weight.N} N. Find the tension in the cord"""
-
 		self.answer = f"""{round(weight.N,2)} N"""
+		self.latex_solution = f"""{lpref}
+\\text{{Solution is not needed for this question.}}\\\\
+{lsuff}"""
 
 class example_3_4:
 	def __init__(self,*args,**kwargs):
@@ -560,10 +565,14 @@ class example_3_4:
 		acceleration = c.acceleration(random_handler.main(0.30),'mpers2')
 
 		self.question = f"""A {mass.kg} kg object is to be given an upward acceleration of {acceleration.mpers2} m/s2 by a rope pulling straight upward on it. What must be the tension in the rope?"""
-
 		tension = c.force(mass.kg * gravity.mpers2 + mass.kg * acceleration.mpers2)
-
 		self.answer = f"""{round(tension.N,2)} N"""
+		self.latex_solution = f"""{lpref}
+T &= mg + ma \\\\
+&= m \\left(g + a \\right) \\\\
+&= {mass.kg:.4g} \\left({gravity.mpers2:.4g} + {acceleration.mpers2:.4g}\\right) \\\\
+&= {tension.N:.4g} N \\\\
+{lsuff}"""
 
 class example_3_5:
 	def __init__(self,*args,**kwargs):
@@ -575,8 +584,19 @@ class example_3_5:
 		friction = c.force(force.N)
 		normal = c.force(mass.kg * gravity.mpers2)
 		mu = friction.N / normal.N
-
 		self.answer = f"""{round(mu,2)}"""
+		self.latex_solution = f"""{lpref}
+f &= F \\\\
+&= {force.N:.4g} N \\\\\
+\\\\
+N &= m g \\\\
+&= \\left({mass.kg:.4g}\\right)	\\left({gravity.mpers2:.4g}\\right) \\\\
+&= {normal.N:.4g} N \\\\
+\\\\
+\\mu &= \\frac{{f}}{{N}} \\\\
+&= \\frac{{	{friction.N:.4g}}}	{{	{normal.N:.4g}}} \\\\
+&= {mu:.4g} \\\\
+{lsuff}"""
 
 class example_3_6:
 	def __init__(self,*args,**kwargs):
@@ -585,15 +605,28 @@ class example_3_6:
 		forceY = c.force(random_handler.main(30),'N')
 
 		self.question = f"""The only force acting on a {mass.kg} kg object has components Fx = {forceX.N} N and Fy = {forceY.N} N. Find the acceleration of the object."""
-
 		accelX = c.acceleration(forceX.N / mass.kg )
 		accelY = c.acceleration(forceY.N / mass.kg )
-
 		accelTotal = c.acceleration( math.sqrt(accelX.mpers2**2 + accelY.mpers2**2) )
-
 		angle = c.angle(math.atan(accelY.mpers2 / accelX.mpers2 ), 'rad')
-
 		self.answer = f"""{round(accelTotal.mpers2,2)} m/s2 at {round(angle.deg,2)} degrees"""
+		self.latex_solution = f"""{lpref}
+a_x &= \\frac{{ \\sum F_x }} {{m}} \\\\
+&= \\frac{{	{forceX.N:.4g}}}	{{	{mass.kg:.4g}}} \\\\
+&={accelX.mpers2:.4g} 	{{ \\frac{{m}} {{s^2}} }} \\\\
+\\\\
+a_y &= \\frac{{	\\sum F_y}}	{{m}} \\\\
+&= \\frac{{	{forceY.N:.4g}}} {{	{mass.kg:.4g}}} \\\\
+&={accelY.mpers2:.4g} 	{{ \\frac{{m}} {{s^2}} }} \\\\
+\\\\
+a &= \\sqrt{{	a_x^2 + a_y^2 }} \\\\
+&= \\sqrt{{	{accelX.mpers2:.4g}^2 + {accelY.mpers2:.4g}^2 }} \\\\
+&={accelTotal.mpers2:.4g} {{	\\frac{{m}}	{{s^2}} }} \\\\
+\\\\
+\\theta &= \\arctan	\\left(\\frac{{	a_y }}	{{a_x}}\\right) \\\\
+&= \\arctan \\left(\\frac{{	{accelY.mpers2:.4g} }} {{	{accelX.mpers2:.4g}}}\\right) \\\\
+&= {angle.degrees:.4g}^\\circ \\\\
+{lsuff}"""
 
 class example_3_7:
 	def __init__(self,*args,**kwargs):
@@ -601,11 +634,17 @@ class example_3_7:
 		acceleration = c.acceleration(random_handler.main(0.70),'mpers2')
 
 		self.question = f"""A {weight.N} N object is to be given an acceleration of {acceleration.mpers2} m/s2. How large a unbalanced force must act upon it?"""
-
 		mass = c.mass(weight.N / gravity.mpers2)
 		force = c.force(mass.kg * acceleration.mpers2)
-
 		self.answer = f"""{round(force.N,2)} N"""
+		self.latex_solution = f"""{lpref}
+m &= \\frac{{w}}{{g}} \\\\
+&= \\frac{{	{weight.N:.4g}}} {{	{gravity.mpers2:.4g}}} \\\\
+\\\\
+F &= m a \\\\
+&= \\left({mass.kg:.4g}\\right)	\\left({acceleration.mpers2:.4g}\\right) \\\\
+&= {force.N:.4g} {{N}} \\\\
+{lsuff}"""
 
 class example_3_8:
 	def __init__(self,*args,**kwargs):
@@ -615,11 +654,18 @@ class example_3_8:
 		time = c.time(random_handler.main(3),'s')
 
 		self.question = f"""A constant force acts on a {mass.kg} kg object and reduces its velocity from {velocity1.mpers} m/s to {velocity2.mpers} m/s in a time of {time.s} s. Find the force."""
-
 		acceleration = c.acceleration((velocity2.mpers - velocity1.mpers) / time.s)
 		force = c.force(mass.kg * acceleration.mpers2)
-
 		self.answer = f"""{round(force.N,2)} N"""
+		self.latex_solution = f"""{lpref}
+a &= \\frac{{ v_2 - v_1	}} {{ t }} \\\\
+&= \\frac{{ {velocity2.mpers:.4g} - {velocity1.mpers:.4g}}} {{ {time.s:.4g}}} \\\\
+&= {acceleration.mpers2:.4g} {{	\\frac{{m}}{{s^2}}}} \\\\
+\\\\
+F &= ma \\\\
+&= \\left({mass.kg:.4g}\\right)	\\left({acceleration.mpers2:.4g}\\right) \\\\
+&= {force.N:.4g} {{ N}} \\\\
+{lsuff}"""
 
 class example_3_9:
 	def __init__(self,*args,**kwargs):
@@ -628,13 +674,28 @@ class example_3_9:
 		friction = c.force(random_handler.main(0.70),'N')
 
 		self.question = f"""A {mass.g} g block with an initial speed of {velocity1.cmpers} cm/s slides along a horizontal tabletop against a friction force of {friction.N} N. What is the coefficient of friction between the block and the tabletop?"""
-
 		acceleration = c.acceleration( - friction.N / mass.kg )
 		xDistance = c.length( ( 0 - velocity1.mpers**2)  / (2 * acceleration.mpers2)  )
 		normal = c.force(mass.kg * gravity.mpers2)
 		mu = friction.N / normal.N
-
 		self.answer = f"""{round(mu,2)}"""
+		self.latex_solution = f"""{lpref}
+a &= \\frac{{ - f}}{{m}} \\\\
+&= \\frac{{ - {friction.N:.4g}}} {{ {mass.kg:.4g}}} \\\\
+&= {acceleration.mpers2:.4g}{{	\\frac{{m}}{{s^2}}}} \\\\
+\\\\
+s_x &= \\frac{{	v_2^2 - v_1^2 }} {{2 a}} \\\\
+&= \\frac{{ 0^2 - {velocity1.mpers:.4g}^2	}} {{2 \\times {acceleration.mpers2:.4g}}} \\\\
+&= {xDistance.m:.4g} {{m}} \\\\
+\\\\
+N &= mg \\\\
+&= \\left({mass.kg:.4g}\\right)	\\left({gravity.mpers2:.4g}\\right)	\\\\
+&= {normal.N:.4g} {{N}} \\\\
+\\\\
+\\mu &= \\frac{{ f}} {{N}} \\\\
+&= \\frac{{	{friction.N:.4g}}} {{ {normal.N:.4g}}} \\\\
+&= {mu:.4g} \\\\
+{lsuff}"""
 
 class example_3_10:
 	def __init__(self,*args,**kwargs):
@@ -643,14 +704,32 @@ class example_3_10:
 		distanceToStop = c.length(random_handler.main(70),'m')
 
 		self.question = f"""A {mass.kg} kg car is moving on a level road at {velocity1.mpers} m/s. If it is required to stop it in a distance of {distanceToStop.m}, what is the minimum coefficient of friction between the tires and the roadway if this is to be possible? Assume the wheels are not locked, in which case we are dealing with static friction - there is no sliding."""
-
 		acceleration = c.acceleration((0 - velocity1.mpers**2)/( 2 * distanceToStop.m) )
 		force = c.force(mass.kg * acceleration.mpers2)
 		friction = c.force( force.N)
 		normal = c.force(mass.kg * gravity.mpers2)
 		mu = friction.N / normal.N
-
 		self.answer = f"""{round(mu,2)}"""
+		self.latex_solution = f"""{lpref}
+a &= \\frac{{	v_2^2 - v_1^2 }} {{2 s}} \\\\
+&= \\frac{{ 0^2 - {velocity1.mpers:.4g}^2}} {{ 2 \\times {distanceToStop.m:.4g}}} \\\\
+&= {acceleration.mpers2:.4g}{{ \\frac{{m}}{{s^2}}}} \\\\
+\\\\
+F &= m a \\\\
+&= \\left({mass.kg:4g}\\right) \\left({acceleration.mpers2:.4g}\\right) \\\\
+&= {force.N} {{N}} \\\\
+\\\\
+f &= F \\\\
+&= {friction.N:.4g} {{N}} \\\\
+\\\\
+N &= mg \\\\
+&= \\left({mass.kg:.4g}\\right) \\left({gravity.mpers2:.4g}\\right) \\\\
+&= {normal.N:.4g} {{N}} \\\\
+\\\\
+\\mu &= \\frac{{ f}}{{	N}} \\\\
+&= \\frac{{	{friction.N:.4g}}} {{	{normal.N:.4g}}} \\\\
+&= {mu:.4g} \\\\
+{lsuff}"""
 
 class example_3_11:
 	def __init__(self,*args,**kwargs):
@@ -660,23 +739,37 @@ class example_3_11:
 		massTrain2 = c.mass(random_handler.main(16000),'kg')
 
 		self.question = f"""An {massEngine.kg} kg engine pulls a {massTrain1.kg} kg train along a level track and gives it an acceleration a1 = {acceleration1.mpers2} m/s2. What acceleration a2 would the engine give to a {massTrain2.kg} kg train?"""
-
 		massBefore = c.mass(massEngine.kg + massTrain1.kg)
 		massAfter = c.mass(massEngine.kg + massTrain2.kg)
 		acceleration2 = c.acceleration( (massBefore.kg / massAfter.kg) * acceleration1.mpers2 )
-
 		self.answer = f"""{round(acceleration2.mpers2,2)} m/s2"""
+		self.latex_solution = f"""{lpref}
+m_{{	\\text{{before}}}} &= m_{{	\\text{{engine}}}} + m_{{	\\text{{train_1}}}} \\\\
+&= {massEngine.kg:.4g} + {massTrain1.kg:.4g} \\\\
+&= {massBefore.kg:.4g} {{kg}}
+\\\\
+m_{{ \\text{{after}}}} &= m_{{ \\text{{engine}}}} + m{{	\\text{{	train_2}}}} \\\\
+&= {massEngine.kg:.4g} + {massTrain2.kg:.4g} \\\\
+&= {massAfter.kg:.4g} {{kg}} \\\\
+\\\\
+\\text{{ Assuming same amount of force between first and second scenarios}} \\\\
+\\frac{{a_2}}{{a_1}} &= \\frac{{m_1}}{{m_2}} \\\\
+\\frac{{a_2}}	{{	{acceleration1.mpers2:.4g}}} &= \\frac{{	{massBefore.kg:.4g}}} {{	{massAfter.kg:.4g}}} \\\\
+a_2 &= {acceleration2.mpers2:.4g}{{	\\frac{{m}}{{s^2}}}}\\\\
+{lsuff}"""
 
 class example_3_13:
 	def __init__(self,*args,**kwargs):
 		tensionLimit = c.force(random_handler.main(1500),'N')
 		mass = c.mass(random_handler.main(700),'kg')
-
 		self.question = f"""A tow rope will break if the tension in it exceeds {tensionLimit.N} N. It is used to tow a {mass.kg} kg car along level ground. What is the largest acceleration the rope can give to the car?"""
-
 		acceleration = c.acceleration(tensionLimit.N / mass.kg)
-
 		self.answer = f"""{round(acceleration.mpers2,2)} m/s2"""
+		self.latex_solution = f"""{lpref}
+a &= \\frac{{ T_{{	\\text{{limit}}}}}}{{	m}} \\\\
+&= \\frac{{	{tensionLimit.N:4g}}} {{	{mass.kg:.4g}}} \\\\
+&= {acceleration.mpers2:.4g} {{ 	\\frac{{m}}{{s^2}}}} \\\\
+{lsuff}"""
 
 class example_3_14:
 	def __init__(self,*args,**kwargs):
@@ -687,13 +780,15 @@ class example_3_14:
 			tensionLimit = c.force(min(random_handler.main(300),mass.kg*gravity.mpers2),'N')
 
 			self.question = f"""Compute the least acceleration with which a {mass.kg} kg woman can slide down a rope if the rope can withstand a tension of only {tensionLimit.N} N"""
-
 			acceleration = c.acceleration( (mass.kg*gravity.mpers2 - tensionLimit.N) / mass.kg  )
-
 			if acceleration.mpers2 >= 0:
 				regen = False
-
 		self.answer = f"""{round(acceleration.mpers2,2)} m/s2"""
+		self.latex_solution = f"""{lpref}
+a &= \\frac{{	mg - T}} {{ m }} \\\\
+&= \\frac{{	\\left({mass.kg:.4g}\\right) \\left({gravity.mpers2:.4g}\\right) - {tensionLimit.N:.4g}}} {{ {mass.kg:.4g}}} \\\\
+&= 	{acceleration.mpers2:.4g} {{	\\frac{{m}}{{s^2}}}} \\\\
+{lsuff}"""
 
 class example_3_15:
 	def __init__(self,*args,**kwargs):
@@ -702,16 +797,37 @@ class example_3_15:
 		mu = random_handler.u(0.5)
 
 		self.question = f"""A {mass.kg} box is slid along the floor by a {force.N} N force. The coefficient of friction between the box and the floor is {mu} when the box is sliding. Find the acceleration of the box."""
-
 		normal = c.force(mass.kg * gravity.mpers2)
 		friction = c.force( mu * normal.N)
 
-		acceleration = c.acceleration( (force.N - friction.N) / mass.kg)
 		comment = ''
+		self.latex_solution = f"""{lpref}
+N &= mg \\\\
+&= \\left({mass.kg:.4g}\\right) \\left({gravity.mpers2:.4g}\\right) \\\\
+&= {normal.N:.4g} {{N}} \\\\
+\\\\
+f &= \\mu N \\\\
+&= \\left({mu}\\right) \\left({normal.N:.4g}\\right) \\\\
+&= {friction.N:.4g} {{N}} \\\\
+\\\\
+\\text{{ Check if force is greater than friction or not...}} \\\\
+f &= {friction.N:.4g} {{N}} \\\\
+F &= {force.N:.4g} {{N}} \\\\"""
 		if friction.N > force.N:
 			#the block wont move
 			acceleration = c.acceleration(0)
 			comment = 'the block wont move'
+			self.latex_solution = self.latex_solution + f"""f &> N \\\\
+a &= 0 \\\\
+{lsuff}"""
+		else:
+			acceleration = c.acceleration( (force.N - friction.N) / mass.kg)
+			comment = ''
+			self.latex_solution = self.latex_solution + f"""f &< N \\\\
+a &= \\frac{{ F - f }} {{m}} \\\\
+&= \\frac{{	{force.N:.4g} - {friction.N:.4g}}} {{	{mass.kg:.4g}}} \\\\
+&= {acceleration.mpers2:.4g} {{	\\frac{{m}}{{s^2}}}}\\\\
+{lsuff}"""
 		self.answer = f"""{round(acceleration.mpers2,2)} m/s2, {comment}"""
 
 class example_3_16:
@@ -725,7 +841,6 @@ class example_3_16:
 			mu = random_handler.main(0.5)
 
 			self.question = f"""A {mass.kg} kg box is pulled by a {force.N} N force at an angle of {angle_force.deg} degrees to the horizontal (positive towards the +y direction). The coefficient of kinetic friction is {mu}. Find the acceleration of the box."""
-
 			forceX = c.force( force.N * math.cos(angle_force.rad))
 			forceY = c.force( force.N * math.sin(angle_force.rad))
 			weight = c.force( mass.kg * gravity.mpers2)
@@ -737,6 +852,31 @@ class example_3_16:
 				regen = False
 
 			self.answer = f"""{round(acceleration.mpers2,2)} m/s2"""
+			self.latex_solution = f"""{lpref}
+F_x &= F \\cos \\left( \\theta \\right) \\\\
+&= {force.N:.4g} \\cos \\left({angle_force.degrees:.4g}^\\circ \\right) \\\\
+&= {forceX.N:.4g} {{N}} \\\\
+\\\\
+F_y &= F \\sin \\left(\\theta \\right) \\\\
+&= {force.N:.4g} \\sin \\left({angle_force.degrees:.4g}^\\circ\\right) \\\\
+&= {forceY.N:.4g} {{N}} \\\\
+\\\\
+w &= mg \\\\
+&= \\left({mass.kg:.4g}\\right) \\left({gravity.mpers2:.4g}\\right) \\\\
+&= 	{weight.N:.4g} {{N}} \\\\
+\\\\
+N &= w - F_y \\\\
+&= {weight.N:4g} - {forceY.N:4g} \\\\
+&= 	{normal.N:.4g} {{N}} \\\\
+\\\\
+f &= \\mu N \\\\
+&= \\left({mu:.4g}\\right) \\left({normal.N:.4g}\\right) \\\\
+&= {friction.N:4g} {{N}} \\\\
+\\\\
+a &= \\frac{{F_x - f}} {{m}} \\\\
+&= \\frac{{ {forceX.N:.4g} - {friction.N:.4g}}} {{	{mass.kg:.4g}}} \\\\
+&= 	{acceleration.mpers2:.4g} {{	\\frac{{m}}{{s^2}}}} \\\\
+{lsuff}"""
 
 class example_3_17:
 	def __init__(self,*args,**kwargs):
@@ -757,8 +897,15 @@ class example_3_17:
 			except:
 				regen = True
 
-
-
+		self.latex_solution = f"""{lpref}
+a &= \\frac{{ -\\mu}} {{g}} \\\\
+&= \\frac{{ - {mu:.4g}}} {{	{gravity.mpers2:.4g}}} \\\\
+&= {acceleration.mpers2:.4g} {{	\\frac{{m}}{{s^2}}}} \\\\
+\\\\
+s_x &= \\frac{{	v_2^2 - v_1^2 }} {{a}} \\\\
+&= \\frac{{	{velocity2.mpers:.4g}^2 - {velocity1.mpers:.4g}}} {{	{acceleration.mpers2:.4g}}} \\\\
+&= {xDistance.m:.4g} {{m}} \\\\
+{lsuff}"""
 
 class example_3_18:
 	def __init__(self,*args,**kwargs):
@@ -786,17 +933,48 @@ class example_3_18:
 				regen = False
 
 			self.answer = f"""{round(mu,2)}"""
+			self.latex_solution = f"""{lpref}
+F_y &= F \\cos \\left(\\theta \\right) \\\\
+&= {force.N:.4g} \\cos \\left({theta_force.degrees:.4g}^\\circ \\right) \\\\
+&= {forceX.N:.4g} {{N}} \\\\
+\\\\
+F_y &= F \\sin \\left(\\theta \\right) \\\\
+&= {force.N:.4g} \\cos \\left({theta_force.degrees:.4g}^\\circ \\right) \\\\
+&= {forceY.N:.4g} {{N}} \\\\
+\\\\
+w &= mg \\\\
+&= \\left({mass.kg:.4g}\\right) \\left({gravity.mpers2:.4g}\\right) \\\\
+&= {weight.N:4g} {{N}} \\\\
+\\\\
+a &= \\frac{{	v_2 - v_1}} {{t }} \\\\
+&= \\frac{{	 {velocity2.mpers:.4g} - {velocity1.mpers:.4g}}} {{	{time.s:.4g}}} \\\\
+&= {acceleration.mpers2:.4g} {{	\\frac{{m}}{{s^2}}}} \\\\
+\\\\
+f &= F_x - ma \\\\
+&= {forceX.N:.4g} - \\left({mass.kg:.4g}\\right) \\left({acceleration.mpers2:.4g}\\right) \\\\
+&= 	{friction.N:4g} {{N}} \\\\
+\\\\
+N &= F_y + w \\\\
+&= {forceY.N:.4g} + {weight.N:.4g} \\\\
+&= {normal.N:.4g}{{N}} \\\\
+\\\\
+\\mu &= \\frac{{ f}} {{ N}} \\\\
+&= \\frac{{	{friction.N:4g}}} {{	{normal.N:.4g}}} \\\\
+&= {mu:.4g} \\\\
+{lsuff}"""
 
 class example_3_19:
 	def __init__(self,*args,**kwargs):
 		weight = c.force(random_handler.main(200),'N')
 		angle = c.angle(random_handler.main(30),'deg')
-
 		self.question = f"""A {weight.N} N wagon is to pulled up a {angle.deg}-degree incline at constant speed. How large a force parallel to the incline is needed if friction effects are negligible."""
-
 		weightIncline = c.force( weight.N * math.sin(angle.radians) )
-
 		self.answer = f"""{round(weightIncline.N,2)} N"""
+		self.latex_solution = f"""{lpref}
+F &= w \\sin \\theta \\\\
+&= {weight.N:.4g} \\sin {angle.degrees:.4g}^\\circ \\\\
+&= {weightIncline.N:.4g}	 {{ N}} \\\\
+{lsuff}"""
 
 class example_3_20:
 	def __init__(self,*args,**kwargs):
@@ -819,8 +997,32 @@ class example_3_20:
 				regen = False
 
 			acceleration = c.acceleration( ( weightX.N - friction.N) / mass.kg)
-
 			self.answer = f"""{round(acceleration.mpers2,2)} m/s2"""
+
+			self.latex_solution = f"""{lpref}
+w &= mg \\\\
+&= {mass.kg:.4g} \\times {gravity.mpers2:.4g} \\\\
+&= {weight.N:.4g} {{N}} \\\\
+\\\\
+w_x &= w \\sin \\theta \\\\
+&= {weight.N:.4g} \\sin {angle.degrees:.4g}^\\circ \\\\
+&= {weightX.N:.4g} {{N}} \\\\
+\\\\
+w_y &= w \\cos \\theta \\\\
+&= {weight.N:.4g} \\cos {angle.degrees:.4g}^\\circ \\\\
+&= {weightY.N:.4g} {{N}} \\\\
+\\\\
+N &= w_y \\\\
+N &= {normal.N:.4g} {{N}} \\\\
+\\\\
+f &= \\mu N \\\\
+&= {mu:.4g} \\times {normal.N:.4g} \\\\
+&= {friction.N:.4g} {{N}} \\\\
+\\\\
+a &= \\frac{{ w_x - f}}	{{m}} \\\\
+&= \\frac{{	{weightX.N:.4g} - {friction.N:.4g}}} {{ {mass.kg:.4g}}} \\\\
+&= {acceleration.mpers2:.4g} {{ \\frac{{m}}{{s^2}}}} \\\\
+{lsuff}"""
 
 class example_3_21:
 	def __init__(self,*args,**kwargs):
@@ -849,6 +1051,40 @@ class example_3_21:
 
 			self.answer = f"""{round(mu,2)}"""
 
+			self.latex_solution = f"""{lpref}
+F_x &= F \\cos \\theta \\\\
+&= {force.N:.4g} \\cos {angle.degrees:.4g}^\\circ \\\\
+&= {forceX.N:.4g} {{N}} \\\\
+\\\\
+F_y &= F \\sin \\theta \\\\
+&= {force.N:.4g} \\sin {angle.degrees:.4g}^\\circ \\\\
+&= {forceY.N:.4g} {{N}} \\\\
+\\\\
+w &= mg \\\\
+&= {mass.kg:.4g} \\times {gravity.mpers2:.4g} \\\\
+&= {weight.N:.4g} {{N}} \\\\
+\\\\
+w_x &= w \\sin \\theta \\\\
+&= {weight.N:.4g} \\sin {angle.degrees:.4g}^\\circ\\\\
+&= {weightX.N:.4g} {{N}} \\\\
+\\\\
+w_y &= w \\cos \\theta \\\\
+&= {weight.N:.4g} \\cos {angle.degrees:.4g}^\\circ \\\\
+&= {weightY.N:.4g} {{N}} \\\\
+\\\\
+f &= F_x - w_x - ma \\\\
+&= {forceX.N:.4g} - {weightX.N:.4g} - \\left({mass.kg:.4g}\\right) \\left({acceleration.mpers2:.4g}\\right) \\\\
+&= {friction.N:.4g} {{N}} \\\\
+\\\\
+N &= F_y + w_y \\\\
+&= {forceY.N:.4g} + {weightY.N:.4g} \\\\
+&= {normal.N:.4g} {{N}} \\\\
+\\\\
+\\mu &= \\frac{{f}} {{N}} \\\\
+&= \\frac{{ {friction.N:.4g}}} {{ {normal.N:.4g}}} \\\\
+&= {mu:.4g} \\\\
+{lsuff}"""
+
 class example_3_22:
 	def __init__(self,*args,**kwargs):
 		mass1 = c.mass(random_handler.main(300),'g')
@@ -863,6 +1099,20 @@ class example_3_22:
 		forceMass2 = c.force(friction2.N + mass2.kg*acceleration.mpers2)
 
 		self.answer = f"""{round(forceMass2.N,2)} N"""
+		self.latex_solution = f"""{lpref}
+F &= \\mu g \\left(m_1 + m_2\\right) + a \\left(m_1 + m_2\\right) \\\\
+&= \\left({mu:.4g}\\right) \\left({gravity.mpers2:.4g}\\right) \\left({mass1.kg:.4g} + {mass2.kg:.4g}\\right) + {acceleration.mpers2:.4g} \\left({mass1.kg:.4g} + {mass2.kg:.4g}\\right)\\\\
+&= {force.N:.4g} {{N}} \\\\
+\\\\
+f_2 &= \\mu m g\\\\
+&= {mu:.4g} \\times {mass2.kg:.4g} \\times {gravity.mpers2:.4g} \\\\
+&= {friction2.N:.4g} {{N}} \\\\
+\\\\
+F_{{m_2}} &= f_2 + m_2 a \\\\
+&= {friction2.N:.4g} + \\left({mass2.kg:.4g}\\right) \\left({acceleration.mpers2:.4g}\\right) \\\\
+&= {forceMass2.N:.4g} {{N}} \\\\
+{lsuff}"""
+
 
 class example_3_23:
 	def __init__(self,*args,**kwargs):
@@ -878,6 +1128,16 @@ class example_3_23:
 		tension = c.force(mass2.kg *( gravity.mpers2 - acceleration.mpers2))
 		self.answer = f"""{round(tension.N,2)} N"""
 
+		self.latex_solution = f"""{lpref}
+a &= \\frac{{ \\left(m_2 - m_1\\right) g }} {{m_1 + m_2}} \\\\
+&= \\frac{{	\\left({mass2.kg:.4g} - {mass1.kg:.4g}\\right)	\\left({gravity.mpers2:.4g}\\right)}} {{ {mass1.kg:.4g} + {mass2.kg:.4g}}} \\\\
+&= 	{acceleration.mpers2:.4g} {{	\\frac{{m}}{{s^2}}}} \\\\
+\\\\
+T &= m_2 \\left(g - a\\right) \\\\
+&= \\left({mass2.kg:.4g}\\right) \\left({gravity.mpers2:.4g} - {acceleration.mpers2:.4g}\\right) \\\\
+&={tension.N:.4g} {{N}} \\\\
+{lsuff}"""
+
 class example_3_24:
 	def __init__(self,*args,**kwargs):
 		regen = True
@@ -889,15 +1149,22 @@ class example_3_24:
 			time = c.time(random_handler.main(3.0),'s')
 
 			self.question = f"""Mass A with a mass of {massA.kg} kg is a block that is on a table in which has a coefficient of friction of {mu}. Mass A is attached to horizontal rope across a pulley and the other end drops down attached to a freely hanging mass B with a mass of {massB.kg} kg. How far will mass B drop in the first {time.s} s after the system is released?"""
-
 			acceleration = c.acceleration ( (massB.kg * gravity.mpers2 - mu * massA.kg * gravity.mpers2) /  (massA.kg + massB.kg) )
-
 			distance = c.length(  (1/2) * acceleration.mpers2 * time.s**2 )
-
 			self.answer = f"""{round(distance.m,2)} m"""
 
 			if massA.kg > massB.kg:
 				regen = False
+
+		self.latex_solution = f"""{lpref}
+a &= \\frac{{m_b g - \\mu m_a g}}{{m_a + m_b}} \\\\
+&= \\frac{{ {massB.kg:.4g} \\cdot {gravity.mpers2:.4g} - {mu:.4g} \\cdot {massA.kg:.4g} \\cdot {gravity.mpers2:.4g} }} {{ {massA.kg:.4g} + {massB.kg:.4g}}} \\\\
+&= {acceleration.mpers2:.4g} {{ \\frac{{m}}{{s^2}}}} \\\\
+\\\\
+s &= \\frac{{1}}{{2}} a t^2 \\\\
+&= \\frac{{1}}{{2}} \\cdot {acceleration.mpers2:.4g} \\cdot {time.s:.4g}^2 \\\\
+&= {distance.m:.4g} {{m}} \\\\
+{lsuff}"""
 
 
 class example_3_25:
@@ -911,13 +1178,17 @@ class example_3_25:
 			acceleration = c.acceleration(random_handler.main(0.75),'mpers2')
 
 			self.question = f"""Mass A with a mass of {massA.kg} kg is a block that is on a table in which has a coefficient of friction of {mu}. Mass A is attached to horizontal rope across a pulley and the other end drops down attached to a freely hanging mass B with a mass of {massB.kg} kg. How large horizontal force acting on mass A is required to raise mass B up with an acceleration of {acceleration.mpers2} m/s2?"""
-
 			force = c.force( acceleration.mpers2 * (massA.kg + massB.kg)  + mu*massA.kg*gravity.mpers2 + massB.kg*gravity.mpers2 )
-
 			self.answer = f"""{round(force.N,2)} N"""
 
 			if massA.kg > massB.kg:
 				regen = False
+
+		self.latex_solution = f"""{lpref}
+F &= a \\left(m_a + m_b\\right) + \\mu m_a g + m_b g \\\\
+&= {acceleration.mpers2:.4g} \\left({massA.kg:.4g} + {massB.kg:.4g}\\right) + {mu:.4g} \\cdot {massA.kg:.4g} \\cdot {gravity.mpers2:.4g} + {massB.kg:.4g} \\cdot {gravity.mpers2:.4g} \\\\
+&= {force.N:.4g} {{N}} \\\\
+{lsuff}"""
 
 class example_3_26:
 	def __init__(self,*args,**kwargs):
@@ -926,8 +1197,13 @@ class example_3_26:
 		self.question =f"""The coefficient of static friction between a box and the flat bed of a truck is {mu}. What is the maximum acceleration the truck can have along level ground if the box is not to slide?"""
 
 		acceleration = c.acceleration (mu * gravity.mpers2)
-
 		self.answer = f"""{round(acceleration.mpers2,2)} m/s2"""
+
+		self.latex_solution = f"""{lpref}
+a &= \\mu g \\\\
+&= {mu:.4g} \\cdot {gravity.mpers2:.4g} \\\\
+&= {acceleration.mpers2:.4g} {{ \\frac{{m}}{{s^2}}}}\\\\
+{lsuff}"""
 
 #chapter 4
 #chapter 5
