@@ -51,7 +51,7 @@ class example_2_2:
 			self.latex_solution = f"""{lpref}
 |v| &= \\frac{{s}}{{t}} \\\\
 &= \\frac{{	0 }} {{ {time.s:.4g} }} \\\\
-\\text{{The runner is back at the starting point, hence, zero displacement.}}
+\\text{{The runner is back at the starting point, hence, zero displacement.}}\\\\
 &= 0 \\frac{{m}}{{s}} \\\\
 {lsuff}"""
 
@@ -1219,6 +1219,11 @@ class schaums_6_1:
 		work = c.energy( force.N * math.cos(theta.rad) * distance.m )
 
 		self.answer = f"""{round(work.J,2)} J"""
+		self.latex_solution = f"""{lpref}
+W &= Fs \\cos \\theta  \\\\
+&= {force.N:.4g} \\cdot {distance.m:.4g} \\cos \\left({theta.degrees:.4g}^\\circ \\right)\\\\
+&= {work.J:.4g}\\text{{ J}}\\\\
+{lsuff}"""
 
 class schaums_6_2:
 	def __init__(self,*args,**kwargs):
@@ -1236,6 +1241,20 @@ class schaums_6_2:
 
 		self.answer = f"""{work1.J} J, {work2.J} J, {work3.J} J"""
 
+		self.latex_solution = f"""{lpref}
+W_1 &= F_1 s \\cos \\theta_1 \\\\
+&= {f1.N:4g} \\cdot {distance.m:.4g} \\cos {theta.deg:.4g}^\\circ \\\\
+&= {work1.J:.4g} \\text{{ J}} \\\\
+\\\\
+W_2 &= F_2 s \\cos \\theta_2 \\\\
+&= F_2 \\cos 90^\\circ \\\\
+&= 0 \\text{{ J}} \\\\
+\\\\
+W_3 &= F_3 s \\cos \\theta_3 \\\\
+&= {f3.N:.4g} \\cdot {distance.m:.4g} \\cos 0^\\circ \\\\
+&= {work3.J:.4g} \\text{{ J}} \\\\
+{lsuff}"""
+
 class schaums_6_3:
 	def __init__(self,*args,**kwargs):
 		mass = c.mass(random_handler.main(300),'g')
@@ -1249,6 +1268,16 @@ class schaums_6_3:
 
 		self.answer = f"""{round(work.J,2 )} J"""
 
+		self.latex_solution= f"""{lpref}
+f &= \\mu m g \\\\
+&= {mu:.4g} \\cdot {mass.kg:.4g} \\cdot {gravity.mpers2:.4g} \\\\
+&= {friction.N:.4g} \\text{{ N}} \\\\
+\\\\
+W &= - f s \\\\
+&= - {friction.N:.4g} \\cdot {distance.m:.4g} \\\\
+&= {work.J:.4g} \\text{{ J}} \\\\
+{lsuff}"""
+
 class schaums_6_4:
 	def __init__(self,*args,**kwargs):
 		mass = c.mass(random_handler.main(3), 'kg')
@@ -1259,6 +1288,11 @@ class schaums_6_4:
 		work = c.energy( mass.kg * gravity.mpers2 * distance.m )
 
 		self.answer = f"""{round(work.J, 2)} J"""
+		self.latex_solution = f"""{lpref}
+W &= m g s \\\\
+&= {mass.kg:.4g} \\cdot {gravity.mpers2:.4g} \\cdot {distance.m:.4g} \\\\
+&= {work.J:.4g} \\text{{ J}} \\\\
+{lsuff}"""
 
 class schaums_6_6:
 	def __init__(self,*args,**kwargs):
@@ -1270,6 +1304,12 @@ class schaums_6_6:
 		work = c.energy( ladderWeight.N * ladderCenterOfGravity.m + topEndWeight.N * ladderLength.m )
 
 		self.answer = f"""{round(work.J,2)} J"""
+
+		self.latex_solution= f"""{lpref}
+W &= w_{{ \\text{{ladder}}}} COG_{{ \\text{{ladder}}}} + w_{{ \\text{{top}}}} L_{{ \\text{{ladder}}}} \\\\
+&= {ladderWeight.N:.4g} \\cdot {ladderCenterOfGravity.m:.4g} + {topEndWeight.N:.4g} \\cdot {ladderLength.m:.4g} \\\\
+&= {work.J:.4g} \\text{{ J}} \\\\
+{lsuff}"""
 
 class schaums_6_7:
 	def __init__(self,*args,**kwargs):
@@ -1283,6 +1323,16 @@ class schaums_6_7:
 		work = c.energy ( mass.kg * gravity.mpers2 * height.m)
 
 		self.answer = f"""{round(work.J,2)} J"""
+		self.latex_solution = f"""{lpref}
+m &= V \\rho \\\\
+&= {volume.m3:.4g} \\cdot {density.kgperm3:.4g} \\\\
+&= {mass.kg:.4g} \\\\
+\\\\
+W &= m g s \\\\
+&= {mass.kg:.4g} \\cdot {gravity.mpers2:.4g} \\cdot {height.m:.4g} \\\\
+&= {work.J:.4g} \\text{{ J}}\\\\
+{lsuff}"""
+
 
 class schaums_6_8:
 	def __init__(self,*args,**kwargs):
@@ -1290,11 +1340,17 @@ class schaums_6_8:
 		height = c.length(random_handler.main(400),'cm')
 
 		self.question = f"""A {mass.kg} kg mass falls {height.cm} cm. a) How much work was done on it by the gravitational force? b) How much PE_g did it lose?"""
-
 		work = c.energy( mass.kg * gravity.mpers2* height.m )
-
 		self.answer = f"""{round(work.J,2)} J, - {round(work.J,2)} J"""
-
+		self.solution = f"""{lpref}
+W_1 &= m g s \\\\
+&= {mass.kg:.4g} \\cdot {gravity.mpers2:.4g} \\cdot {height.m:.4g} \\\\
+&= {work.J:.4g} \\text{{ J}} \\\\
+\\\\
+W_2 &= m g s \\\\
+&= {mass.kg:.4g} \\cdot {gravity.mpers2:.4g} \\cdot - {height.m:.4g} \\\\
+&= -{work.J:.4g} \\text{{ J}} \\\\
+{lsuff}"""
 
 class schaums_6_9:
 	def __init__(self,*args,**kwargs):
@@ -1307,6 +1363,13 @@ class schaums_6_9:
 		velocity = c.velocity ( math.sqrt((2 * force.N * distance.m) / mass.kg))
 
 		self.answer = f"""{round(velocity.mpers,2)} m/s"""
+		self.latex_solution = f"""{lpref}
+v &= \\sqrt{{	\\frac{{2Fs}}{{m}}	}}\\\\
+&= \\sqrt{{	\\frac{{2 \\cdot {force.N:.4g} \\cdot {distance.m:.4g}}}{{	{mass.kg:.4g}}}	}}\\\\
+&= {velocity.mpers:.4g} \\frac{{m}}{{s}} \\\\
+\\\\
+
+{lsuff}"""
 
 class schaums_6_10:
 	def __init__(self,*args,**kwargs):
@@ -1318,8 +1381,12 @@ class schaums_6_10:
 		self.question = f"""A {mass.kg} kg block slides across a tabletop with an initial velocity of {velocity1.cmpers} cm/s and comes to rest in a distance of {distance.cm} cm. Find the average friction force that retarded the motion"""
 
 		friction = c.force ( (0.5 * mass.kg * velocity1.mpers**2) / (distance.m))
-
 		self.answer = f"""{round(friction.N,2)} N"""
+		self.latex_solution = f"""{lpref}
+f &= \\frac{{1}}{{2}} \\frac{{m v_1^2}}{{s}} \\\\
+&= \\frac{{1}}{{2}} \\frac{{ {mass.kg:.4g} \\cdot {velocity1.mpers:.4g}^2}} {{ {distance.m:.4g}}} \\\\
+&= {friction.N:.4g} \\text{{ N}} \\\\
+{lsuff}"""
 
 class schaums_6_11:
 	def __init__(self,*args,**kwargs):
@@ -1328,10 +1395,13 @@ class schaums_6_11:
 		mass = c.mass (random_handler.main(90), 'kg')
 
 		self.question = f"""A car going {velocity.mpers} m/s is brought to rest in a distance of {distance.m} m as it strikes a pile of dirt. How large an average force is exerted by seatbelts on a {mass.kg} kg passenger as the car is stopped?"""
-
 		force = c.force( (0.5*mass.kg*velocity.mpers**2) / (distance.m) )
-
 		self.answer = f"""{round(force.kN,2)} kN"""
+		self.latex_solution = f"""{lpref}
+F &= \\frac{{1}}{{2}} \\frac{{m v^2}} {{s}} \\\\
+&= \\frac{{1}}{{2}} \\frac{{ {mass.kg:.4g} \\cdot {velocity.mpers}^2}} {{ {distance.m:.4g}}} \\\\
+&= {force.N:.4g} \\text{{ N}} \\\\
+{lsuff}"""
 
 class schaums_6_12:
 	def __init__(self,*args,**kwargs):
@@ -1342,13 +1412,16 @@ class schaums_6_12:
 			velocitySpecific = c.velocity(random_handler.main(12), 'mpers')
 
 			self.question = f"""A projectile is shot upward from the earth with speed of {velocity.mpers} m/s. How high is it when its speed is {velocitySpecific.mpers} m/s?"""
-
 			height = c.length( - (velocitySpecific.mpers**2 - velocity.mpers**2) / (2*gravity.mpers2))
-
 			self.answer = f"""{round(height.m,2)} m"""
-
 			if velocity.mpers > velocitySpecific.mpers:
 				regen = False
+
+		self.latex_solution = f"""{lpref}
+h &= \\frac{{ - \\left( v_{{ \\text{{specific}}}} - v \\right)}} {{2 g}} \\\\
+&= \\frac{{ - \\left({velocitySpecific.mpers:.4g} - {velocity.mpers:.4g}\\right)}} {{ 2 \\cdot {gravity.mpers2:.4g}}} \\\\
+&= {height.m:.4g} \\text{{ m}} \\\\
+{lsuff}"""
 
 class schaums_6_13:
 	def __init__(self,*args,**kwargs):
@@ -1360,7 +1433,7 @@ class schaums_6_13:
 			mass2 = c.mass(random_handler.main(700),'g')
 			distance = c.length(random_handler.main(120),'cm')
 
-			self.question = f"""In an Atwood machine, the two masses are {mass1.g}g and {mass2.g}g. The system is released from rest. How fast is the {mass1.g}g mass moving after is has fallen {distance.cm} cm?"""
+			self.question = f"""In an Atwood machine, the two masses are {mass1.g:.4g}g and {mass2.g:.4g}g. The system is released from rest. How fast is the {mass1.g:.4g}g mass moving after is has fallen {distance.cm:.4g} cm?"""
 
 			try:
 				velocity = c.velocity ( math.sqrt ((2*gravity.mpers2*distance.m*(mass1.kg - mass2.kg))/(mass1.kg + mass2.kg)))
@@ -1377,6 +1450,12 @@ class schaums_6_13:
 			if mass1.g > mass2.g:
 				regen = False
 
+		self.latex_solution = f"""{lpref}
+v &= \\sqrt{{ \\frac{{2g \\left(m_1 - m_2\\right)}}{{m_1 + m_2}} }} \\\\
+&= \\sqrt{{ \\frac{{2 \\cdot {gravity.mpers2:.4g} \\left({mass1.kg:.4g} - {mass2.kg:.4g}\\right)}}{{ {mass1.kg:.4g} + {mass2.kg:.4g}}} }} \\\\
+&= {velocity.mpers:.4g} \\frac{{ \\text{{m}}}}{{ \\text{{s}}}}\\\\
+{lsuff}"""
+
 
 class schaums_6_16:
 	def __init__(self,*args,**kwargs):
@@ -1391,6 +1470,11 @@ class schaums_6_16:
 		friction = c.force ( (-(0.5*mass.kg*speed.mpers**2) - (mass.kg*gravity.mpers2*height.m)) / ( distance.m ) )
 
 		self.answer = f"""{round(friction.kN,2)} kN"""
+		self.latex_solution = f"""{lpref}
+f &= \\frac{{ \\frac{{1}}{{2}} m v^2 - mgh }}{{s}} \\\\
+&= \\frac{{ \\frac{{1}}{{2}} \\cdot {mass.kg:.4g} \\cdot {speed.mpers:.4g}^2 - {mass.kg:.4g} \\cdot {gravity.mpers2:.4g} \\cdot {height.m:.4g}}}{{ {distance.m:.4g}}} \\\\
+&= {friction.N:.4g} \\text{{ N}} \\\\
+{lsuff}"""
 
 class schaums_6_17:
 	def __init__(self,*args,**kwargs):
@@ -1409,7 +1493,15 @@ class schaums_6_17:
 
 			if length.m > height.m:
 				regen = False
-
+		self.latex_solution = f"""{lpref}
+h &= \\frac{{1}}{{2}}  \\frac{{v^2}} {{ g}} \\\\
+&= \\frac{{1}}{{2}} \\frac{{ {velocity.mpers:.4g}^2}} {{ {gravity.mpers2:.4g}}} \\\\
+&= {height.m:.4g} \\text{{ m}} \\\\
+\\\\
+\\theta &= \\arccos \\left( \\frac{{ l - h }}{{ l }} \\right)\\\\
+&= \\arccos \\left( \\frac{{ {length.m:.4g} - {height.m:.4g}}} {{ {length.m:.4g}}}\\right)\\\\
+&= {angle.degrees:.4g}^\\circ \\\\
+{lsuff}"""
 
 class schaums_6_18:
 	def __init__(self,*args,**kwargs):
@@ -1432,6 +1524,12 @@ class schaums_6_18:
 
 		self.answer = f"""{round(distance.m,2)} m"""
 
+		self.latex_solution = f"""{lpref}
+\\frac{{1}}{{2}} m v^2 &= m g d \\sin \\theta + \\mu m g d \\cos \\theta \\\\
+\\frac{{1}}{{2}} \\cdot {velocity.mpers:.4g}^2 &= {gravity.mpers2:.4g} \\cdot d \\cdot \\sin {angle.degrees:.4g}^\\circ + d \\cdot {mu:.4g} \\cdot {gravity.mpers2:.4g} \\cos {angle.degrees:.4g}^\\circ \\\\
+d &= {distance.m:.4g} \\text{{ m}} \\\\
+{lsuff}"""
+
 class schaums_6_19:
 	def __init__(self,*args,**kwargs):
 		mass = c.mass(random_handler.main(60000), 'kg' )
@@ -1446,6 +1544,11 @@ class schaums_6_19:
 		distance = c.length (  (0.5 * mass.kg * (velocity2.mpers**2 - velocity1.mpers**2) / (force.N - friction.N - mass.kg* gravity.mpers2 * percentGrade.whole) ))
 
 		self.answer = f"""{round(distance.km,2)} km"""
+		self.latex_solution = f"""{lpref}
+d &= \\frac{{ \\frac{{1}}{{2}} m \\left(v_2^2 - v_1^2\\right) }} {{ F - f - mg G}} \\\\
+&= \\frac{{ \\frac{{1}}{{2}} \\cdot {mass.kg:.4g} \\left( {velocity2.mpers:.4g}^2 - {velocity1.mpers:.4g}^2 \\right) }} {{ {force.N:.4g} - {friction.N:.4g} - {mass.kg:.4g} \\cdot {gravity.mpers2:.4g} \\cdot {percentGrade.whole}}} \\\\
+&= {distance.m:.4g} \\text{{ m}} \\\\
+{lsuff}"""
 
 class schaums_6_20:
 	def __init__(self,*args,**kwargs):
@@ -1459,6 +1562,12 @@ class schaums_6_20:
 
 		self.answer = f"""{round(power.hp,2)} hp"""
 
+		self.latex_solution = f"""{lpref}
+P &= \\frac{{1}}{{2}} \\frac{{m v^2}}{{t}} \\\\
+&= \\frac{{1}}{{2}} \\frac{{ {mass.kg:.4g} \\cdot {velocity.mpers:.4g}^2}}{{ {time.s:.4g}}} \\\\
+&= {power.W:.4g} \\text{{ W}} \\\\
+{lsuff}"""
+
 class schaums_6_21:
 	def __init__(self,*args,**kwargs):
 		power = c.power ( random_handler.main(0.25), 'hp')
@@ -1469,6 +1578,11 @@ class schaums_6_21:
 		mass = c.mass ( (power.W) / (gravity.mpers2 * velocity.mpers))
 
 		self.answer = f"""{round(mass.kg,2)} kg"""
+		self.latex_solution = f"""{lpref}
+m &= \\frac{{ P }} {{gv}} \\\\
+&= \\frac{{ {power.W:.4g}}} {{ {gravity.mpers2:.4g} \\cdot {velocity.mpers:.4g}}} \\\\
+&= {mass.kg:.4g} \\text{{ kg}}\\\\
+{lsuff}"""
 
 class schaums_6_23:
 	def __init__(self,*args,**kwargs):
@@ -1481,6 +1595,12 @@ class schaums_6_23:
 		power = c.power(dischargeRate.kg * (0.5*speed.mpers**2 + gravity.mpers2*distance.m))
 
 		self.answer = f"""{round(power.hp,2)} hp"""
+
+		self.latex_solution = f"""{lpref}
+P &= \\frac{{dm}}{{dt}} \\left( \\frac{{1}}{{2}} v^2 + gh \\right) \\\\
+&= {dischargeRate.kg:.4g} \\left( \\frac{{1}}{{2}} \\cdot {speed.mpers:.4g}^2 + {gravity.mpers2:.4g} \\cdot {distance.m:.4g} \\right) \\\\
+&= {power.W:.4g} \\text{{ W}}\\\\
+{lsuff}"""
 
 
 class schaums_8_1:

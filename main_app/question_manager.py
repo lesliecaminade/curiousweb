@@ -11,7 +11,8 @@ topics_keys = [
 subtopics_keys = [
     'Electronics: Power Electronics',
     'Sciences: One Dimension Kinematics',
-    'Sciences: Kinetics'
+    'Sciences: Kinetics',
+    'Sciences: Work-Energy Theorem',
 ]
 
 one_dimension_kinematics = [
@@ -63,7 +64,6 @@ kinetics = [
     example_3_26,
 ]
 
-
 power_electronics = [
     fewson_2_1,
     fewson_2_2,
@@ -77,14 +77,37 @@ power_electronics = [
     fewson_3_6,
 ]
 
+work_energy_theorem = [
+    schaums_6_1,
+    schaums_6_2,
+    schaums_6_3,
+    schaums_6_4,
+    schaums_6_6,
+    schaums_6_7,
+    schaums_6_8,
+    schaums_6_9,
+    schaums_6_10,
+    schaums_6_11,
+    schaums_6_12,
+    schaums_6_13,
+    schaums_6_16,
+    schaums_6_17,
+    schaums_6_18,
+    schaums_6_19,
+    schaums_6_20,
+    schaums_6_21,
+    schaums_6_23,
+]
+
 
 questions_by_subtopic = {
     subtopics_keys[0]:power_electronics,
     subtopics_keys[1]:one_dimension_kinematics,
     subtopics_keys[2]:kinetics,
+    subtopics_keys[3]:work_energy_theorem,
 }
 
 questions_by_topic ={
     topics_keys[3]: power_electronics,
-    topics_keys[2]: one_dimension_kinematics + kinetics,
+    topics_keys[2]: one_dimension_kinematics + kinetics + work_energy_theorem,
 }
