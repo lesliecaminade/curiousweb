@@ -15,8 +15,12 @@ import os
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 TEMPLATE_DIR = os.path.join(BASE_DIR, 'templates')
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
+STATIC_DIR = os.path.join(BASE_DIR, 'static')
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+#re-enable the static root below upon deploying to pythonanywhere.com and run collectstatic on the virtual environment it is running
+#STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
@@ -28,8 +32,8 @@ SECRET_KEY = '-k)w3)n6$h#i*(b!kp8(y0+145syat&(&a3v&i-ptij-mla4h#'
 DEBUG = True
 
 ALLOWED_HOSTS = [
-'siliconcortex.pythonanywhere.com',
-'127.0.0.1',
+    'siliconcortex.pythonanywhere.com',
+    '127.0.0.1',
 ]
 
 
@@ -125,7 +129,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
-    STATIC_ROOT,
+    STATIC_DIR,
 ]
 
 MEDIA_URL = '/media/'
