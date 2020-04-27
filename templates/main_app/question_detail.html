@@ -65,25 +65,14 @@
 {% endif %}
 
 <script type="text/javascript">
-var timeout = 60000;
-var timeout2 = 60000;
+
 var progressbartimer = 0
-
-setTimeout(function() {
-        $("#answerButton").removeAttr("disabled"); // or removeAttr("disabled");
-        $("#answerButton").text("Answer");
-      }, timeout);
-
-setTimeout(function() {
-        $("#solutionButton").removeAttr("disabled"); // or removeAttr("disabled");
-        $("#solutionButton").text("Solution");
-      }, timeout2);
 
 $(document).ready(function () {
 
 function barLoop() {
   setTimeout(function(){
-    progressbartimer = progressbartimer + Math.floor((Math.random() * 10) + 1);;
+    progressbartimer = progressbartimer + Math.floor((Math.random() * 3) + 1);;
     width_string = progressbartimer.toString() +"%"
     $("#solutionProgressBar").css("width", width_string);
     $("#solutionProgressBar").attr("aria-valuenow", width_string);
@@ -101,7 +90,7 @@ function barLoop() {
 
 
     }
-  }, 600)
+  }, 1000)
 
 
 }
