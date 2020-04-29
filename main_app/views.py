@@ -111,7 +111,7 @@ def question_customize_reroll(request):
         question_instance = random.choice(question_pool)()
 
         #try if the question contains an image, and send it if there is
-        if question_instance.image:
+        try:
             context = {
                 'available': True,
                 'question':question_instance.question,
@@ -120,7 +120,7 @@ def question_customize_reroll(request):
                 'subtopic_reroll':subtopic_found,
                 'image':question_instance.image
             }
-        else:
+        except:
             context = {
                 'available': True,
                 'question':question_instance.question,
