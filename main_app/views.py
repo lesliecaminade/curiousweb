@@ -109,13 +109,23 @@ def question_customize_reroll(request):
         #retrieve the proper set of questions
         question_pool = questions_by_subtopic[subtopic_found]
         question_instance = random.choice(question_pool)()
-        context = {
-            'available': True,
-            'question':question_instance.question,
-            'answer':question_instance.answer,
-            'solution':question_instance.latex_solution,
-            'subtopic_reroll':subtopic_found,
-        }
+        try:
+            context = {
+                'available': True,
+                'question':question_instance.question,
+                'answer':question_instance.answer,
+                'solution':question_instance.latex_solution,
+                'subtopic_reroll':subtopic_found,
+                'image':question_instance.image
+            }
+        except:
+            context = {
+                'available': True,
+                'question':question_instance.question,
+                'answer':question_instance.answer,
+                'solution':question_instance.latex_solution,
+                'subtopic_reroll':subtopic_found,
+            }
 
         #return the questions to the template_name
 

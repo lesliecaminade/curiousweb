@@ -1,7 +1,8 @@
 from generator import random_handler as ran
 from generator import constants_conversions as c
 from generator.latex_engine import *
-
+from generator.latex_engine import LATEX_SOLUTION_PREFIX as lp
+from generator.latex_engine import LATEX_SOLUTION_SUFFIX as ls
 import sympy as sym
 import math
 import random
@@ -705,9 +706,24 @@ class fewson_3_8:
 
         self.answer = f"""{iave.A:.4g} A, {torque.Nm:.4g} Nm"""
         self.latex_question = f"""{LATEX_ITEM_PREFIX} A separately excited dc motor is driven from a {vsourcerms.V:.4g} V, {frequency.Hz:.4g} Hz supply using a half controlled thyristor bridge with a flywheel diode connected across the armature. The motor has an armature resistance Ra of {ra.ohms:.4g} ohms, and an armature voltage constant kv of {kv.V:.4g} V/rad/s. The field current is constant at its rated value. Assume that the armature current is steady. Determin the values of armauture current and torque for an armature speed of {speed.revpermin:.4g} rev/min and a firing delay angle of {alpha.degrees:.4g} degrees."""
-        self.latex_solution = f"""{LATEX_SOLUTION_PREFIX}
-E_{{b}}
-{LATEX_SOLUTION_SUFFIX}"""
+        self.latex_solution = f"""{lp}
+E_b &= k_v \\omega \\\\
+&= {kv.V:.4g} \\cdot {speed.radpers} \\\\
+&= {eb.V:.4g} \\text{{ V}} \\\\
+\\\\
+V_{{ \\text{{ave}}}} &= \\frac{{1}}{{2 \\pi }}  \\int_{{ \\alpha}}^{{ \\pi}} \\sqrt{{2}} V_{{ \\text{{rms}}}} \\sin t dt \\\\
+&= \\frac{{1}}{{2 \\pi }}  \\int_{{ {alpha.radians:.4g} }}^{{ \\pi}} \\sqrt{{2}} \\cdot {vsourcerms.V:.4g}  \\sin t dt \\\\
+&= {eb.V:.4g} \\text{{ V}} \\\\
+\\\\
+I_{{ \\text{{ave}}}} &= \\frac{{ V_{{ \\text{{ave}} }}  - E_b }} {{ R_a }} \\\\
+&= \\frac{{ {vave.V:.4g} - {eb.V:.4g}}} {{ {ra.ohms:.4g}}} \\\\
+&= {iave.A:.4g} \\text{{ A}} \\\\
+\\\\
+\\tau &= k_v I_{{ \\text{{ave}}}} \\\\
+&= {kv.V:.4g} \\cdot {iave.A:.4g} \\\\
+&= {torque.Nm:.4g} \\text{{ Nm}} \\\\
+{ls}"""
+
 class fewson_3_9:
     def __init__(self,*args,**kwargs):
         print('39')
@@ -740,8 +756,31 @@ class fewson_3_9:
 
 
         self.answer = f"""{vave.V:.4} V, {iave.A:.4} A, {irms.A:.4} A, {powerP.W:.4} W, {pf:.4}, {powerPmax.W:.4} W, {pfmax:.4}"""
-        self.latex_question = f"""test"""
-        self.latex_solution = f"""test"""
+        self.latex_solution = f"""{lp}
+\\text{{ For question A }} \\\\
+V_{{ \\text{{ave}}}} &= \\frac{{1}}{{ \\frac{{2\\pi}}{{3}} }} \\int_{{ - \\frac{{ \\pi}}{{3}} + \\alpha}}^{{ \\frac{{ \\pi}}{{3}} + \\alpha }} \\sqrt{{2}} V_{{ \\text{{rms}} }} \\cos t dt \\\\
+&= \\frac{{1}}{{ \\frac{{2\\pi}}{{3}} }} \\int_{{ - \\frac{{ \\pi}}{{3}} + {alpha.radians:.4g}}}^{{ \\frac{{ \\pi}}{{3}} + {alpha.radians:.4g}}} \\sqrt{{2}} \\cdot {vsourcerms.V:.4g} \\cos t dt \\\\
+&= {vave.V:.4g} \\text{{ V}} \\\\
+\\\\
+I_{{ \\text{{ave}}}} &= \\frac{{ V_{{ \\text{{ave}}}}}} {{R_{{ \\text{{load}}}}}} \\\\
+&= \\frac{{ {vave.V:.4g}}} {{ {rload.ohms:.4g}}} \\\\
+&= {iave.A:.4g} \\text{{ A}} \\\\
+\\\\
+I_{{ \\text{{rms}}}} &=  \\frac{{ I_{{ \\text{{ave}}}} }} {{ \\sqrt{{3}}}} \\\\
+&= \\frac{{ {iave.A:.4g}}} {{ \\sqrt{{3}}}} \\\\
+&= {irms.A:.4g} \\text{{ A}} \\\\
+\\\\
+P &= I_{{ \\text{{ave}}}}^2 R_{{ \\text{{load}}}} \\\\
+&= {iave.A:.4g}^2 \\cdot {rload.ohms:.4g} \\\\
+&= {powerP.W:.4g} \\text{{ W}} \\\\
+\\\\
+pf &= \\frac{{ P}} {{ 3 V_{{ \\text{{rms}}}}  I_{{ \\text{{rms}}}}    }} \\\\
+&= \\frac{{ {powerP.W:.4g}}} {{3 \\cdot {vsourcerms.V:.4g} \\cdot {irms.A} }}\\\\
+&= {pf:.4g}\\\\
+\\\\
+\\text{{ For question B, same soltion}} \\\\
+\\text{{ But make }} \\alpha = 0 \\\\
+{ls}"""
 
 class fewson_3_10:
     def __init__(self,*args,**kwargs):
@@ -775,5 +814,28 @@ class fewson_3_10:
 
 
         self.answer = f"""{vave.V:.4} V, {iave.A:.4} A, {irms.A:.4} A, {powerP.W:.4} W, {pf:.4}, {powerPmax.W:.4} W, {pfmax:.4}"""
-        self.latex_question = f"""test"""
-        self.latex_solution = f"""test"""
+        self.latex_solution = f"""{lp}
+\\text{{ For question A }} \\\\
+V_{{ \\text{{ave}}}} &= \\frac{{1}}{{ \\frac{{ \\pi}}{{3}} }} \\int_{{ - \\frac{{ \\pi}}{{6}} + \\alpha}}^{{ \\frac{{ \\pi}}{{6}} + \\alpha }} \\sqrt{{2}} V_{{ \\text{{rms}} }} \\cos t dt \\\\
+&= \\frac{{1}}{{ \\frac{{ \\pi}}{{3}} }} \\int_{{ - \\frac{{ \\pi}}{{6}} + {alpha.radians:.4g}}}^{{ \\frac{{ \\pi}}{{6}} + {alpha.radians:.4g}}} \\sqrt{{2}} \\cdot {vsourcerms.V:.4g} \\cos t dt \\\\
+&= {vave.V:.4g} \\text{{ V}} \\\\
+\\\\
+I_{{ \\text{{ave}}}} &= \\frac{{ V_{{ \\text{{ave}}}}}} {{R_{{ \\text{{load}}}}}} \\\\
+&= \\frac{{ {vave.V:.4g}}} {{ {rload.ohms:.4g}}} \\\\
+&= {iave.A:.4g} \\text{{ A}} \\\\
+\\\\
+I_{{ \\text{{rms}}}} &=  \\frac{{ I_{{ \\text{{ave}}}} \\sqrt{{6}} }} {{ 3 }} \\\\
+&= \\frac{{ {iave.A:.4g} \\cdot \\sqrt{{6}} }} {{ 3 }} \\\\
+&= {irms.A:.4g} \\text{{ A}} \\\\
+\\\\
+P &= I_{{ \\text{{ave}}}}^2 R_{{ \\text{{load}}}} \\\\
+&= {iave.A:.4g}^2 \\cdot {rload.ohms:.4g} \\\\
+&= {powerP.W:.4g} \\text{{ W}} \\\\
+\\\\
+pf &= \\frac{{ P}} {{ 3 V_{{ \\text{{rms}}}}  I_{{ \\text{{rms}}}}    }} \\\\
+&= \\frac{{ {powerP.W:.4g}}} {{3 \\cdot {vsourcerms.V:.4g} \\cdot {irms.A} }}\\\\
+&= {pf:.4g}\\\\
+\\\\
+\\text{{ For question B, same soltion}} \\\\
+\\text{{ But make }} \\alpha = 0 \\\\
+{ls}"""

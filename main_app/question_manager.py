@@ -1,5 +1,6 @@
 from electronics.power_electronics_engine import *
 from geas.physics_engine import *
+from electronics.diode_engine import *
 
 topics_keys = [
     'Mathematics',
@@ -13,6 +14,7 @@ subtopics_keys = [
     'Sciences: One Dimension Kinematics',
     'Sciences: Kinetics',
     'Sciences: Work-Energy Theorem',
+    'Electronics: Diode Circuits',
 ]
 
 one_dimension_kinematics = [
@@ -75,6 +77,9 @@ power_electronics = [
     fewson_3_4,
     fewson_3_5,
     fewson_3_6,
+    fewson_3_8,
+    fewson_3_9,
+    fewson_3_10,
 ]
 
 work_energy_theorem = [
@@ -99,15 +104,46 @@ work_energy_theorem = [
     schaums_6_23,
 ]
 
+diode = [
+    floyd_2_2,
+    floyd_2_3,
+    floyd_2_4,
+    floyd_2_5,
+    floyd_2_6,
+    floyd_2_7,
+    floyd_2_8,
+    floyd_2_9,
+    floyd_2_10,
+    floyd_2_11,
+    floyd_2_12,
+    floyd_2_13,
+    floyd_3_5,
+    floyd_3_6,
+    floyd_3_7,
+    floyd_3_8_a,
+    boylestad_2_4,
+    boylestad_2_6,
+    boylestad_2_9,
+    boylestad_2_10,
+    boylestad_2_11,
+    boylestad_2_12,
+    boylestad_2_13,
+    boylestad_2_14,
+    boylestad_2_15,
+    boylestad_2_16,
+    boylestad_2_17,
+]
+
 
 questions_by_subtopic = {
     subtopics_keys[0]:power_electronics,
     subtopics_keys[1]:one_dimension_kinematics,
     subtopics_keys[2]:kinetics,
     subtopics_keys[3]:work_energy_theorem,
+    subtopics_keys[4]:diode,
 }
 
-questions_by_topic ={
-    topics_keys[3]: power_electronics,
+questions_by_topic = {
+    topics_keys[3]: power_electronics + diode,
     topics_keys[2]: one_dimension_kinematics + kinetics + work_energy_theorem,
 }
