@@ -442,32 +442,34 @@ class floyd_3_6:
     def __init__(self,*args,**kwargs):
         repeat = True
         while repeat:
-            try:
-                Vz = c.voltage(int(ran.main(12)))
-                Vin = c.voltage(Vz.V + int(ran.main(12)))
-                Rs = c.resistance(470, 'e12')
-                Izk = c.current(random.randint(1,3), 'mA')
-                Izm = c.current(int(ran.main(50)), 'mA')
 
-                self.image = '2qq8d3u9659jmxxe5nps.png'
-                self.question = f"""For an input voltage of {Vin.V:.4g} V, determine the minimum and the maximum load currents for which the zener diode will maintain regulation. What is the minimum value of RL that can be used? R = {Rs.ohms:.4g} ohms, Vz = {Vz.V:.4g} V, Izk = {Izk.mA:.4g} mA, and Izm = {Izm.mA:.4g} mA. Assume an ideal zener diode where Zz = 0 ohms and Vz remains a constant {Vz.V:.4g} V over the range of current values, for simplicity."""
+            Vz = c.voltage(int(ran.main(12)))
+            Vin = c.voltage(Vz.V + int(ran.main(12)))
+            Rs = c.resistance(470, 'e12')
+            Izk = c.current(random.randint(1,3), 'mA')
+            Izm = c.current(int(ran.main(50)), 'mA')
+            Izk_int = int(Izk.mA)
+            Izm_int = int(Izm.mA)
 
-                Itotal = c.current(
-                (Vin.V - Vz.V) / Rs.ohms
-                )
+            self.image = '2qq8d3u9659jmxxe5nps.png'
+            self.question = f"""For an input voltage of {Vin.V:.4g} V, determine the minimum and the maximum load currents for which the zener diode will maintain regulation. What is the minimum value of RL that can be used? R = {Rs.ohms:.4g} ohms, Vz = {Vz.V:.4g} V, Izk = {Izk.mA:.4g} mA, and Izm = {Izm.mA:.4g} mA. Assume an ideal zener diode where Zz = 0 ohms and Vz remains a constant {Vz.V:.4g} V over the range of current values, for simplicity."""
 
-                if Itotal.A <= Izm.A:
-                    repeat = True
-                else:
-                    Iloadmin = c.current(Itotal.A - Izm.A)
-                    Rloadmax = c.resistance(Vz.V / Iloadmin.A)
-                    repeat = False
+            Itotal = c.current(
+            (Vin.V - Vz.V) / Rs.ohms
+            )
+            Itotal_frac = Fraction(int(Vin.V - Vz.V), int(Rs.ohms) )
 
-                Iloadmax = c.current(Itotal.A - Izk.A)
-
-                Rloadmin = c.resistance(Vz.V / Iloadmax.A)
-            except:
+            if Itotal.A <= Izm.A:
                 repeat = True
+            else:
+                Iloadmin_int = Izk_int - Izm_int
+                Rloadmax = c.resistance(Vz.V / Iloadmin_int )
+                repeat = False
+
+            Iloadmax = Itotal_frac - Izk_int
+
+            Rloadmin = c.resistance(Vz.V / Iloadmax)
+
 
         self.answer = f"""{Iloadmin.mA:.4g} mA, {Iloadmax.mA:.4g} mA, {Rloadmin.ohms:.4g} ohms, {Rloadmax.ohms:.4g} ohms"""
         self.latex_solution = f"""{lp}
