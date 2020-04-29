@@ -442,7 +442,6 @@ class floyd_3_6:
     def __init__(self,*args,**kwargs):
         repeat = True
         while repeat:
-
             Vz = c.voltage(int(ran.main(12)))
             Vin = c.voltage(Vz.V + int(ran.main(12)))
             Rs = c.resistance(470, 'e12')
@@ -469,6 +468,8 @@ class floyd_3_6:
             Iloadmax = Itotal_frac - Izk_int
 
             Rloadmin = c.resistance(Vz.V / Iloadmax)
+
+
 
 
         self.answer = f"""{Iloadmin.mA:.4g} mA, {Iloadmax.mA:.4g} mA, {Rloadmin.ohms:.4g} ohms, {Rloadmax.ohms:.4g} ohms"""
