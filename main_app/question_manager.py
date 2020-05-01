@@ -1,6 +1,7 @@
 from electronics.power_electronics_engine import *
 from geas.physics_engine import *
 from electronics.diode_engine import *
+from electronics.field_effect_transistors_engine import *
 
 topics_keys = [
     'Mathematics',
@@ -15,6 +16,8 @@ subtopics_keys = [
     'Sciences: Kinetics',
     'Sciences: Work-Energy Theorem',
     'Electronics: Diode Circuits',
+    'Electronics: Field Effect Transistors',
+
 ]
 
 one_dimension_kinematics = [
@@ -134,6 +137,23 @@ diode = [
     boylestad_2_17,
 ]
 
+field_effect_transistors = [
+    boylestad_7_1,
+    boylestad_7_2,
+    boylestad_7_4,
+    boylestad_7_5,
+    boylestad_7_6,
+    boylestad_7_8,
+    boylestad_7_10,
+    boylestad_7_11,
+    boylestad_8_7,
+    boylestad_8_8,
+    boylestad_8_9,
+    boylestad_8_10,
+    boylestad_8_11,
+    boylestad_8_12,
+]
+
 
 questions_by_subtopic = {
     subtopics_keys[0]:power_electronics,
@@ -141,9 +161,11 @@ questions_by_subtopic = {
     subtopics_keys[2]:kinetics,
     subtopics_keys[3]:work_energy_theorem,
     subtopics_keys[4]:diode,
+    subtopics_keys[5]:field_effect_transistors,
+
 }
 
 questions_by_topic = {
-    topics_keys[3]: power_electronics + diode,
+    topics_keys[3]: power_electronics + diode + field_effect_transistors,
     topics_keys[2]: one_dimension_kinematics + kinetics + work_energy_theorem,
 }
