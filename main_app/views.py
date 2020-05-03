@@ -29,6 +29,7 @@ import random
 from electronics.power_electronics_engine import *
 from main_app.question_manager import topics_keys, subtopics_keys, questions_by_subtopic, questions_by_topic
 import requests as requests_library
+from email_management.email_sender import send_email
 
 def landing(request):
     return render(request, 'main_app/landing.html')
@@ -208,6 +209,8 @@ def report_error(request):
         email = request.POST['email']
         description = request.POST['description']
         image = request.POST['image']
+
+
         recaptcha = request.POST['g-recaptcha-response']
         recaptcha_data = {
             'secret': '6Lc1CO4UAAAAACs9XqPf35SGvdtP-0QmDM0n0K6V',
@@ -230,12 +233,32 @@ def login_view(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            return render(request, 'main_app/landing.html',{'login_success': True, 'login_fail':False})
+            return render(request, 'main_app/landing.html',{'message':'Login Successful.')
         else:
-            return render(request, 'main_app/landing.html',{'login_success': False, 'login_fail':True})
+            return render(request, 'main_app/landing.html',{'danger': 'Login Failed.'})
     else:
         return render(request, 'main_app/login.html')
 
 def logout_view(request):
     logout(request)
-    return render(request, 'main_app/landing.html')
+    return render(request, 'main_app/landing.html', {'message': 'Logout Successful.'})
+
+def enroll(request):
+    if request.method == "POST":
+        recaptcha = request.POST['g-recaptcha-response']
+        recaptcha_data = {
+            'secret': '6Lc1CO4UAAAAACs9XqPf35SGvdtP-0QmDM0n0K6V',
+            'response': recaptcha,
+        }
+
+        google_captcha_response = requests_library.post('https://www.google.com/recaptcha/api/siteverify', recaptcha_data)
+        if 'true' in google_captcha_response.text:
+            #create and save the object
+            send_email(f"""{request.POST['first_name']}, {request.POST['last_name']}, {request.POST['school_name']}, {request.POST['year_graduated']}, {request.POST['phone_number']}, {request.POST['facebook_username']}""")
+            return render(request, 'main_app/landing.html', {'message': 'Enrollment has been requested, keep your lines open so we can contact you.'})
+        else:
+            return render(request, 'main_app/report_error.html')
+
+
+    else:
+        return render(request, 'main_app/enrollment.html')

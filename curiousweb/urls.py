@@ -36,6 +36,7 @@ urlpatterns = [
     path('report-error/', views.report_error, name='report_error'),
     path('login/', views.login_view, name='login'),
     path('logout/', views.logout_view, name='logout'),
+    path('enroll/',views.enroll, name='enroll'),
 
 
     # path('login/', auth_views.LoginView.as_view(),{'template_name':'registration/login.html'},name='login'),

@@ -3,26 +3,28 @@
 
 <div class="container">
 
-  {%if login_success %}
-  <div class="alert alert-primary" role="alert">
-    Login Successful
-  </div>
-  {%endif%}
-
-  {%if login_fail %}
+  {%if danger %}
   <div class="alert alert-danger" role="alert">
-    Login Failed
+    {{danger}}
+  </div>
+  {%endif%}
+
+  {%if message%}
+  <div class="alert alert-primary" role="alert">
+    {{message}}
   </div>
   {%endif%}
 
 
-  <h1 class="display-4">Welcome To Project Curious Web</h1>
+  <h1 class="display-4">Welcome To CERTC</h1>
   <p class="lead">This is a site wherein you can find most common questions asked in the PRC Engineering Board Exams. You can find here problem solving questions with their corresponding solutions.</p>
   <hr class="my-4">
   <p>This is an ongoing project of CERTC <img src="/static/main_logo.png" width="30" height="30" class="d-inline-block align-top" alt=""></p>
 
   <a class="btn btn-primary btn-lg" href="{%url 'question_customize' %}" role="button">Try Demo</a>
-
+  {%if not user.is_authenticated %}
+  <a class="btn btn-primary btn-lg" href="{%url 'enroll' %}" role="button">Request for Enrollment</a>
+  {% endif %}
   <img src="/static/cover_photo_certc_1000p.png" class="img-fluid mt-4" alt="Responsive image">
 </div>
 
