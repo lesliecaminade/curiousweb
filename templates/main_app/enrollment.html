@@ -1,0 +1,41 @@
+{% extends 'main_app/base.html' %}
+{% block content %}
+
+<form method="POST">
+  <div class="form-group">
+    <label for="first_name">First Name</label>
+    <input type="text" class="form-control" placeholder="First Name" name="first_name">
+  </div>
+
+  <div class="form-group">
+    <label for="last_name">Last Name</label>
+    <input type="text" class="form-control" placeholder="Last Name" name="last_name">
+  </div>
+
+  <div class="form-group">
+    <label for="school_name">School Full Name</label>
+    <input type="text" class="form-control" placeholder="University of Some Place" name="school_name">
+  </div>
+
+  <div class="form-group">
+    <label for="year_graduated">Year Graduated</label>
+    <input type="number" class="form-control" placeholder="20XX or 19XX" name="year_graduated">
+  </div>
+
+  <div class="form-group">
+    <label for="phone_number">Phone Number</label>
+    <input type="number" class="form-control" placeholder="+639471234567" name="phone_number">
+  </div>
+
+  <div class="form-group">
+    <label for="phone_number">Facebook Messenger Username</label>
+    <input type="text" class="form-control" placeholder="facebook.com/someusername" name="facebook_username">
+  </div>
+
+<div class="g-recaptcha" data-sitekey="6Lc1CO4UAAAAAP64v29D0oS3JZWx7Is6lACu47lI"></div>
+<button type="submit" class="btn btn-primary">Submit</button>
+
+  {% csrf_token %}
+</form>
+
+{% endblock %}
