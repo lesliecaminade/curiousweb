@@ -2,6 +2,7 @@ from electronics.power_electronics_engine import *
 from geas.physics_engine import *
 from electronics.diode_engine import *
 from electronics.field_effect_transistors_engine import *
+from electronics.energy_conversion_engine import *
 
 topics_keys = [
     'Mathematics',
@@ -17,6 +18,7 @@ subtopics_keys = [
     'Sciences: Work-Energy Theorem',
     'Electronics: Diode Circuits',
     'Electronics: Field Effect Transistors',
+    'Electronics: Energy Conversion',
 
 ]
 
@@ -154,6 +156,9 @@ field_effect_transistors = [
     boylestad_8_12,
 ]
 
+energy_conversion = [
+    johnbird_4_1,
+]
 
 questions_by_subtopic = {
     subtopics_keys[0]:power_electronics,
@@ -162,6 +167,7 @@ questions_by_subtopic = {
     subtopics_keys[3]:work_energy_theorem,
     subtopics_keys[4]:diode,
     subtopics_keys[5]:field_effect_transistors,
+    subtopics_keys[6]:energy_conversion,
 
 }
 
