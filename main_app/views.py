@@ -8,6 +8,8 @@ from main_app.models import ErrorReport
 Import the function-based-view login required"""
 #from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
+from django.contrib.auth import authenticate, login, logout
 
 """Import the reverse and reverse_lazy functions"""
 from django.urls import reverse, reverse_lazy
@@ -20,6 +22,8 @@ from django.utils import timezone
 
 
 
+
+
 """PROJECT SPECIFIC"""
 import random
 from electronics.power_electronics_engine import *
@@ -28,7 +32,6 @@ import requests as requests_library
 
 def landing(request):
     return render(request, 'main_app/landing.html')
-
 
 def question_detail(request):
     #receive the topic type
@@ -73,13 +76,47 @@ def question_customize(request):
         #retrieve the proper set of questions
         question_pool = questions_by_subtopic[subtopic_found]
         question_instance = random.choice(question_pool)()
-        context = {
-            'available': True,
-            'question':question_instance.question,
-            'answer':question_instance.answer,
-            'solution':question_instance.latex_solution,
-            'subtopic_reroll':subtopic_found,
-        }
+
+        #try if the question contains an image, and send it if there is
+
+        #check if user is enrolled
+        if request.user.is_authenticated:
+            try:
+                context = {
+                    'available': True,
+                    'question':question_instance.question,
+                    'answer':question_instance.answer,
+                    'solution':question_instance.latex_solution,
+                    'subtopic_reroll':subtopic_found,
+                    'image':question_instance.image,
+                }
+            except:
+                context = {
+                    'available': True,
+                    'question':question_instance.question,
+                    'answer':question_instance.answer,
+                    'solution':question_instance.latex_solution,
+                    'subtopic_reroll':subtopic_found,
+                }
+        else:
+            #if the student is not enrolled
+                try:
+                    context = {
+                        'available': True,
+                        'question':question_instance.question,
+                        'answer':question_instance.answer,
+                        'solution':'\\text{Enrollment is required to view solution.}',
+                        'subtopic_reroll':subtopic_found,
+                        'image':question_instance.image,
+                    }
+                except:
+                    context = {
+                        'available': True,
+                        'question':question_instance.question,
+                        'answer':question_instance.answer,
+                        'solution':'\\text{Enrollment is required to view solution.}',
+                        'subtopic_reroll':subtopic_found,
+                    }
 
         #return the questions to the template_name
 
@@ -92,7 +129,6 @@ def question_customize(request):
         subtopics = subtopics_keys
 
         context = {
-            #'topics':topics,
             'subtopics':subtopics,
         }
         return render(request, 'main_app/question_customize.html', context)
@@ -111,23 +147,45 @@ def question_customize_reroll(request):
         question_instance = random.choice(question_pool)()
 
         #try if the question contains an image, and send it if there is
-        try:
-            context = {
-                'available': True,
-                'question':question_instance.question,
-                'answer':question_instance.answer,
-                'solution':question_instance.latex_solution,
-                'subtopic_reroll':subtopic_found,
-                'image':question_instance.image
-            }
-        except:
-            context = {
-                'available': True,
-                'question':question_instance.question,
-                'answer':question_instance.answer,
-                'solution':question_instance.latex_solution,
-                'subtopic_reroll':subtopic_found,
-            }
+
+        #check if user is enrolled
+        if request.user.is_authenticated:
+            try:
+                context = {
+                    'available': True,
+                    'question':question_instance.question,
+                    'answer':question_instance.answer,
+                    'solution':question_instance.latex_solution,
+                    'subtopic_reroll':subtopic_found,
+                    'image':question_instance.image,
+                }
+            except:
+                context = {
+                    'available': True,
+                    'question':question_instance.question,
+                    'answer':question_instance.answer,
+                    'solution':question_instance.latex_solution,
+                    'subtopic_reroll':subtopic_found,
+                }
+        else:
+            #if the student is not enrolled
+                try:
+                    context = {
+                        'available': True,
+                        'question':question_instance.question,
+                        'answer':question_instance.answer,
+                        'solution':'\\text{Enrollment is required to view solution.}',
+                        'subtopic_reroll':subtopic_found,
+                        'image':question_instance.image,
+                    }
+                except:
+                    context = {
+                        'available': True,
+                        'question':question_instance.question,
+                        'answer':question_instance.answer,
+                        'solution':'\\text{Enrollment is required to view solution.}',
+                        'subtopic_reroll':subtopic_found,
+                    }
 
         #return the questions to the template_name
 
@@ -155,6 +213,7 @@ def report_error(request):
             'secret': '6Lc1CO4UAAAAACs9XqPf35SGvdtP-0QmDM0n0K6V',
             'response': recaptcha,
         }
+
         google_captcha_response = requests_library.post('https://www.google.com/recaptcha/api/siteverify', recaptcha_data)
         if 'true' in google_captcha_response.text:
             #create and save the object
@@ -163,3 +222,20 @@ def report_error(request):
         return render(request, 'main_app/landing.html')
     else:
         return render(request, 'main_app/report_error.html')
+
+def login_view(request):
+    if request.method == "POST":
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return render(request, 'main_app/landing.html',{'login_success': True, 'login_fail':False})
+        else:
+            return render(request, 'main_app/landing.html',{'login_success': False, 'login_fail':True})
+    else:
+        return render(request, 'main_app/login.html')
+
+def logout_view(request):
+    logout(request)
+    return render(request, 'main_app/landing.html')
