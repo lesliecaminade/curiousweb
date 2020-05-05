@@ -2,9 +2,9 @@
 from django import forms
 
 """Importing the models that we created"""
-# from main_app.models import (
-#
-# )
+from main_app.models import (
+Topic, Subtopic, MultipleChoice,
+)
 
 
 class QuestionCustomizeForm(forms.Form):

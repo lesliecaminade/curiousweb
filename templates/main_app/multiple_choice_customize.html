@@ -1,0 +1,43 @@
+{% extends 'main_app/base.html' %}
+{% block content %}
+
+<div class="jumbotron">
+
+  {%if danger %}
+  <div class="alert alert-danger" role="alert">
+    {{danger}}
+  </div>
+  {%endif%}
+
+  {%if message %}
+  <div class="alert alert-primary" role="alert">
+    {{message}}
+  </div>
+  {% endif%}
+
+
+  <h1 class="display-4">Customize Multiple Choice Question</h1>
+  <p class="lead">Click the topic or subtopic that you want the questions to come from</p>
+  <hr class="my-4">
+
+<form action="{%url 'multiple_choice_detail' %}" method="POST">
+
+  <div class="form-group">
+    <label for="exampleFormControlSelect1">Subtopic</label>
+    <select class="form-control" id="exampleFormControlSelect1" name="subtopic">
+        <option>Select a topic</option>
+      {% for subtopic in subtopics %}
+        <option>{{ subtopic }}</option>
+      {% endfor %}
+    </select>
+
+  <button type="submit" class="btn btn-primary btn-lg btn-block">Go</button>
+
+  </div>
+
+
+
+{% csrf_token %}
+</form>
+
+{% endblock %}
