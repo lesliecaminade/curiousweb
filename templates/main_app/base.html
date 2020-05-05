@@ -28,29 +28,63 @@
       </nav>
 
       <ul class="nav justify-content-end navbar-light bg-light">
-        <li class="nav-item">
-          <a class="nav-link" href="https://lesliecaminade.pythonanywhere.com">Dev Website</a>
-        </li>
 
-        <li class="nav-item">
-          <a class="nav-link active" href="https://www.facebook.com/CERTC-Review-Center-760996034020590">CERTC ECE/EE Review Center</a>
-        </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Review
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" href="{% url 'question_customize' %}">Review Questions with Detailed Solutions</a>
+          <a class="dropdown-item" href="{%url 'multiple_choice_question_customize'%}">Review Modules</a>
+        </div>
+      </li>
 
-        {%if user.is_authenticated %}
-        <li class="nav-item">
-          <!-- this will become a link to a settings page later -->
-          <a class="nav-link" href="">{{user.username}}</a>
-        </li>
+      {%if user.is_authenticated %}
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown2" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Question Management
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdow2n">
+          <a class="dropdown-item" href="{% url 'create_multiple_choice_question' %}">Add Module Questions</a>
+          <a class="dropdown-item" href="{% url 'multiple_choice_question_list_select'%}">List of Multiple Choice Questions</a>
+        </div>
+      </li>
+      {% endif %}
 
-        <li class="nav-item">
-          <a class="nav-link" href="{%url 'logout'%}">Logout</a>
-        </li>
-        {% else %}
-        
-        <li class="nav-item">
-          <a class="nav-link" href="{%url 'login'%}">Login</a>
-        </li>
-        {% endif %}
+      {%if user.is_authenticated %}
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown_username" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          {{user.username}}
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown_username">
+          <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
+          <a class="dropdown-item" href="{% url 'change_password'%}">Change Password</a>
+        </div>
+      </li>
+      {% else %}
+
+      <li class="nav-item">
+        <a class="nav-link" href="{%url 'login'%}">Login</a>
+      </li>
+
+      {% endif %}
+
+
+      <li class="nav-item">
+        <a class="nav-link active" href="https://www.facebook.com/CERTC-Review-Center-760996034020590">CERTC ECE/EE Review Center</a>
+      </li>
+
+
+      <li class="nav-item">
+        <a class="nav-link" href="https://lesliecaminade.pythonanywhere.com">Dev Website</a>
+      </li>
+
+
+
+
+
+
+
       </ul>
 
 

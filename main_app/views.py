@@ -1,8 +1,10 @@
 """Importing models """
 from main_app.models import ErrorReport
+from main_app.models import Topic, Subtopic, MultipleChoice
 
 """Import the forms"""
 #from main_app.forms import QuestionCustomizeForm
+#from main_app.forms import MultipleChoiceForm
 
 """Import the class-based-view login required
 Import the function-based-view login required"""
@@ -233,7 +235,7 @@ def login_view(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            return render(request, 'main_app/landing.html',{'message':'Login Successful.')
+            return render(request, 'main_app/landing.html',{'message':'Login Successful.'})
         else:
             return render(request, 'main_app/landing.html',{'danger': 'Login Failed.'})
     else:
@@ -262,3 +264,357 @@ def enroll(request):
 
     else:
         return render(request, 'main_app/enrollment.html')
+
+def create_multiple_choice_question(request):
+    if request.user.is_staff:
+        if request.method == "POST":
+            question = request.POST['question']
+            correct = request.POST['correct']
+            wrong_1 = request.POST['wrong_1']
+            wrong_2 = request.POST['wrong_2']
+            wrong_3 = request.POST['wrong_3']
+
+            try:
+                image = request.POST['image']
+            except:
+                image = None
+
+            try:
+                correct_image = request.POST['correct_image']
+            except:
+                correct_image = None
+
+            try:
+                wrong_image_1 = request.POST['wrong_image_1']
+            except:
+                wrong_image_1 = None
+
+            try:
+                wrong_image_2 = request.POST['wrong_image_2']
+            except:
+                wrong_image_2 = None
+
+            try:
+                wrong_image_3 = request.POST['wrong_image_3']
+            except:
+                wrong_image_3 = None
+
+            try:
+                solution = request.POST['solution']
+            except:
+                solution = None
+
+            subtopic = request.POST['subtopic']
+
+            multiple_choice_question = MultipleChoice.objects.create(
+                author = request.user.username,
+                question = question,
+                correct = correct,
+                wrong_1 = wrong_1,
+                wrong_2 = wrong_2,
+                wrong_3 = wrong_3,
+                image = image,
+                correct_image = correct_image,
+                wrong_image_1 = wrong_image_1,
+                wrong_image_2 = wrong_image_2,
+                wrong_image_3 = wrong_image_3,
+                solution = solution,
+                subtopic = Subtopic.objects.filter(name=subtopic)[0]
+            )
+
+            try:
+                multiple_choice_question.save()
+
+                subtopics = []
+                for object in Subtopic.objects.all():
+                    subtopics.append(getattr(object, 'name'))
+
+                context = {
+                    'subtopics': subtopics,
+                    'previous_subtopic' : subtopic,
+                    'message': 'Question successfully saved.'
+                }
+            except:
+                context = {
+                    'subtopics': subtopics,
+                    'previous_subtopic' : subtopic,
+                    'danger': 'Question saving failed.'
+                }
+
+            return render(request, 'main_app/create_multiple_choice_question.html', context)
+        else:
+            subtopics = []
+
+            for object in Subtopic.objects.all():
+                subtopics.append(getattr(object, 'name'))
+
+            context = {
+                'subtopics': subtopics,
+            }
+            return render(request, 'main_app/create_multiple_choice_question.html', context)
+
+    elif request.user.is_authenticated:
+        return render(request, 'main_app/landing.html', {'danger': 'Staff Login Required'})
+    else:
+        return render(request, 'main_app/login.html', {'danger': 'Staff Login Required'})
+
+def multiple_choice_question_customize(request):
+
+    if request.method == "POST":
+        subtopic = request.POST['subtopic']
+
+        subtopics = []
+
+        for object in Subtopic.objects.all():
+            subtopics.append(getattr(object, 'name'))
+            
+        if subtopic == "Select a topic":
+            context = {
+                'subtopics': subtopics,
+                'message': 'Please select a topic.',
+            }
+
+            return render(request, 'main_app/multiple_choice_customize.html', context)
+
+
+
+
+        all_questions_on_that_topic = MultipleChoice.objects.filter(subtopic = subtopic)
+
+        try:
+            one_question = random.choice(all_questions_on_that_topic)
+        except:
+            subtopics = []
+
+            for object in Subtopic.objects.all():
+                subtopics.append(getattr(object, 'name'))
+
+            context = {
+                'subtopics': subtopics,
+                'message': 'Please select a topic.',
+            }
+
+            return render(request, 'main_app/multiple_choice_customize.html', context)
+
+        if one_question.correct_image:
+            correct_image_html_code = f"""
+<div class="container">
+<img src= " {one_question.correct_image.url} " class="col-lg-6 col-md-12 mx-auto rounded d-block" alt="Question image">
+</div>
+<hr class="my-4">"""
+        else:
+            correct_image_html_code = ''
+
+        if one_question.wrong_image_1:
+            wrong_image_1_html_code = f"""
+<div class="container">
+<img src= " {one_question.wrong_image_1.url} " class="col-lg-6 col-md-12 mx-auto rounded d-block" alt="Question image">
+</div>
+<hr class="my-4">"""
+        else:
+            wrong_image_1_html_code = ""
+
+        if one_question.wrong_image_1:
+            wrong_image_2_html_code = f"""
+<div class="container">
+<img src= " {one_question.wrong_image_2.url} " class="col-lg-6 col-md-12 mx-auto rounded d-block" alt="Question image">
+</div>
+<hr class="my-4">"""
+        else:
+            wrong_image_2_html_code = ""
+
+        if one_question.wrong_image_1:
+            wrong_image_3_html_code = f"""
+<div class="container">
+<img src= " {one_question.wrong_image_2.url} "" class="col-lg-6 col-md-12 mx-auto rounded d-block" alt="Question image">
+</div>
+<hr class="my-4">"""
+        else:
+            wrong_image_3_html_code = ""
+
+        choices_html_code = [
+f"""<button type="button" class="btn btn-outline-primary correct_choice my-1 btn-block">{one_question.correct}</button>
+<div class="container">
+</div> {correct_image_html_code}""",
+f"""<button type="button" class="btn btn-outline-primary wrong_choice my-1 btn-block">{one_question.wrong_1}</button>
+<div class="container">
+</div> {wrong_image_1_html_code}""",
+f"""<button type="button" class="btn btn-outline-primary wrong_choice my-1 btn-block">{one_question.wrong_2}</button>
+<div class="container">
+</div> {wrong_image_2_html_code}""",
+f"""<button type="button" class="btn btn-outline-primary wrong_choice my-1 btn-block">{one_question.wrong_3}</button>
+<div class="container">
+</div> {wrong_image_3_html_code}""",
+        ]
+
+        random.shuffle(choices_html_code)
+
+        context = {
+            'question': one_question.question,
+            'image': one_question.image,
+            'correct': one_question.correct,
+            'wrong_1': one_question.wrong_1,
+            'wrong_2': one_question.wrong_2,
+            'wrong_3': one_question.wrong_3,
+            'solution': one_question.solution,
+            'subtopic': subtopic,
+            'choices_html_code': choices_html_code,
+            'available': True,
+            'pk': one_question.pk,
+        }
+
+        return render(request, 'main_app/multiple_choice_detail.html', context)
+
+
+    else:
+        subtopics = []
+
+        for object in Subtopic.objects.all():
+            subtopics.append(getattr(object, 'name'))
+
+        context = {
+            'subtopics': subtopics,
+            'message': 'Please select a topic.'
+        }
+
+        return render(request, 'main_app/multiple_choice_customize.html', context)
+
+def multiple_choice_question_list(request):
+    if request.method == "POST" and request.user.is_staff:
+
+        subtopic = request.POST['subtopic']
+        all_questions_on_that_topic = MultipleChoice.objects.filter(subtopic = subtopic)
+
+        context = {
+            'available': True,
+            'all_questions': all_questions_on_that_topic,
+            'subtopic': subtopic,
+        }
+        return render(request, 'main_app/multiple_choice_question_list.html', context)
+
+    elif request.method == "GET" and request.user.is_staff:
+
+        subtopics = []
+        for object in Subtopic.objects.all():
+            subtopics.append(getattr(object, 'name'))
+
+        context = {
+            'available': True,
+            'subtopics': subtopics,
+        }
+
+        return render(request, 'main_app/multiple_choice_question_list_select.html', context)
+    else:
+        return render(request, 'main_app/landing.html', {'danger':'Admin account is required to allow question listing.'})
+
+def multiple_choice_question_specific(request, pk):
+    if request.user.is_staff:
+        one_question = MultipleChoice.objects.get(pk = pk)
+
+        if one_question.correct_image:
+            correct_image_html_code = f"""
+<div class="container">
+<img src= " {one_question.correct_image.url} " class="col-lg-6 col-md-12 mx-auto rounded d-block" alt="Question image">
+</div>
+<hr class="my-4">"""
+        else:
+            correct_image_html_code = ''
+
+        if one_question.wrong_image_1:
+            wrong_image_1_html_code = f"""
+<div class="container">
+<img src= " {one_question.wrong_image_1.url} " class="col-lg-6 col-md-12 mx-auto rounded d-block" alt="Question image">
+</div>
+<hr class="my-4">"""
+        else:
+            wrong_image_1_html_code = ""
+
+        if one_question.wrong_image_1:
+            wrong_image_2_html_code = f"""
+<div class="container">
+<img src= " {one_question.wrong_image_2.url} " class="col-lg-6 col-md-12 mx-auto rounded d-block" alt="Question image">
+</div>
+<hr class="my-4">"""
+        else:
+            wrong_image_2_html_code = ""
+
+        if one_question.wrong_image_1:
+            wrong_image_3_html_code = f"""
+<div class="container">
+<img src= " {one_question.wrong_image_2.url} "" class="col-lg-6 col-md-12 mx-auto rounded d-block" alt="Question image">
+</div>
+<hr class="my-4">"""
+        else:
+            wrong_image_3_html_code = ""
+
+        choices_html_code = [
+f"""<button type="button" class="btn btn-outline-primary correct_choice my-1 btn-block">{one_question.correct}</button>
+<div class="container">
+</div> {correct_image_html_code}""",
+f"""<button type="button" class="btn btn-outline-primary wrong_choice my-1 btn-block">{one_question.wrong_1}</button>
+<div class="container">
+</div> {wrong_image_1_html_code}""",
+f"""<button type="button" class="btn btn-outline-primary wrong_choice my-1 btn-block">{one_question.wrong_2}</button>
+<div class="container">
+</div> {wrong_image_2_html_code}""",
+f"""<button type="button" class="btn btn-outline-primary wrong_choice my-1 btn-block">{one_question.wrong_3}</button>
+<div class="container">
+</div> {wrong_image_3_html_code}""",
+        ]
+
+        context = {
+            'question': one_question.question,
+            'image': one_question.image,
+            'correct': one_question.correct,
+            'wrong_1': one_question.wrong_1,
+            'wrong_2': one_question.wrong_2,
+            'wrong_3': one_question.wrong_3,
+            'solution': one_question.solution,
+            'subtopic': one_question.subtopic,
+            'choices_html_code': choices_html_code,
+            'available': True,
+            'pk': one_question.pk,
+        }
+        return render(request, 'main_app/multiple_choice_detail.html', context)
+    else:
+        return render(request, 'main_app/landing.html', {'danger':'Admin account is required to allow targeted question lookup.'})
+
+def multiple_choice_question_delete(request, pk):
+    if request.user.is_staff:
+        one_question = MultipleChoice.objects.get(pk = pk)
+        one_question.delete()
+
+        subtopics = []
+        for object in Subtopic.objects.all():
+            subtopics.append(getattr(object, 'name'))
+        context = {
+            'message': 'Question successfully deleted.',
+            'subtopics': subtopics,
+        }
+
+        return render(request, 'main_app/multiple_choice_question_list_select.html', context)
+    else:
+        subtopics = []
+        for object in Subtopic.objects.all():
+            subtopics.append(getattr(object, 'name'))
+        context = {
+            'danger': 'Admin account is required to delete questions.',
+            'subtopics': subtopics,
+        }
+        return render(request, 'main_app/multiple_choice_question_list_select.html', context)
+
+def change_password(request):
+    if request.user.is_authenticated and request.method == "POST":
+
+        password = request.POST['password']
+        confirm_password = request.POST['confirm_password']
+        if password == confirm_password:
+            request.user.set_password(password)
+            request.user.save()
+            return render(request, 'main_app/landing.html', {'message':'Password change successful.'})
+        else:
+            return render(request, 'main_app/change_password.html', {'danger': 'Passwords did not match, try again.'})
+    elif request.method =="GET" and request.user.is_authenticated:
+        return render(request, 'main_app/change_password.html')
+    else:
+        return render(request, 'main_app/landing.html', {'danger':'Login is first required.'})

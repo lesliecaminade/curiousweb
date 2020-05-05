@@ -36,9 +36,15 @@ urlpatterns = [
     path('report-error/', views.report_error, name='report_error'),
     path('login/', views.login_view, name='login'),
     path('logout/', views.logout_view, name='logout'),
+    path('change_password/', views.change_password, name='change_password'),
     path('enroll/',views.enroll, name='enroll'),
-
-
+    path('create_multiple_choice_question/', views.create_multiple_choice_question, name='create_multiple_choice_question'),
+    path('question_mcq_custom/', views.multiple_choice_question_customize, name='multiple_choice_question_customize'),
+    path('question_mcq_detail/', views.multiple_choice_question_customize, name='multiple_choice_detail'),
+    path('question_mcq_select/<pk>', views.multiple_choice_question_specific, name='multiple_choice_detail_specific'),
+    path('question_mcq_list/', views.multiple_choice_question_list, name='multiple_choice_question_list'),
+    path('question_mcq_select/', views.multiple_choice_question_list, name='multiple_choice_question_list_select'),
+    path('question_mcq_delete/<pk>', views.multiple_choice_question_delete, name='multiple_choice_question_delete'),
     # path('login/', auth_views.LoginView.as_view(),{'template_name':'registration/login.html'},name='login'),
     # path('logout/', auth_views.LogoutView.as_view(), {'next_page':''}, name='logout'),
 
