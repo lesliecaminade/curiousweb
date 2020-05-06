@@ -38,7 +38,7 @@ one_dimension_kinematics = [
     example_2_16,
     example_2_17,
     example_2_18,
-    example_2_19,
+    # example_2_19,
     example_2_20,
     example_2_21,
 ]

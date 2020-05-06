@@ -21,12 +21,12 @@
   <hr class="my-4">
   <p>This is an ongoing project of CERTC <img src="/static/main_logo.png" width="30" height="30" class="d-inline-block align-top" alt=""></p>
 
-  <a class="btn btn-primary btn-lg" href="{%url 'question_customize' %}" role="button">Try Questions with Solutions</a>
+  <a class="btn btn-primary btn-lg" href="{%url 'question_customize' %}" role="button">Try Step-by-Step Solution Questions</a>
 
   <a class="btn btn-primary btn-lg" href="{%url 'multiple_choice_question_customize'%}" role="button">Try Modules</a>
 
   {% if not user.is_authenticated %}
-  <a class="btn btn-primary btn-lg" href="{%url 'enroll' %}" role="button">Request for Enrollment</a>
+  <a class="btn btn-secondary btn-lg" href="{%url 'enroll' %}" role="button">Request for Enrollment</a>
   {% endif %}
 
 
