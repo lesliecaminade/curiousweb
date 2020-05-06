@@ -288,7 +288,7 @@ class example_2_14:
 		self.answer = f"""{round(time.s,2)} s"""
 		self.latex_solution = f"""{lpref}
 v_f &= -\\sqrt{{v_i^2 - 2gh	}} \\\\
-&= -\\sqrt{{\\left({velocityInit.mpers:.4g}\\right)^2 - 2 \\left({gravity.mpers2:.4g}\\right)	\\left({height.m:.4g}\\right)}} \\\\
+&= -\\sqrt{{ \\left({velocityInit.mpers:.4g}\\right)^2 - 2 \\left({gravity.mpers2:.4g}\\right)	\\left({heightCaught.m:.4g}\\right)}} \\\\
 &= {velocityFinal.mpers:.4g} \\frac{{m}}{{s}} \\\\
 \\\\
 t &= \\frac{{v_f - v_i}} / {{-g}} \\\\
@@ -436,7 +436,6 @@ class example_2_19:
 		t = c.time(max(sympy.solveset(equation,x,domain = sympy.Reals).args[0], sympy.solveset(equation,x,domain = sympy.Reals).args[1]))
 		xDistance = c.length( vix.mpers * t.s )
 		self.answer = f"""{round(xDistance.m,2)} m"""
-
 		self.latex_solution = f"""{lpref}
 h_i + v_{{iy}} t - \\frac{{1}}{{2}} g t^2 &= 0 \\\\
 {hi.m:.4g} + {viy.mpers:.4g} \\times t - \\frac{{1}}{{2}} \\times {gravity.mpers2:.4g} t^2 &= 0 \\\\

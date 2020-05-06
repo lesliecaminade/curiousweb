@@ -32,6 +32,8 @@ from electronics.power_electronics_engine import *
 from main_app.question_manager import topics_keys, subtopics_keys, questions_by_subtopic, questions_by_topic
 import requests as requests_library
 from email_management.email_sender import send_email
+from email_management.email_sender_2 import SendMessage
+import yagmail
 
 def landing(request):
     return render(request, 'main_app/landing.html')
@@ -256,7 +258,12 @@ def enroll(request):
         google_captcha_response = requests_library.post('https://www.google.com/recaptcha/api/siteverify', recaptcha_data)
         if 'true' in google_captcha_response.text:
             #create and save the object
-            send_email(f"""{request.POST['first_name']}, {request.POST['last_name']}, {request.POST['school_name']}, {request.POST['year_graduated']}, {request.POST['phone_number']}, {request.POST['facebook_username']}""")
+            #send_email(f"""{request.POST['first_name']}, {request.POST['last_name']}, {request.POST['school_name']}, {request.POST['year_graduated']}, {request.POST['phone_number']}, {request.POST['facebook_username']}""")
+            #SendMessage(sender, to, subject, msgHtml, msgPlain, '/path/to/file.pdf')
+            #SendMessage('cortexsilicon@gmail.com', 'lesliecaminade@gmail.com', 'New Enrollment', , f"""{request.POST['first_name']}, {request.POST['last_name']}, {request.POST['school_name']}, {request.POST['year_graduated']}, {request.POST['phone_number']}, {request.POST['facebook_username']}""")
+            yag = yagmail.SMTP('cortexsilicon','232653F8746C73C0DA302C73608B2511846BE1D2')
+            contents = [f"""{request.POST['first_name']}, {request.POST['last_name']}, {request.POST['school_name']}, {request.POST['year_graduated']}, {request.POST['phone_number']}, {request.POST['facebook_username']}"""]
+            yag.send('lesliecaminade@gmail.com', 'New Enrollment', contents)
             return render(request, 'main_app/landing.html', {'message': 'Enrollment has been requested, keep your lines open so we can contact you.'})
         else:
             return render(request, 'main_app/report_error.html')
@@ -367,7 +374,7 @@ def multiple_choice_question_customize(request):
 
         for object in Subtopic.objects.all():
             subtopics.append(getattr(object, 'name'))
-            
+
         if subtopic == "Select a topic":
             context = {
                 'subtopics': subtopics,
