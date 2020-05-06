@@ -29,10 +29,11 @@ from . import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls, name='admin-login'),
+    path('', views.landing, name='home'),
     path('', views.landing, name='landing'),
-    path('question/', views.question_detail, name='question_detail'),
+    #path('question/', views.question_detail, name='question_detail'),
     path('question/custom/', views.question_customize, name='question_customize'),
-    path('question/reroll/', views.question_customize_reroll, name='question_customize_reroll'),
+    path('question/reroll/', views.question_customize, name='question_customize_reroll'),
     path('report-error/', views.report_error, name='report_error'),
     path('login/', views.login_view, name='login'),
     path('logout/', views.logout_view, name='logout'),
