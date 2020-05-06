@@ -1,7 +1,6 @@
 {% extends 'main_app/base.html' %}
 {% block content %}
 
-<div class="jumbotron">
   <h1 class="display-4">Customize Question</h1>
   <p class="lead">Click the topic or subtopic that you want the questions to come from</p>
   <hr class="my-4">
@@ -18,7 +17,7 @@
     </select>
   </div>
 
-  <button type="submit" class="btn btn-primary">Go</button>
+  <button type="submit" class="btn btn-primary-lg">Go</button>
 {% csrf_token %}
 </form>
 

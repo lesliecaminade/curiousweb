@@ -36,10 +36,11 @@ from email_management.email_sender_2 import SendMessage
 import yagmail
 """function definitions"""
 
-def list_this_model(model, attr):
+def list_this_model(model, attr, **kwargs):
     """this function returns a list of all the instance parameter of a model in the database
     model - the model the will be listed
     attr - the particular attribute to be listed"""
+
     output_list = []
     for object in model.objects.all():
         output_list.append(getattr(object, attr))
@@ -269,7 +270,6 @@ Facebook: {request.POST['facebook_username']}"""] #this is the content of the em
 def create_multiple_choice_question(request):
     if request.user.is_staff: #if the user is a staff (teacher)
         if request.method == "POST": #if the method is POST
-
             """the variables being setup below pertain to the question structure
             the try-except statement are catching whether the question creator has inserted
             images or not. """
@@ -302,6 +302,8 @@ def create_multiple_choice_question(request):
                 solution = request.POST['solution']
             except:
                 solution = None
+
+            topic = request.POST['topic']
             subtopic = request.POST['subtopic']
 
             #create the multiple_choice_question instance
@@ -323,28 +325,39 @@ def create_multiple_choice_question(request):
 
             try: #attempt to save the question
                 multiple_choice_question.save() #save the question to the database
-
+                topics = list_this_model(Topic, 'name') #create a list of all topics
                 subtopics = list_this_model(Subtopic, 'name') #create a list of all subtopics
                 context = {
+                    'topics': topics,
                     'subtopics': subtopics, #the list of all subtopics
-                    'previous_subtopic' : subtopic, #the previous subtopic, used if the user clicks next, prefills the dropdown menu
+                    'previous_topic': topic, #variables keeping track of the selected option previously
+                    'previous_subtopic' : subtopic, #variables keeping track of the selected option previously
                     'message': 'Question successfully saved.'
                 }
             except:
                 subtopics = list_this_model(Subtopic, 'name') #create a list of all subtopics
+                topics = list_this_model(Topic, 'name') #create a list of all topics
                 context = {
+                    'topics': topics,
                     'subtopics': subtopics,
+                    'previous_topic': topic,
                     'previous_subtopic' : subtopic,
                     'danger': 'Question saving failed.'
                 }
 
             return render(request, 'main_app/create_multiple_choice_question.html', context) #return the page to create the new question again
-        else:
+        else: #if method is GET
+            topics = list_this_model(Topic, 'name') #create a list of all topics
             subtopics = list_this_model(Subtopic, 'name') #create a list of all subtopics
             context = {
+                'topics': topics,
                 'subtopics': subtopics,
+                'previous_topic': None,
+                'previous_subtopic' : None,
             }
             return render(request, 'main_app/create_multiple_choice_question.html', context) #return to page to create a question
+
+
 
     elif request.user.is_authenticated: #IF THE user is logged in but is not a  staff
         return render(request, 'main_app/landing.html', {'danger': 'Staff Login Required'}) #return the page with a message that a staff account is required
@@ -353,6 +366,7 @@ def create_multiple_choice_question(request):
 
 def multiple_choice_question_customize(request):
     if request.method == "POST": #if the method is POST
+        topics = list_this_model(Topic, 'name') #create a list of all topics
         subtopic = request.POST['subtopic'] #subtopic field content from the HTML form
         subtopics = list_this_model(Subtopic, 'name') #create a list of all subtopics
         if subtopic == "Select a topic": #the 'Select a topic' is the default value in the dropdown, and this is checking if the dropdown was not changed
@@ -374,6 +388,7 @@ def multiple_choice_question_customize(request):
             # for object in Subtopic.objects.all():
             #     subtopics.append(getattr(object, 'name'))
             context = {
+                'topics': topics,
                 'subtopics': subtopics,
                 'message': 'The selected topic contains no available questions for now.',
             }
@@ -456,14 +471,17 @@ f"""<button type="button" class="btn btn-outline-primary wrong_choice my-1 btn-b
         return render(request, 'main_app/multiple_choice_detail.html', context) #return the page containing the question.
 
     else: #if the method is GET
+        topics = list_this_model(Topic, 'name') #create a list of all topics
         subtopics = list_this_model(Subtopic, 'name') #create a list of all subtopics
         context = {
+            'topics': topics,
             'subtopics': subtopics,
         }
         return render(request, 'main_app/multiple_choice_customize.html', context) #return a page to allow the user to select a topic.
 
 def multiple_choice_question_list(request):
     if request.method == "POST" and request.user.is_staff: #if method is POST  and the user is a staff LOL
+
         subtopic = request.POST['subtopic'] #subtopic field from the HTML
         all_questions_on_that_topic = MultipleChoice.objects.filter(subtopic = subtopic) #QueryDict of all the MultipleChoice objects satisfying the filter
         context = {
@@ -474,9 +492,11 @@ def multiple_choice_question_list(request):
         return render(request, 'main_app/multiple_choice_question_list.html', context) #return the page with a list of all the question within that subtopic
 
     elif request.method == "GET" and request.user.is_staff: #if method is GET and user is staff
+        topics = list_this_model(Topic, 'name') #create a list of all topics
         subtopics = list_this_model(Subtopic, 'name') #create a list of all subtopics
         context = {
             'available': True,
+            'topics': topics,
             'subtopics': subtopics,
         }
         return render(request, 'main_app/multiple_choice_question_list_select.html', context) #return the page with a list of all subtopics
@@ -546,7 +566,6 @@ f"""<button type="button" class="btn btn-outline-primary wrong_choice my-1 btn-b
             'wrong_2': one_question.wrong_2,
             'wrong_3': one_question.wrong_3,
             'solution': one_question.solution,
-            'subtopic': subtopic, #this is so that the subtopic selected is saved for the NEXT button, the user would not select the topic again
             'choices_html_code': choices_html_code,
             'available': True, #flag
             'pk': one_question.pk, #this is the question primary key, and is used for identifying the question, especially for cases when the
@@ -561,16 +580,20 @@ def multiple_choice_question_delete(request, pk):
     if request.user.is_staff: #if the user is a staff
         one_question = MultipleChoice.objects.get(pk = pk) #one question that will be deleted
         one_question.delete() #actually delete the question
+        topics = list_this_model(Topic, 'name') #create a list of all topics
         subtopics = list_this_model(Subtopic, 'name') #create a list of all subtopics
         context = {
             'message': 'Question successfully deleted.',
+            'topics': topics,
             'subtopics': subtopics,
         }
         return render(request, 'main_app/multiple_choice_question_list_select.html', context) #return the page saying that deletion is sucessful
     else: # if user is not a staff
+        topics = list_this_model(Topic, 'name') #create a list of all topics
         subtopics = list_this_model(Subtopic, 'name') #create a list of all subtopics
         context = {
             'danger': 'Admin account is required to delete questions.',
+            'topics': topics,
             'subtopics': subtopics,
         }
         return render(request, 'main_app/multiple_choice_question_list_select.html', context) #return a page that says deletion is not allowed
@@ -589,3 +612,21 @@ def change_password(request):
         return render(request, 'main_app/change_password.html') #return the page
     else: #if user is not logged in
         return render(request, 'main_app/landing.html', {'danger':'Login is first required.'}) #return to the landing page saying log in is required
+
+def load_subtopics(request):
+    topic = request.GET.get('topic') #get the topic value passed in by the ajax call in the javascript in the json file
+    previous_topic = request.GET.get('previous_topic') #get the previous topic value passed in by the ajax call in the javascripp
+    previous_subtopic = request.GET.get('previous_subtopic') #get the previous topic value passed in by the ajax call in the javascript
+    subtopics = Subtopic.objects.filter(topic = topic).order_by('name') #get all the subtopics under the topic
+
+
+    #populate a list with the strings containing the list of all the subtopics
+    subtopics_list = []
+    for subtopic in subtopics:
+        subtopics_list.append(subtopic.name)
+    context = {
+        'subtopics': subtopics_list,
+        'previous_topic': previous_topic,
+        'previous_subtopic': previous_subtopic,
+    }
+    return render(request, 'main_app/ajax/load_subtopics_dropdown.html', context) #pass the page snippet along with the list of the subtopics
