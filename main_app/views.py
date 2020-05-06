@@ -261,7 +261,7 @@ def enroll(request):
             #send_email(f"""{request.POST['first_name']}, {request.POST['last_name']}, {request.POST['school_name']}, {request.POST['year_graduated']}, {request.POST['phone_number']}, {request.POST['facebook_username']}""")
             #SendMessage(sender, to, subject, msgHtml, msgPlain, '/path/to/file.pdf')
             #SendMessage('cortexsilicon@gmail.com', 'lesliecaminade@gmail.com', 'New Enrollment', , f"""{request.POST['first_name']}, {request.POST['last_name']}, {request.POST['school_name']}, {request.POST['year_graduated']}, {request.POST['phone_number']}, {request.POST['facebook_username']}""")
-            yag = yagmail.SMTP('cortexsilicon','232653F8746C73C0DA302C73608B2511846BE1D2')
+            yag = yagmail.SMTP('cortexsilicon','jnzbhrbqcsavnlhu')
             contents = [f"""{request.POST['first_name']}, {request.POST['last_name']}, {request.POST['school_name']}, {request.POST['year_graduated']}, {request.POST['phone_number']}, {request.POST['facebook_username']}"""]
             yag.send('lesliecaminade@gmail.com', 'New Enrollment', contents)
             return render(request, 'main_app/landing.html', {'message': 'Enrollment has been requested, keep your lines open so we can contact you.'})
