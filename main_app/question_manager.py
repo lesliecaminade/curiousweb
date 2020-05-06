@@ -4,6 +4,8 @@ from electronics.diode_engine import *
 from electronics.field_effect_transistors_engine import *
 from electronics.energy_conversion_engine import *
 
+
+
 topics_keys = [
     'Mathematics',
     'Sciences',
@@ -94,7 +96,7 @@ work_energy_theorem = [
     schaums_6_4,
     schaums_6_6,
     schaums_6_7,
-    schaums_6_8,
+    # schaums_6_8,
     schaums_6_9,
     schaums_6_10,
     schaums_6_11,
