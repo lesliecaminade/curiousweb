@@ -1,43 +1,58 @@
 {% extends 'main_app/base.html' %}
 {% block content %}
 
-<div class="jumbotron">
-
   {%if danger %}
   <div class="alert alert-danger" role="alert">
     {{danger}}
   </div>
   {%endif%}
-
   {%if message %}
   <div class="alert alert-primary" role="alert">
     {{message}}
   </div>
   {% endif%}
 
-
-  <h1 class="display-4">Customize Multiple Choice Question</h1>
+  <h1 class="display-4">Topic Selection</h1>
   <p class="lead">Click the topic or subtopic that you want the questions to come from</p>
   <hr class="my-4">
 
-<form action="{%url 'multiple_choice_detail' %}" method="POST">
+<form action="{%url 'multiple_choice_detail' %}" method="POST" id="main_form" ajax_url="{%url 'ajax_load_subtopics'%}">
+  <input type="hidden" id="previous_topic" value="{{previous_topic}}">
+  <input type="hidden" id="previous_subtopic" value="{{previous_subtopic}}">
 
-  <div class="form-group">
-    <label for="exampleFormControlSelect1">Subtopic</label>
-    <select class="form-control" id="exampleFormControlSelect1" name="subtopic">
-        <option>Select a topic</option>
-      {% for subtopic in subtopics %}
-        <option>{{ subtopic }}</option>
-      {% endfor %}
-    </select>
+    <div class="form-group">
+      <label for="subtopic">Topic</label>
+      <select class="form-control" id="topic" name ="topic">
+        <option>Please select a Topic</option>
+        {% for topic in topics %}
+          {% if topic == previous_topic %}
+          <option selected>{{ topic }}</option>
+          {% else %}
+          <option>{{ topic }}</option>
+          {% endif %}
+        {% endfor %}
+      </select>
+      </div>
 
-  <button type="submit" class="btn btn-primary btn-lg btn-block">Go</button>
+    <div class="form-group">
+      <label for="subtopic">Subtopic</label>
+      <select class="form-control" id="subtopic" name = "subtopic">
+        <option>Please select a subtopic</option>
+        {% include 'main_app/ajax/load_subtopics_dropdown.html' %}
+      </select>
+      </div>
 
-  </div>
+      <div class="form-group">
+      <label for="question">Question</label>
+      <textarea class="form-control" id="question" rows="5" name = "question"></textarea>
+      <small id="questionHelp" class="form-text text-muted">The choices will be automatically shuffled.</small>
+      </div>
 
-
+<button type="submit" class="btn btn-primary btn-lg btn-block">Go</button>
 
 {% csrf_token %}
 </form>
 
+<!-- this is the dropdown menu javascript -->
+<script type="text/javascript" src="/static/js/topic_subtopic_dropdown_ajax.js"></script>
 {% endblock %}

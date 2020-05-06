@@ -46,6 +46,8 @@ urlpatterns = [
     path('question_mcq_list/', views.multiple_choice_question_list, name='multiple_choice_question_list'),
     path('question_mcq_select/', views.multiple_choice_question_list, name='multiple_choice_question_list_select'),
     path('question_mcq_delete/<pk>', views.multiple_choice_question_delete, name='multiple_choice_question_delete'),
+
+    path('create_multiple_choice_question/ajax/', views.load_subtopics, name='ajax_load_subtopics'),
     # path('login/', auth_views.LoginView.as_view(),{'template_name':'registration/login.html'},name='login'),
     # path('logout/', auth_views.LogoutView.as_view(), {'next_page':''}, name='logout'),
 
