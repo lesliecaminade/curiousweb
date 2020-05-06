@@ -1,6 +1,18 @@
 {% extends 'main_app/base.html' %}
 {% block content %}
 
+{%if danger %}
+<div class="alert alert-danger" role="alert">
+  {{danger}}
+</div>
+{%endif%}
+
+{%if message%}
+<div class="alert alert-primary" role="alert">
+  {{message}}
+</div>
+{% endif %}
+
 <form method="POST" action="">
   <div class="form-group">
     <label for="exampleInputEmail1">Username</label>

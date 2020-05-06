@@ -69,14 +69,13 @@ def question_customize(request):
 
     subtopic_found = False #this is a flag which sets if the subtopic selected was found or not
 
-    if request.method == "POST":
-        for subtopic in subtopics_keys:
+    if request.method == "POST": #if method is POST
+        for subtopic in subtopics_keys: #iterate over the list of subtopics in the subtopics mcq
             if request.POST['subtopic'] == str(subtopic):
                 subtopic_found = subtopic
 
         if subtopic_found == False: #if the default combobx value was not changed
             subtopics = subtopics_keys
-
             context = {
                 'subtopics':subtopics,
             }
@@ -93,7 +92,7 @@ def question_customize(request):
                     'question':question_instance.question, #the question content
                     'answer':question_instance.answer, #the answer content
                     'solution':question_instance.latex_solution, #the solution content, formatted using latex
-                    'subtopic_reroll':subtopic_found, #this is a hiddent input that contains the subtopic selection, and is used to select the same subtopic again when the user hits the next button
+                    'subtopic':subtopic_found, #this is a hiddent input that contains the subtopic selection, and is used to select the same subtopic again when the user hits the next button
                     'image':question_instance.image, #the image object for the questions, some questions contain images,
 
                 }
@@ -103,7 +102,7 @@ def question_customize(request):
                     'question':question_instance.question,
                     'answer':question_instance.answer,
                     'solution':question_instance.latex_solution,
-                    'subtopic_reroll':subtopic_found,
+                    'subtopic':subtopic_found,
                 }
         else: #if the student is not enrolled
                 try:
@@ -112,7 +111,7 @@ def question_customize(request):
                         'question':question_instance.question,
                         'answer':question_instance.answer,
                         'solution':'\\text{Enrollment is required to view solution.}',
-                        'subtopic_reroll':subtopic_found,
+                        'subtopi':subtopic_found,
                         'image':question_instance.image,
                     }
                 except:
@@ -121,7 +120,7 @@ def question_customize(request):
                         'question':question_instance.question,
                         'answer':question_instance.answer,
                         'solution':'\\text{Enrollment is required to view solution.}',
-                        'subtopic_reroll':subtopic_found,
+                        'subtopic':subtopic_found,
                     }
 
         return render(request, 'main_app/question_detail.html', context) #return the page that contains the randomly selected question from the engine
@@ -195,11 +194,10 @@ question_customize_reroll view."""
 similar to how the request for enrollment"""
 
 def report_error(request):
-    if request.method =="POST": #if the method is POST
-        email = request.POST['email']
-        description = request.POST['description']
-        image = request.POST['image']
-
+    if request.method =="POST" and request.user.is_authenticated: #if the method is POST and the user is logged in
+        user = request.user #get the username field from HTML
+        description = request.POST['description'] #get the description field from HTML
+        image = request.POST['image'] #get the image field from html
 
         recaptcha = request.POST['g-recaptcha-response']
         recaptcha_data = {
@@ -209,11 +207,28 @@ def report_error(request):
 
         google_captcha_response = requests_library.post('https://www.google.com/recaptcha/api/siteverify', recaptcha_data)
         if 'true' in google_captcha_response.text:
-            #create and save the object
-            error_report = ErrorReport.objects.create(email = email, description = description, image = image)
-            error_report.save()
-        return render(request, 'main_app/landing.html')
+            #DEPRECATED: create and save the object
+            # error_report = ErrorReport.objects.create(email = email, description = description, image = image)
+            # error_report.save()
 
+            """yagmail is a library to manage google smtp in a more simpler manner,
+            for more information, visit https://github.com/kootenpv/yagmail"""
+
+            yag = yagmail.SMTP('cortexsilicon','jnzbhrbqcsavnlhu') #input the email username and app password
+            contents = [f"""Name: {user.first_name}, {user.last_name},
+Error Description: {description},
+Screenshot: {image.url}"""] #this is the content of the email to be sent to the admin, pertaining the error
+            yag.send('lesliecaminade@gmail.com', 'CERTC CuriousWeb New Error Report', contents) #send the email
+
+            context = {
+                'message': 'Report has been successfully sent.',
+            }
+            return render(request, 'main_app/report_error.html', context) #return the report error page
+        else: #if google detected a BOT
+            context = {
+                'danger' : 'Please answer the captcha correctly so we can accept you report.',
+            }
+            return render(request, 'main_app/report_error.html', context) #return the report error page
     else: #if the method is GET
         return render(request, 'main_app/report_error.html') #return the report error page
 
@@ -259,7 +274,7 @@ School: {request.POST['school_name']},
 Year Graduated: {request.POST['year_graduated']},
 Phone Number: {request.POST['phone_number']},
 Facebook: {request.POST['facebook_username']}"""] #this is the content of the email to be sent to the admin, pertaining to enrollment details
-            yag.send('lesliecaminade@gmail.com', 'New Enrollment', contents) #send the email
+            yag.send('lesliecaminade@gmail.com', 'CERTC CuriousWeb New Enrollment', contents) #send the email
             return render(request, 'main_app/landing.html', {'message': 'Enrollment has been requested, keep your lines open so we can contact you.'}) #return to the landing page with a message of a successful enrollment
         else:
             return render(request, 'main_app/landing.html', {'danger': 'Recaptcha failed. If you are really a human, please try again.'}) #return to the landing page with a message of a failed enrollment request due to a failed recaptcha
@@ -484,6 +499,19 @@ def multiple_choice_question_list(request):
 
         subtopic = request.POST['subtopic'] #subtopic field from the HTML
         all_questions_on_that_topic = MultipleChoice.objects.filter(subtopic = subtopic) #QueryDict of all the MultipleChoice objects satisfying the filter
+
+        if len(all_questions_on_that_topic) == 0:#check if the result contains nothing
+
+            topics = list_this_model(Topic, 'name') #create a list of all topics
+            subtopics = list_this_model(Subtopic, 'name') #create a list of all subtopics
+            context = {
+                'available': True,
+                'topics': topics,
+                'subtopics': subtopics,
+                'message': 'The topic/subtopic selected contains no questions at the moment, please pick another one.'
+            }
+            return render(request, 'main_app/multiple_choice_question_list_select.html', context) #return the page with a list of all subtopics
+
         context = {
             'available': True, #flag
             'all_questions': all_questions_on_that_topic, #this are all the questions
@@ -618,8 +646,6 @@ def load_subtopics(request):
     previous_topic = request.GET.get('previous_topic') #get the previous topic value passed in by the ajax call in the javascripp
     previous_subtopic = request.GET.get('previous_subtopic') #get the previous topic value passed in by the ajax call in the javascript
     subtopics = Subtopic.objects.filter(topic = topic).order_by('name') #get all the subtopics under the topic
-
-
     #populate a list with the strings containing the list of all the subtopics
     subtopics_list = []
     for subtopic in subtopics:
