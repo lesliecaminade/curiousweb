@@ -1,0 +1,57 @@
+{% extends 'main_app/base.html' %}
+{% block content %}
+
+  {%if danger %}
+  <div class="alert alert-danger" role="alert">
+    {{danger}}
+  </div>
+  {%endif%}
+  {%if message %}
+  <div class="alert alert-primary" role="alert">
+    {{message}}
+  </div>
+  {% endif%}
+
+  <h1 class="display-4">Exam Configuration</h1>
+  <p class="lead">Click the topic and subtopic that you want the questions to come from</p>
+  <hr class="my-4">
+
+<form method="POST" id="main_form" ajax_url="{%url 'ajax_load_subtopics'%}">
+  <!-- <input type="hidden" id="previous_topic" value="{{previous_topic}}"> -->
+  <!-- <input type="hidden" id="previous_subtopic" value="{{previous_subtopic}}"> -->
+
+    <div class="form-group">
+      <label for="subtopic">Topic</label>
+      <select class="form-control" id="topic" name ="topic">
+        <option>Please select a Topic</option>
+        {% for topic in topics %}
+          {% if topic == previous_topic %}
+          <option selected>{{ topic }}</option>
+          {% else %}
+          <option>{{ topic }}</option>
+          {% endif %}
+        {% endfor %}
+      </select>
+      </div>
+
+    <div class="form-group">
+      <label for="subtopic">Subtopic</label>
+      <select class="form-control" id="subtopic" name = "subtopic">
+        <option>Please select a subtopic</option>
+        {% include 'main_app/ajax/load_subtopics_dropdown.html' %}
+      </select>
+      </div>
+
+<div class="form-group">
+  <label>Number of questions</label>
+  <input type="number" class="form-control" placeholder="Number of items" name="item_count">
+</div>
+
+<button type="submit" class="btn btn-primary btn-lg btn-block">Create Exam</button>
+
+{% csrf_token %}
+</form>
+
+<!-- this is the dropdown menu javascript -->
+<script type="text/javascript" src="/static/js/topic_subtopic_dropdown_ajax.js"></script>
+{% endblock %}

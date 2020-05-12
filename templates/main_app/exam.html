@@ -1,0 +1,35 @@
+{% extends 'main_app/base.html' %}
+{% block content %}
+
+{%if danger %}
+<div class="alert alert-danger" role="alert">
+  {{danger}}
+</div>
+{%endif%}
+
+{%if message%}
+<div class="alert alert-primary" role="alert">
+  {{message}}
+</div>
+{% endif %}
+
+<h1 class="display-4">Exam</h1>
+
+
+<!-- this will be inside a for loop to iterate through all the questions -->
+
+<!-- container for the answer review -->
+<div class="container">
+  <!-- container for the card -->
+  {% for item in items_list %}
+  <div class="container">
+    <p>{{item.question}}</p>
+    <p>{{item.correct}}</p>
+    <p>{{item.wrong_1}}</p>
+    <p>{{item.wrong_2}}</p>
+    <p>{{item.wrong_3}}</p>
+  </div>
+  {% endfor %}
+  
+</div>
+{% endblock %}

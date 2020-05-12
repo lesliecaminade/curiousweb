@@ -1,0 +1,65 @@
+{% extends 'main_app/base.html' %}
+{% block content %}
+
+{%if danger %}
+<div class="alert alert-danger" role="alert">
+  {{danger}}
+</div>
+{%endif%}
+
+{%if message%}
+<div class="alert alert-primary" role="alert">
+  {{message}}
+</div>
+{% endif %}
+
+<h1 class="display-4">Test Results</h1>
+<!-- <p class="lead">This is a site wherein you can find most common questions asked in the PRC Engineering Board Exams. You can find here problem solving questions with their corresponding solutions.</p>
+<hr class="my-4">
+<p>This is an ongoing project of CERTC <img src="/static/main_logo.png" width="30" height="30" class="d-inline-block align-top" alt=""></p> -->
+
+<!-- container for the test results -->
+<div class="container">
+
+<div class="row">
+  <div class="col-6">
+    <!-- name -->
+    <!-- topic -->
+    <!-- subtopic -->
+  </div>
+
+  <div class="col-6">
+    <!-- a large score percentage -->
+  </div>
+
+</div>
+
+<div class="row">
+  <div class="col-6">
+    <!-- not yet allocated -->
+  </div>
+
+  <div class="col-6">
+    <!-- points -->
+    <!-- duration -->
+    <!-- start -->
+    <!-- finish -->
+  </div>
+
+</div>
+
+</div>
+
+<!-- this will be inside a for loop to iterate through all the questions -->
+
+<!-- container for the answer review -->
+<div class="container">
+  <!-- container for the card -->
+  <div class="container">
+    <!-- question -->
+    <!-- choices -->
+    <!-- solution -->
+  </div>
+
+</div>
+{% endblock %}
