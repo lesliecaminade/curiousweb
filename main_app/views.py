@@ -815,10 +815,10 @@ def enroll(request):
                     <tr><td>Conditional Subject </td><td>{student.conditional_subject}</td></tr>
                     <tr><td>Mobile Number </td><td>{student.mobile_number}</td></tr>
                     <tr><td>Facebook Username </td><td>{student.facebook_username}</td></tr>
-                    <tr><td>ID picture</td><td>http://siliconcortex.pythonanywhere.com{student.id_picture.path} </td></tr>
-                    <tr><td>Payment picture </td><td>http://siliconcortex.pythonanywhere.com{student.payment_picture.path}</td></tr>
-                    <tr><td>ID picture</td><td><img src=" http://siliconcortex.pythonanywhere.com{student.id_picture.path} " alt="id picture" title="ID" style="display:block" width="200"/> </td></tr>
-                    <tr><td>Payment picture </td><td><img src=" http://siliconcortex.pythonanywhere.com{student.payment_picture.path} " alt="payment picture" title="Payment Proof" style="display:block" width="200"/> </td></tr>
+                    <tr><td>ID picture</td><td>http://siliconcortex.pythonanywhere.com{student.id_picture.url} </td></tr>
+                    <tr><td>Payment picture </td><td>http://siliconcortex.pythonanywhere.com{student.payment_picture.url}</td></tr>
+                    <tr><td>ID picture</td><td><img src=" http://siliconcortex.pythonanywhere.com{student.id_picture.url} " alt="id picture" title="ID" style="display:block" width="200"/> </td></tr>
+                    <tr><td>Payment picture </td><td><img src=" http://siliconcortex.pythonanywhere.com{student.payment_picture.url} " alt="payment picture" title="Payment Proof" style="display:block" width="200"/> </td></tr>
                   </ul>
                 </table>
               </body>
