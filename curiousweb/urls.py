@@ -19,19 +19,15 @@ from django.urls import include, path
 from main_app import views
 from django.conf.urls.static import static
 
-"""edit this to match projectname"""
+"""edit this to match projectname
+optionally, using a "." makes the import at the same directory as this file is"""
 from . import settings
-
-
-
-""""the paths for the login and logout are done using the built-in django features"""
 
 
 urlpatterns = [
     path('admin/', admin.site.urls, name='admin-login'),
     path('', views.landing, name='home'),
     path('', views.landing, name='landing'),
-    #path('question/', views.question_detail, name='question_detail'),
     path('question/custom/', views.question_customize, name='question_customize'),
     path('question/reroll/', views.question_customize, name='question_customize_reroll'),
     path('report-error/', views.report_error, name='report_error'),
@@ -39,16 +35,15 @@ urlpatterns = [
     path('logout/', views.logout_view, name='logout'),
     path('change_password/', views.change_password, name='change_password'),
     path('enroll/',views.enroll, name='enroll'),
-    path('create_multiple_choice_question/', views.create_multiple_choice_question, name='create_multiple_choice_question'),
-    path('question_mcq_custom/', views.multiple_choice_question_customize, name='multiple_choice_question_customize'),
-    path('question_mcq_detail/', views.multiple_choice_question_customize, name='multiple_choice_detail'),
-    path('question_mcq_select/<pk>', views.multiple_choice_question_specific, name='multiple_choice_detail_specific'),
-    path('question_mcq_list/', views.multiple_choice_question_list, name='multiple_choice_question_list'),
-    path('question_mcq_select/', views.multiple_choice_question_list, name='multiple_choice_question_list_select'),
-    path('question_mcq_delete/<pk>', views.multiple_choice_question_delete, name='multiple_choice_question_delete'),
-
-    path('create_multiple_choice_question/ajax/', views.load_subtopics, name='ajax_load_subtopics'),
-    # path('login/', auth_views.LoginView.as_view(),{'template_name':'registration/login.html'},name='login'),
-    # path('logout/', auth_views.LogoutView.as_view(), {'next_page':''}, name='logout'),
+    path('mcq/create', views.create_multiple_choice_question, name='create_multiple_choice_question'),
+    path('mcq/customize/', views.multiple_choice_question_customize, name='multiple_choice_question_customize'),
+    path('mcq/detail', views.multiple_choice_question_customize, name='multiple_choice_detail'),
+    path('mcq/detail/<pk>', views.multiple_choice_question_specific, name='multiple_choice_detail_specific'),
+    path('mcq/list/', views.multiple_choice_question_list, name='multiple_choice_question_list'),
+    path('mcq/list/select', views.multiple_choice_question_list, name='multiple_choice_question_list_select'),
+    path('mcq/delete/<pk>', views.multiple_choice_question_delete, name='multiple_choice_question_delete'),
+    path('load_subtopics/ajax/', views.load_subtopics, name='ajax_load_subtopics'),
+    path('mcq/exam/', views.exam_configure, name='exam_configure'),
+    path('mcq/exam/results/', views.exam_results, name='exam_results'),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

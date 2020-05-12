@@ -4,8 +4,6 @@ from electronics.diode_engine import *
 from electronics.field_effect_transistors_engine import *
 from electronics.energy_conversion_engine import *
 
-
-
 topics_keys = [
     'Mathematics',
     'Sciences',

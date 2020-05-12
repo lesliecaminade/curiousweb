@@ -1,6 +1,6 @@
 """Importing models """
 from main_app.models import ErrorReport
-from main_app.models import Topic, Subtopic, MultipleChoice
+from main_app.models import Topic, Subtopic, MultipleChoice, Student
 
 """Import the forms"""
 #from main_app.forms import QuestionCustomizeForm
@@ -19,13 +19,15 @@ from django.urls import reverse, reverse_lazy
 """Importi the render, get_object_or_404, and redirect"""
 from django.shortcuts import render, get_object_or_404, redirect
 
-"""Import timezone function"""
+#datetime related imports
 from django.utils import timezone
+import datetime
 
 #questionbank related imports
 import random
 from electronics.power_electronics_engine import *
 from main_app.question_manager import topics_keys, subtopics_keys, questions_by_subtopic, questions_by_topic
+from main_app.mcq_manager import create_exam
 
 #http related imports
 import requests as requests_library
@@ -217,7 +219,7 @@ def report_error(request):
             yag = yagmail.SMTP('cortexsilicon','jnzbhrbqcsavnlhu') #input the email username and app password
             contents = [f"""Name: {user.first_name}, {user.last_name},
 Error Description: {description},
-Screenshot: {image.url}"""] #this is the content of the email to be sent to the admin, pertaining the error
+Screenshot: {image}"""] #this is the content of the email to be sent to the admin, pertaining the error
             yag.send('lesliecaminade@gmail.com', 'CERTC CuriousWeb New Error Report', contents) #send the email
 
             context = {
@@ -252,35 +254,35 @@ def logout_view(request):
     logout(request)
     return render(request, 'main_app/landing.html', {'message': 'Logout Successful.'})
 
-def enroll(request):
-    if request.method == "POST": # if method is POST
-
-        """These are all information related to setting up the google recaptcha,
-        for more information, see https://www.google.com/recaptcha/admin/site/351143989"""
-        recaptcha = request.POST['g-recaptcha-response']
-        recaptcha_data = {
-            'secret': '6Lc1CO4UAAAAACs9XqPf35SGvdtP-0QmDM0n0K6V',
-            'response': recaptcha,
-        }
-        google_captcha_response = requests_library.post('https://www.google.com/recaptcha/api/siteverify', recaptcha_data)
-
-        if 'true' in google_captcha_response.text: #if the google recaptch confirms a valid human
-            """yagmail is a library to manage google smtp in a more simpler manner,
-            for more information, visit https://github.com/kootenpv/yagmail"""
-
-            yag = yagmail.SMTP('cortexsilicon','jnzbhrbqcsavnlhu') #input the email username and app password
-            contents = [f"""Name: {request.POST['first_name']}, {request.POST['last_name']},
-School: {request.POST['school_name']},
-Year Graduated: {request.POST['year_graduated']},
-Phone Number: {request.POST['phone_number']},
-Facebook: {request.POST['facebook_username']}"""] #this is the content of the email to be sent to the admin, pertaining to enrollment details
-            yag.send('lesliecaminade@gmail.com', 'CERTC CuriousWeb New Enrollment', contents) #send the email
-            return render(request, 'main_app/landing.html', {'message': 'Enrollment has been requested, keep your lines open so we can contact you.'}) #return to the landing page with a message of a successful enrollment
-        else:
-            return render(request, 'main_app/landing.html', {'danger': 'Recaptcha failed. If you are really a human, please try again.'}) #return to the landing page with a message of a failed enrollment request due to a failed recaptcha
-
-    else:# if method is GET
-        return render(request, 'main_app/enrollment.html') #return the enrollment request page
+# def enroll(request):
+#     if request.method == "POST": # if method is POST
+#
+#         """These are all information related to setting up the google recaptcha,
+#         for more information, see https://www.google.com/recaptcha/admin/site/351143989"""
+#         recaptcha = request.POST['g-recaptcha-response']
+#         recaptcha_data = {
+#             'secret': '6Lc1CO4UAAAAACs9XqPf35SGvdtP-0QmDM0n0K6V',
+#             'response': recaptcha,
+#         }
+#         google_captcha_response = requests_library.post('https://www.google.com/recaptcha/api/siteverify', recaptcha_data)
+#
+#         if 'true' in google_captcha_response.text: #if the google recaptch confirms a valid human
+#             """yagmail is a library to manage google smtp in a more simpler manner,
+#             for more information, visit https://github.com/kootenpv/yagmail"""
+#
+#             yag = yagmail.SMTP('cortexsilicon','jnzbhrbqcsavnlhu') #input the email username and app password
+#             contents = [f"""Name: {request.POST['first_name']}, {request.POST['last_name']},
+# School: {request.POST['school_name']},
+# Year Graduated: {request.POST['year_graduated']},
+# Phone Number: {request.POST['phone_number']},
+# Facebook: {request.POST['facebook_username']}"""] #this is the content of the email to be sent to the admin, pertaining to enrollment details
+#             yag.send('lesliecaminade@gmail.com', 'CERTC CuriousWeb New Enrollment', contents) #send the email
+#             return render(request, 'main_app/landing.html', {'message': 'Enrollment has been requested, keep your lines open so we can contact you.'}) #return to the landing page with a message of a successful enrollment
+#         else:
+#             return render(request, 'main_app/landing.html', {'danger': 'Recaptcha failed. If you are really a human, please try again.'}) #return to the landing page with a message of a failed enrollment request due to a failed recaptcha
+#
+#     else:# if method is GET
+#         return render(request, 'main_app/enrollment.html') #return the enrollment request page
 
 def create_multiple_choice_question(request):
     if request.user.is_staff: #if the user is a staff (teacher)
@@ -478,7 +480,7 @@ f"""<button type="button" class="btn btn-outline-primary wrong_choice my-1 btn-b
             'wrong_3': one_question.wrong_3,
             'solution': one_question.solution,
             'subtopic': subtopic, #this is so that the subtopic selected is saved for the NEXT button, the user would not select the topic again
-            'choices_html_code': choices_html_code,
+            'choices_html_code': choices_html_code, #HTML code that contains the randomized choices
             'available': True, #flag
             'pk': one_question.pk, #this is the question primary key, and is used for identifying the question, especially for cases when the
             #user is of staff level and wants to edit or delete the question. buttons are present on the page.
@@ -656,3 +658,155 @@ def load_subtopics(request):
         'previous_subtopic': previous_subtopic,
     }
     return render(request, 'main_app/ajax/load_subtopics_dropdown.html', context) #pass the page snippet along with the list of the subtopics
+
+def exam_configure(request): #the user is taken on this view if they want to take an exam
+    """This view contains code that gives the exam configuration page, caters the configuration after the
+    user completes it, and afterwards send the exam itself."""
+    if request.method =="GET" and request.user.is_authenticated: # a user attempts to take an exam
+        topics = list_this_model(Topic, 'name') #create a list of all topics
+        subtopics = list_this_model(Subtopic, 'name') #create a list of all subtopics
+        context = {
+            'topics': topics,
+            'subtopics': subtopics,
+        }
+        return render(request, 'main_app/exam_config.html', context) #return a page that says deletion is not allowed
+    if request.method == "POST" and request.user.is_authenticated:
+        subtopic = request.POST['subtopic'] #get the subtopic HTML field
+        item_count = request.POST['item_count'] #get the item_count HTML field
+        items_list = create_exam(subtopic, item_count) #create a list of question items - see function
+
+        context = {
+            'items_list': items_list
+        }
+        return render(request, 'main_app/exam.html', context)
+    else:  # the user is not authenticated
+        #return an error saying that a login is required to take the exam
+        pass
+
+def exam_results(request):
+    """This view contains the code that check the exam the user has just taken,
+    and returns two things
+    1) the result summary of the exam
+    2) the exam itself along with its corresponding markings what question is right or wrong
+    3) the user answers compared against
+    4) the answer keys
+    5) the solutions of the questions"""
+
+def enroll(request):
+    if request.method == "GET" and not request.user.is_authenticated: #if method is get
+        context = {}
+        return render(request, 'main_app/enrollment.html', context)#return the page
+
+    elif request.method == "POST" and not request.user.is_authenticated: #if the method is post and the user is NOT logged in
+        """These are all information related to setting up the google recaptcha,
+        for more information, see https://www.google.com/recaptcha/admin/site/351143989"""
+        recaptcha = request.POST['g-recaptcha-response']
+        recaptcha_data = {
+            'secret': '6Lc1CO4UAAAAACs9XqPf35SGvdtP-0QmDM0n0K6V',
+            'response': recaptcha,
+        }
+        google_captcha_response = requests_library.post('https://www.google.com/recaptcha/api/siteverify', recaptcha_data)
+
+        if ('true' in google_captcha_response.text) or (True): #if the google recaptch confirms a valid human
+            if request.POST['password'] == request.POST['confirm_password']: #check if passwwords match
+                try: #this tries to catch any missing of wrong details
+                    first_name = request.POST['first_name']
+                    last_name = request.POST['last_name']
+                    middle_name = request.POST['middle_name']
+                    birthdate = datetime.datetime(int(request.POST['year']), int(request.POST['month']), int(request.POST['date']))
+                    address = request.POST['address']
+                    religion = request.POST['religion']
+                    mobile_number = request.POST['mobile_number']
+                    facebook_username = request.POST['facebook_username']
+                    gender = request.POST['gender']
+                    course = request.POST['course']
+                    review_schedule = request.POST['review_schedule']
+                    school = request.POST['school']
+                    date_graduated = datetime.datetime(int(request.POST['year_graduated']), int(request.POST['month_graduated']), int(request.POST['date_graduated']))
+                    honors = request.POST['honors']
+                    try:
+                        officer_position = request.POST['officer_position']
+                    except:
+                        officer_position = ''
+
+                    scholarships = request.POST['scholarships']
+                    email = request.POST['email']
+                    review_status = request.POST['review_status']
+                    try:
+                        conditional_subject = request.POST['conditional_subject']
+                    except:
+                        conditional_subject = ''
+                    first_name_contact_person = request.POST['first_name_contact_person']
+                    last_name_contact_person = request.POST['last_name_contact_person']
+                    middle_name_contact_person = request.POST['middle_name_contact_person']
+                    address_contact_person = request.POST['address_contact_person']
+                    mobile_number_contact_person = request.POST['mobile_number_contact_person']
+                    id_picture = request.POST['id_picture']
+                    payment_picture = request.POST['payment_picture']
+                except: #if some information is wrong or some required information is missing
+                    return render(request, 'main_app/enrollment.html', {'danger': 'A required information is wrong or missing.'})
+
+                student = Student.objects.create(
+                    first_name = first_name,
+                    last_name = last_name,
+                    middle_name = middle_name,
+                    birthdate = birthdate,
+                    address = address,
+                    religion = religion,
+                    mobile_number = mobile_number,
+                    facebook_username = facebook_username,
+                    gender = gender,
+                    course = course,
+                    review_schedule = review_schedule,
+                    school = school,
+                    date_graduated = date_graduated,
+                    honors = honors,
+                    officer_position = officer_position,
+                    scholarships = scholarships,
+                    email = email,
+                    review_status = review_status,
+                    conditional_subject = conditional_subject,
+                    first_name_contact_person = first_name_contact_person,
+                    last_name_contact_person = last_name_contact_person,
+                    middle_name_contact_person = middle_name_contact_person,
+                    address_contact_person = address_contact_person,
+                    mobile_number_contact_person = mobile_number_contact_person,
+                    id_picture = id_picture,
+                    payment_picture = payment_picture,
+                )  #create the student_object
+
+                student.save() #attempt to save
+                student = Student.objects.filter(first_name = first_name).filter(last_name = last_name).filter(middle_name = middle_name)[0] #open the newly created student object
+
+                """yagmail is a library to manage google smtp in a more simpler manner,
+                for more information, visit https://github.com/kootenpv/yagmail"""
+
+                yag = yagmail.SMTP('cortexsilicon','jnzbhrbqcsavnlhu') #input the email username and app password
+                contents = f"""
+                <html>
+                <body>
+                    <h1>Enrollment: CERTC Online Review</h1>
+                    <table>
+                      <ul>
+                        <tr><td>Name </td> <td>{last_name}, {first_name}, {middle_name}</td></tr>
+                        <tr><td>Course </td><td>{course}</td></tr>
+                        <tr><td>Date Graduated </td><td>{date_graduated}</td></tr>
+                        <tr><td>Honors </td><td>{honors}</td></tr>
+                        <tr><td>Officer Position </td><td>{officer_position}</td></tr>
+                        <tr><td>Scholarships </td><td>{scholarships}</td></tr>
+                        <tr><td>Review Status </td><td>{review_status}</td></tr>
+                        <tr><td>Conditional Subject </td><td>{conditional_subject}</td></tr>
+                        <tr><td>Mobile Number </td><td>{mobile_number}</td></tr>
+                        <tr><td>Facebook Username </td><td>{facebook_username}</td></tr>
+                        <tr><td>ID picture</td><td><img src=" {student.id_picture.path} " alt="id picture" title="ID" style="display:block" width="200" height="87"/ </td></tr>
+                        <tr><td>Payment picture </td><td><img src=" {student.payment_picture.path} " alt="payment picture" title="Payment Proof" style="display:block" width="200" height="87"/> </td></tr>
+                      </ul>
+                    </table>
+                  </body>
+                </html>""" #set the email content
+
+                yag.send(to = ['lesliecaminade@gmail.com', 'lesliecaminade@protonmail.com'], subject = 'CERTC CuriousWeb New Enrollment', contents = contents) #send the email
+                return render(request, 'main_app/landing.html', {'message': 'Enrollment successful, keep your lines open so we can contact you.'}) #return the enrollment page
+
+    else: #if the user is already logged in
+        return render(request, 'main_app/landing.html', {'message': 'You need to logout first before enrolling.'}) #return the login page
