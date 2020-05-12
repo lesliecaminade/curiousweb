@@ -798,8 +798,8 @@ def enroll(request):
                     <tr><td>Conditional Subject </td><td>{conditional_subject}</td></tr>
                     <tr><td>Mobile Number </td><td>{mobile_number}</td></tr>
                     <tr><td>Facebook Username </td><td>{facebook_username}</td></tr>
-                    <tr><td>ID picture</td><td><img src=" {student.id_picture.path} " alt="id picture" title="ID" style="display:block" width="200" height="87"/ </td></tr>
-                    <tr><td>Payment picture </td><td><img src=" {student.payment_picture.path} " alt="payment picture" title="Payment Proof" style="display:block" width="200" height="87"/> </td></tr>
+                    <tr><td>ID picture</td><td><img src=" {student.id_picture.url} " alt="id picture" title="ID" style="display:block" width="200" height="87"/ </td></tr>
+                    <tr><td>Payment picture </td><td><img src=" {student.payment_picture.url} " alt="payment picture" title="Payment Proof" style="display:block" width="200" height="87"/> </td></tr>
                   </ul>
                 </table>
               </body>
