@@ -746,11 +746,12 @@ def enroll(request):
                 mobile_number_contact_person = request.POST['mobile_number_contact_person']
                 id_picture = request.FILES['id_picture']
                 payment_picture = request.FILES['payment_picture']
+                full_name = first_name.lower() + ' ' + last_name.lower()
             except: #if some information is wrong or some required information is missing
                 return render(request, 'main_app/enrollment.html', {'danger': 'A required information is wrong or missing.'})
 
             new_student = Student.objects.create(
-                full_name = first_name.lower() + ' ' + last_name.lower(),
+                full_name = full_name.lower(),
                 first_name = first_name.lower(),
                 last_name = last_name.lower(),
                 middle_name = middle_name.lower(),
