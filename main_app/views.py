@@ -36,6 +36,11 @@ import requests as requests_library
 from email_management.email_sender import send_email
 from email_management.email_sender_2 import SendMessage
 import yagmail
+
+#file related imports
+from django.core.files.storage import FileSystemStorage
+
+
 """function definitions"""
 
 def list_this_model(model, attr, **kwargs):
@@ -781,6 +786,13 @@ def enroll(request):
             )  #create the student_object
 
             new_student.save() #attempt to save
+
+            #handle the actual file upload
+            id_picture_file = request.FILES['id_picture'] #get the file from the request files
+            filename = FileSystemStorage(location = '/media/id_pictures/').save(id_picture_file.name, id_picture_file) #call the internal django function to store the files
+            payment_picture_file = request.FILES['payment_picture'] #get the file from the request files
+            filename = FileSystemStorage(location = '/media/payment_pictures/').save(payment_picture_file.name, payment_picture_file) #call the internal django function to store the files
+
             student = Student.objects.get(full_name = full_name) #open the newly created student object
 
             """yagmail is a library to manage google smtp in a more simpler manner,
