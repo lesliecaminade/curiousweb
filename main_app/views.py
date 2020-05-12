@@ -724,6 +724,7 @@ def enroll(request):
                 school = request.POST['school']
                 date_graduated = datetime.datetime(int(request.POST['year_graduated']), int(request.POST['month_graduated']), int(request.POST['date_graduated']))
                 honors = request.POST['honors']
+
                 try:
                     officer_position = request.POST['officer_position']
                 except:
@@ -732,51 +733,54 @@ def enroll(request):
                 scholarships = request.POST['scholarships']
                 email = request.POST['email']
                 review_status = request.POST['review_status']
+
                 try:
                     conditional_subject = request.POST['conditional_subject']
                 except:
                     conditional_subject = ''
+
                 first_name_contact_person = request.POST['first_name_contact_person']
                 last_name_contact_person = request.POST['last_name_contact_person']
                 middle_name_contact_person = request.POST['middle_name_contact_person']
                 address_contact_person = request.POST['address_contact_person']
                 mobile_number_contact_person = request.POST['mobile_number_contact_person']
-                id_picture = request.POST['id_picture']
-                payment_picture = request.POST['payment_picture']
+                id_picture = request.FILES['id_picture']
+                payment_picture = request.FILES['payment_picture']
             except: #if some information is wrong or some required information is missing
                 return render(request, 'main_app/enrollment.html', {'danger': 'A required information is wrong or missing.'})
 
-            student = Student.objects.create(
-                first_name = first_name,
-                last_name = last_name,
-                middle_name = middle_name,
+            new_student = Student.objects.create(
+                full_name = first_name.lower() + ' ' + last_name.lower(),
+                first_name = first_name.lower(),
+                last_name = last_name.lower(),
+                middle_name = middle_name.lower(),
                 birthdate = birthdate,
-                address = address,
-                religion = religion,
+                address = address.lower(),
+                religion = religion.lower(),
                 mobile_number = mobile_number,
                 facebook_username = facebook_username,
-                gender = gender,
-                course = course,
-                review_schedule = review_schedule,
-                school = school,
+                gender = gender.lower(),
+                course = course.lower(),
+                review_schedule = review_schedule.lower(),
+                school = school.lower(),
                 date_graduated = date_graduated,
-                honors = honors,
-                officer_position = officer_position,
-                scholarships = scholarships,
+                honors = honors.lower(),
+                officer_position = officer_position.lower(),
+                scholarships = scholarships.lower(),
                 email = email,
-                review_status = review_status,
-                conditional_subject = conditional_subject,
-                first_name_contact_person = first_name_contact_person,
-                last_name_contact_person = last_name_contact_person,
-                middle_name_contact_person = middle_name_contact_person,
-                address_contact_person = address_contact_person,
+                review_status = review_status.lower(),
+                conditional_subject = conditional_subject.lower(),
+                first_name_contact_person = first_name_contact_person.lower(),
+                last_name_contact_person = last_name_contact_person.lower(),
+                middle_name_contact_person = middle_name_contact_person.lower(),
+                address_contact_person = address_contact_person.lower(),
                 mobile_number_contact_person = mobile_number_contact_person,
                 id_picture = id_picture,
                 payment_picture = payment_picture,
             )  #create the student_object
 
-            student.save() #attempt to save
-            student = Student.objects.filter(first_name = first_name).filter(last_name = last_name).filter(middle_name = middle_name)[0] #open the newly created student object
+            new_student.save() #attempt to save
+            student = Student.objects.get(full_name = full_name) #open the newly created student object
 
             """yagmail is a library to manage google smtp in a more simpler manner,
             for more information, visit https://github.com/kootenpv/yagmail"""
@@ -788,20 +792,20 @@ def enroll(request):
                 <h1>Enrollment: CERTC Online Review</h1>
                 <table>
                   <ul>
-                    <tr><td>Name </td> <td>{last_name}, {first_name}, {middle_name}</td></tr>
-                    <tr><td>Course </td><td>{course}</td></tr>
-                    <tr><td>Date Graduated </td><td>{date_graduated}</td></tr>
-                    <tr><td>Honors </td><td>{honors}</td></tr>
-                    <tr><td>Officer Position </td><td>{officer_position}</td></tr>
-                    <tr><td>Scholarships </td><td>{scholarships}</td></tr>
-                    <tr><td>Review Status </td><td>{review_status}</td></tr>
-                    <tr><td>Conditional Subject </td><td>{conditional_subject}</td></tr>
-                    <tr><td>Mobile Number </td><td>{mobile_number}</td></tr>
-                    <tr><td>Facebook Username </td><td>{facebook_username}</td></tr>
-                    <tr><td>ID picture</td><td><img src=" {student.id_picture.url} " alt="id picture" title="ID" style="display:block" width="200"/> </td></tr>
-                    <tr><td>Payment picture </td><td><img src=" {student.payment_picture.url} " alt="payment picture" title="Payment Proof" style="display:block" width="200" /> </td></tr>
-                    <tr><td>ID picture</td><td><img src=" {student.id_picture.path} " alt="id picture" title="ID" style="display:block" width="200"/> </td></tr>
-                    <tr><td>Payment picture </td><td><img src=" {student.payment_picture.path} " alt="payment picture" title="Payment Proof" style="display:block" width="200"/> </td></tr>
+                    <tr><td>Name </td> <td>{student.last_name}, {student.first_name}, {student.middle_name}</td></tr>
+                    <tr><td>Course </td><td>{student.course}</td></tr>
+                    <tr><td>Date Graduated </td><td>{student.date_graduated}</td></tr>
+                    <tr><td>Honors </td><td>{student.honors}</td></tr>
+                    <tr><td>Officer Position </td><td>{student.officer_position}</td></tr>
+                    <tr><td>Scholarships </td><td>{student.scholarships}</td></tr>
+                    <tr><td>Review Status </td><td>{student.review_status}</td></tr>
+                    <tr><td>Conditional Subject </td><td>{student.conditional_subject}</td></tr>
+                    <tr><td>Mobile Number </td><td>{student.mobile_number}</td></tr>
+                    <tr><td>Facebook Username </td><td>{student.facebook_username}</td></tr>
+                    <tr><td>ID picture</td><td>http://siliconcortex.pythonanywhere.com{student.id_picture.path} </td></tr>
+                    <tr><td>Payment picture </td><td>http://siliconcortex.pythonanywhere.com{student.payment_picture.path}</td></tr>
+                    <tr><td>ID picture</td><td><img src=" http://siliconcortex.pythonanywhere.com{student.id_picture.path} " alt="id picture" title="ID" style="display:block" width="200"/> </td></tr>
+                    <tr><td>Payment picture </td><td><img src=" http://siliconcortex.pythonanywhere.com{student.payment_picture.path} " alt="payment picture" title="Payment Proof" style="display:block" width="200"/> </td></tr>
                   </ul>
                 </table>
               </body>
