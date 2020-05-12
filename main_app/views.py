@@ -707,106 +707,106 @@ def enroll(request):
         }
         google_captcha_response = requests_library.post('https://www.google.com/recaptcha/api/siteverify', recaptcha_data)
 
-        if ('true' in google_captcha_response.text) or (True): #if the google recaptch confirms a valid human
-            if request.POST['password'] == request.POST['confirm_password']: #check if passwwords match
-                try: #this tries to catch any missing of wrong details
-                    first_name = request.POST['first_name']
-                    last_name = request.POST['last_name']
-                    middle_name = request.POST['middle_name']
-                    birthdate = datetime.datetime(int(request.POST['year']), int(request.POST['month']), int(request.POST['date']))
-                    address = request.POST['address']
-                    religion = request.POST['religion']
-                    mobile_number = request.POST['mobile_number']
-                    facebook_username = request.POST['facebook_username']
-                    gender = request.POST['gender']
-                    course = request.POST['course']
-                    review_schedule = request.POST['review_schedule']
-                    school = request.POST['school']
-                    date_graduated = datetime.datetime(int(request.POST['year_graduated']), int(request.POST['month_graduated']), int(request.POST['date_graduated']))
-                    honors = request.POST['honors']
-                    try:
-                        officer_position = request.POST['officer_position']
-                    except:
-                        officer_position = ''
+        if ('true' in google_captcha_response.text) or (False): #if the google recaptch confirms a valid human
 
-                    scholarships = request.POST['scholarships']
-                    email = request.POST['email']
-                    review_status = request.POST['review_status']
-                    try:
-                        conditional_subject = request.POST['conditional_subject']
-                    except:
-                        conditional_subject = ''
-                    first_name_contact_person = request.POST['first_name_contact_person']
-                    last_name_contact_person = request.POST['last_name_contact_person']
-                    middle_name_contact_person = request.POST['middle_name_contact_person']
-                    address_contact_person = request.POST['address_contact_person']
-                    mobile_number_contact_person = request.POST['mobile_number_contact_person']
-                    id_picture = request.POST['id_picture']
-                    payment_picture = request.POST['payment_picture']
-                except: #if some information is wrong or some required information is missing
-                    return render(request, 'main_app/enrollment.html', {'danger': 'A required information is wrong or missing.'})
+            try: #this tries to catch any missing of wrong details
+                first_name = request.POST['first_name']
+                last_name = request.POST['last_name']
+                middle_name = request.POST['middle_name']
+                birthdate = datetime.datetime(int(request.POST['year']), int(request.POST['month']), int(request.POST['date']))
+                address = request.POST['address']
+                religion = request.POST['religion']
+                mobile_number = request.POST['mobile_number']
+                facebook_username = request.POST['facebook_username']
+                gender = request.POST['gender']
+                course = request.POST['course']
+                review_schedule = request.POST['review_schedule']
+                school = request.POST['school']
+                date_graduated = datetime.datetime(int(request.POST['year_graduated']), int(request.POST['month_graduated']), int(request.POST['date_graduated']))
+                honors = request.POST['honors']
+                try:
+                    officer_position = request.POST['officer_position']
+                except:
+                    officer_position = ''
 
-                student = Student.objects.create(
-                    first_name = first_name,
-                    last_name = last_name,
-                    middle_name = middle_name,
-                    birthdate = birthdate,
-                    address = address,
-                    religion = religion,
-                    mobile_number = mobile_number,
-                    facebook_username = facebook_username,
-                    gender = gender,
-                    course = course,
-                    review_schedule = review_schedule,
-                    school = school,
-                    date_graduated = date_graduated,
-                    honors = honors,
-                    officer_position = officer_position,
-                    scholarships = scholarships,
-                    email = email,
-                    review_status = review_status,
-                    conditional_subject = conditional_subject,
-                    first_name_contact_person = first_name_contact_person,
-                    last_name_contact_person = last_name_contact_person,
-                    middle_name_contact_person = middle_name_contact_person,
-                    address_contact_person = address_contact_person,
-                    mobile_number_contact_person = mobile_number_contact_person,
-                    id_picture = id_picture,
-                    payment_picture = payment_picture,
-                )  #create the student_object
+                scholarships = request.POST['scholarships']
+                email = request.POST['email']
+                review_status = request.POST['review_status']
+                try:
+                    conditional_subject = request.POST['conditional_subject']
+                except:
+                    conditional_subject = ''
+                first_name_contact_person = request.POST['first_name_contact_person']
+                last_name_contact_person = request.POST['last_name_contact_person']
+                middle_name_contact_person = request.POST['middle_name_contact_person']
+                address_contact_person = request.POST['address_contact_person']
+                mobile_number_contact_person = request.POST['mobile_number_contact_person']
+                id_picture = request.POST['id_picture']
+                payment_picture = request.POST['payment_picture']
+            except: #if some information is wrong or some required information is missing
+                return render(request, 'main_app/enrollment.html', {'danger': 'A required information is wrong or missing.'})
 
-                student.save() #attempt to save
-                student = Student.objects.filter(first_name = first_name).filter(last_name = last_name).filter(middle_name = middle_name)[0] #open the newly created student object
+            student = Student.objects.create(
+                first_name = first_name,
+                last_name = last_name,
+                middle_name = middle_name,
+                birthdate = birthdate,
+                address = address,
+                religion = religion,
+                mobile_number = mobile_number,
+                facebook_username = facebook_username,
+                gender = gender,
+                course = course,
+                review_schedule = review_schedule,
+                school = school,
+                date_graduated = date_graduated,
+                honors = honors,
+                officer_position = officer_position,
+                scholarships = scholarships,
+                email = email,
+                review_status = review_status,
+                conditional_subject = conditional_subject,
+                first_name_contact_person = first_name_contact_person,
+                last_name_contact_person = last_name_contact_person,
+                middle_name_contact_person = middle_name_contact_person,
+                address_contact_person = address_contact_person,
+                mobile_number_contact_person = mobile_number_contact_person,
+                id_picture = id_picture,
+                payment_picture = payment_picture,
+            )  #create the student_object
 
-                """yagmail is a library to manage google smtp in a more simpler manner,
-                for more information, visit https://github.com/kootenpv/yagmail"""
+            student.save() #attempt to save
+            student = Student.objects.filter(first_name = first_name).filter(last_name = last_name).filter(middle_name = middle_name)[0] #open the newly created student object
 
-                yag = yagmail.SMTP('cortexsilicon','jnzbhrbqcsavnlhu') #input the email username and app password
-                contents = f"""
-                <html>
-                <body>
-                    <h1>Enrollment: CERTC Online Review</h1>
-                    <table>
-                      <ul>
-                        <tr><td>Name </td> <td>{last_name}, {first_name}, {middle_name}</td></tr>
-                        <tr><td>Course </td><td>{course}</td></tr>
-                        <tr><td>Date Graduated </td><td>{date_graduated}</td></tr>
-                        <tr><td>Honors </td><td>{honors}</td></tr>
-                        <tr><td>Officer Position </td><td>{officer_position}</td></tr>
-                        <tr><td>Scholarships </td><td>{scholarships}</td></tr>
-                        <tr><td>Review Status </td><td>{review_status}</td></tr>
-                        <tr><td>Conditional Subject </td><td>{conditional_subject}</td></tr>
-                        <tr><td>Mobile Number </td><td>{mobile_number}</td></tr>
-                        <tr><td>Facebook Username </td><td>{facebook_username}</td></tr>
-                        <tr><td>ID picture</td><td><img src=" {student.id_picture.path} " alt="id picture" title="ID" style="display:block" width="200" height="87"/ </td></tr>
-                        <tr><td>Payment picture </td><td><img src=" {student.payment_picture.path} " alt="payment picture" title="Payment Proof" style="display:block" width="200" height="87"/> </td></tr>
-                      </ul>
-                    </table>
-                  </body>
-                </html>""" #set the email content
+            """yagmail is a library to manage google smtp in a more simpler manner,
+            for more information, visit https://github.com/kootenpv/yagmail"""
 
-                yag.send(to = ['lesliecaminade@gmail.com', 'lesliecaminade@protonmail.com'], subject = 'CERTC CuriousWeb New Enrollment', contents = contents) #send the email
-                return render(request, 'main_app/landing.html', {'message': 'Enrollment successful, keep your lines open so we can contact you.'}) #return the enrollment page
+            yag = yagmail.SMTP('cortexsilicon','jnzbhrbqcsavnlhu') #input the email username and app password
+            contents = f"""
+            <html>
+            <body>
+                <h1>Enrollment: CERTC Online Review</h1>
+                <table>
+                  <ul>
+                    <tr><td>Name </td> <td>{last_name}, {first_name}, {middle_name}</td></tr>
+                    <tr><td>Course </td><td>{course}</td></tr>
+                    <tr><td>Date Graduated </td><td>{date_graduated}</td></tr>
+                    <tr><td>Honors </td><td>{honors}</td></tr>
+                    <tr><td>Officer Position </td><td>{officer_position}</td></tr>
+                    <tr><td>Scholarships </td><td>{scholarships}</td></tr>
+                    <tr><td>Review Status </td><td>{review_status}</td></tr>
+                    <tr><td>Conditional Subject </td><td>{conditional_subject}</td></tr>
+                    <tr><td>Mobile Number </td><td>{mobile_number}</td></tr>
+                    <tr><td>Facebook Username </td><td>{facebook_username}</td></tr>
+                    <tr><td>ID picture</td><td><img src=" {student.id_picture.path} " alt="id picture" title="ID" style="display:block" width="200" height="87"/ </td></tr>
+                    <tr><td>Payment picture </td><td><img src=" {student.payment_picture.path} " alt="payment picture" title="Payment Proof" style="display:block" width="200" height="87"/> </td></tr>
+                  </ul>
+                </table>
+              </body>
+            </html>""" #set the email content
+
+            yag.send(to = ['lesliecaminade@gmail.com', 'lesliecaminade@protonmail.com'], subject = 'CERTC CuriousWeb New Enrollment', contents = contents) #send the email
+            return render(request, 'main_app/landing.html', {'message': 'Enrollment successful, keep your lines open so we can contact you.'}) #return the enrollment page
 
     else: #if the user is already logged in
         return render(request, 'main_app/landing.html', {'message': 'You need to logout first before enrolling.'}) #return the login page
