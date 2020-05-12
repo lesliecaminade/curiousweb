@@ -43,9 +43,8 @@ class MultipleChoice(models.Model):
     )
 
 class Student(models.Model):
+    full_name = models.CharField(max_length = 200, primary_key = True) #this would just be simply firstname_lastname
     user = models.OneToOneField(User, on_delete = models.PROTECT, null = True)
-    username = models.CharField(max_length = 100)
-    password = models.CharField(max_length = 100)
     first_name = models.CharField(max_length = 100)
     last_name = models.CharField(max_length = 100)
     middle_name = models.CharField(max_length = 100)
