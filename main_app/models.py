@@ -66,7 +66,7 @@ class Student(models.Model):
     conditional_subject = models.CharField(max_length = 50, blank = True)
     first_name_contact_person = models.CharField(max_length=100)
     last_name_contact_person = models.CharField(max_length=100)
-    middle_name_contact_person = models.CharField(max_length=100)
+    middle_name_contact_person = models.CharField(max_length=100, blank = True)
     address_contact_person = models.CharField(max_length=1000)
     mobile_number_contact_person = models.CharField(max_length = 1000)
     id_picture = models.ImageField(blank = True, upload_to = 'id_pictures')
