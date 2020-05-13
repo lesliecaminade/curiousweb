@@ -1,10 +1,16 @@
 """Importing models """
 from main_app.models import ErrorReport
-from main_app.models import Topic, Subtopic, MultipleChoice, Student
+from main_app.models import Topic, Subtopic, Subsubtopic, MultipleChoice, Student
 
 """Import the forms"""
 #from main_app.forms import QuestionCustomizeForm
 #from main_app.forms import MultipleChoiceForm
+from main_app.forms import (
+    StudentForm,
+    ElectronicsStudentForm,
+    ElectricalStudentForm,
+    TutorialStudentForm,
+    )
 
 """Import the class-based-view login required
 Import the function-based-view login required"""
@@ -15,6 +21,7 @@ from django.contrib.auth import authenticate, login, logout
 
 """Import the reverse and reverse_lazy functions"""
 from django.urls import reverse, reverse_lazy
+from django.http import HttpResponseRedirect, HttpResponse
 
 """Importi the render, get_object_or_404, and redirect"""
 from django.shortcuts import render, get_object_or_404, redirect
@@ -36,9 +43,11 @@ import requests as requests_library
 from email_management.email_sender import send_email
 from email_management.email_sender_2 import SendMessage
 import yagmail
+from main_app.emailing import send_email_student
 
 #file related imports
 from django.core.files.storage import FileSystemStorage
+
 
 
 """function definitions"""
@@ -327,6 +336,7 @@ def create_multiple_choice_question(request):
 
             topic = request.POST['topic']
             subtopic = request.POST['subtopic']
+            subsubtopic = request.POST['subsubtopic']
 
             #create the multiple_choice_question instance
             multiple_choice_question = MultipleChoice.objects.create(
@@ -342,21 +352,25 @@ def create_multiple_choice_question(request):
                 wrong_image_2 = wrong_image_2,
                 wrong_image_3 = wrong_image_3,
                 solution = solution,
-                subtopic = Subtopic.objects.filter(name=subtopic)[0]
+                subtopic = Subtopic.objects.filter(name=subtopic)[0],
+                #subsubtopic = Subsubtopic.objects.get(topic__name = topic, subtopic__name = subtopic, name=subsubtopic)
             )
 
             try: #attempt to save the question
                 multiple_choice_question.save() #save the question to the database
                 topics = list_this_model(Topic, 'name') #create a list of all topics
                 subtopics = list_this_model(Subtopic, 'name') #create a list of all subtopics
+                subsubtopics = list_this_model(Subsubtopic, 'name') #create a list of all subsubstopics
                 context = {
-                    'topics': topics,
+                    'topics': topics, #list of all topics
                     'subtopics': subtopics, #the list of all subtopics
+                    'subsubtopics': subsubtopics, #list of all subsubtopics
                     'previous_topic': topic, #variables keeping track of the selected option previously
                     'previous_subtopic' : subtopic, #variables keeping track of the selected option previously
+                    #'previous_subsubstopic': subsubtopic, #variable keeping track of the previously selected option
                     'message': 'Question successfully saved.'
                 }
-            except:
+            except: #if saving the question failed
                 subtopics = list_this_model(Subtopic, 'name') #create a list of all subtopics
                 topics = list_this_model(Topic, 'name') #create a list of all topics
                 context = {
@@ -364,7 +378,8 @@ def create_multiple_choice_question(request):
                     'subtopics': subtopics,
                     'previous_topic': topic,
                     'previous_subtopic' : subtopic,
-                    'danger': 'Question saving failed.'
+                    #'previous_subsubstopic': subsubtopic,
+                    'danger': 'Question saving failed.',
                 }
 
             return render(request, 'main_app/create_multiple_choice_question.html', context) #return the page to create the new question again
@@ -697,135 +712,233 @@ def exam_results(request):
     4) the answer keys
     5) the solutions of the questions"""
 
+
+"""The code below is disabled temporarily to test the new modelForm style form validation instead of the explicit-style"""
+# def enroll(request):
+#     if request.method == "GET" and not request.user.is_authenticated: #if method is get
+#         context = {}
+#         return render(request, 'main_app/enrollment.html', context)#return the page
+#
+#     elif request.method == "POST" and not request.user.is_authenticated: #if the method is post and the user is NOT logged in
+#         """These are all information related to setting up the google recaptcha,
+#         for more information, see https://www.google.com/recaptcha/admin/site/351143989"""
+#         recaptcha = request.POST['g-recaptcha-response']
+#         recaptcha_data = {
+#             'secret': '6Lc1CO4UAAAAACs9XqPf35SGvdtP-0QmDM0n0K6V',
+#             'response': recaptcha,
+#         }
+#         google_captcha_response = requests_library.post('https://www.google.com/recaptcha/api/siteverify', recaptcha_data)
+#
+#         if ('true' in google_captcha_response.text) or (False): #if the google recaptch confirms a valid human
+#
+#             try: #this tries to catch any missing or wrong details
+#                 first_name = request.POST['first_name']
+#                 last_name = request.POST['last_name']
+#                 middle_name = request.POST['middle_name']
+#                 birthdate = datetime.datetime(int(request.POST['year']), int(request.POST['month']), int(request.POST['date']))
+#                 address = request.POST['address']
+#                 religion = request.POST['religion']
+#                 mobile_number = request.POST['mobile_number']
+#                 facebook_username = request.POST['facebook_username']
+#                 gender = request.POST['gender']
+#                 course = request.POST['course']
+#                 review_schedule = request.POST['review_schedule']
+#                 school = request.POST['school']
+#                 date_graduated = datetime.datetime(int(request.POST['year_graduated']), int(request.POST['month_graduated']), int(request.POST['date_graduated']))
+#                 honors = request.POST['honors']
+#
+#                 try:
+#                     officer_position = request.POST['officer_position']
+#                 except:
+#                     officer_position = ''
+#
+#                 scholarships = request.POST['scholarships']
+#                 email = request.POST['email']
+#                 review_status = request.POST['review_status']
+#
+#                 try:
+#                     conditional_subject = request.POST['conditional_subject']
+#                 except:
+#                     conditional_subject = ''
+#
+#                 first_name_contact_person = request.POST['first_name_contact_person']
+#                 last_name_contact_person = request.POST['last_name_contact_person']
+#                 middle_name_contact_person = request.POST['middle_name_contact_person']
+#                 address_contact_person = request.POST['address_contact_person']
+#                 mobile_number_contact_person = request.POST['mobile_number_contact_person']
+#                 id_picture = request.FILES['id_picture']
+#                 payment_picture = request.FILES['payment_picture']
+#                 full_name = first_name.lower() + ' ' + last_name.lower()
+#             except: #if some information is wrong or some required information is missing
+#                 return render(request, 'main_app/enrollment.html', {'danger': 'A required information is wrong or missing.'})
+#
+#             new_student = Student.objects.create(
+#                 full_name = full_name.lower(),
+#                 first_name = first_name.lower(),
+#                 last_name = last_name.lower(),
+#                 middle_name = middle_name.lower(),
+#                 birthdate = birthdate,
+#                 address = address.lower(),
+#                 religion = religion.lower(),
+#                 mobile_number = mobile_number,
+#                 facebook_username = facebook_username,
+#                 gender = gender.lower(),
+#                 course = course.lower(),
+#                 review_schedule = review_schedule.lower(),
+#                 school = school.lower(),
+#                 date_graduated = date_graduated,
+#                 honors = honors.lower(),
+#                 officer_position = officer_position.lower(),
+#                 scholarships = scholarships.lower(),
+#                 email = email,
+#                 review_status = review_status.lower(),
+#                 conditional_subject = conditional_subject.lower(),
+#                 first_name_contact_person = first_name_contact_person.lower(),
+#                 last_name_contact_person = last_name_contact_person.lower(),
+#                 middle_name_contact_person = middle_name_contact_person.lower(),
+#                 address_contact_person = address_contact_person.lower(),
+#                 mobile_number_contact_person = mobile_number_contact_person,
+#                 id_picture = id_picture,
+#                 payment_picture = payment_picture,
+#             )  #create the student_object
+#
+#             new_student.save() #attempt to save
+#
+#             #handle the actual file upload
+#             id_picture_file = request.FILES['id_picture'] #get the file from the request files
+#             filename = FileSystemStorage(location = 'curiousweb/media/id_pictures/').save(id_picture_file.name, id_picture_file) #call the internal django function to store the files
+#             payment_picture_file = request.FILES['payment_picture'] #get the file from the request files
+#             filename = FileSystemStorage(location = 'curiousweb/media/payment_pictures/').save(payment_picture_file.name, payment_picture_file) #call the internal django function to store the files
+#
+#             student = Student.objects.get(full_name = full_name) #open the newly created student object
+#
+#             """yagmail is a library to manage google smtp in a more simpler manner,
+#             for more information, visit https://github.com/kootenpv/yagmail"""
+#
+#             yag = yagmail.SMTP('cortexsilicon','jnzbhrbqcsavnlhu') #input the email username and app password
+#             contents = f"""
+#             <html>
+#             <body>
+#                 <h1>Enrollment: CERTC Online Review</h1>
+#                 <table>
+#                   <ul>
+#                     <tr><td>Name </td> <td>{student.last_name}, {student.first_name}, {student.middle_name}</td></tr>
+#                     <tr><td>Course </td><td>{student.course}</td></tr>
+#                     <tr><td>Date Graduated </td><td>{student.date_graduated}</td></tr>
+#                     <tr><td>Honors </td><td>{student.honors}</td></tr>
+#                     <tr><td>Officer Position </td><td>{student.officer_position}</td></tr>
+#                     <tr><td>Scholarships </td><td>{student.scholarships}</td></tr>
+#                     <tr><td>Review Status </td><td>{student.review_status}</td></tr>
+#                     <tr><td>Conditional Subject </td><td>{student.conditional_subject}</td></tr>
+#                     <tr><td>Mobile Number </td><td>{student.mobile_number}</td></tr>
+#                     <tr><td>Facebook Username </td><td>{student.facebook_username}</td></tr>
+#                     <tr><td>ID picture</td><td>http://siliconcortex.pythonanywhere.com{student.id_picture.url} </td></tr>
+#                     <tr><td>Payment picture </td><td>http://siliconcortex.pythonanywhere.com{student.payment_picture.url}</td></tr>
+#                     <tr><td>ID picture</td><td><img src=" http://siliconcortex.pythonanywhere.com{student.id_picture.url} " alt="id picture" title="ID" style="display:block" width="200"/> </td></tr>
+#                     <tr><td>Payment picture </td><td><img src=" http://siliconcortex.pythonanywhere.com{student.payment_picture.url} " alt="payment picture" title="Payment Proof" style="display:block" width="200"/> </td></tr>
+#                   </ul>
+#                 </table>
+#               </body>
+#             </html>""" #set the email content
+#
+#             yag.send(to = ['lesliecaminade@gmail.com', 'lesliecaminade@protonmail.com', 'jmquiseo@gmail.com'], subject = 'CERTC CuriousWeb New Enrollment', contents = contents) #send the email
+#             return render(request, 'main_app/landing.html', {'message': 'Enrollment successful, keep your lines open so we can contact you.'}) #return the enrollment page
+#
+#     else: #if the user is already logged in
+#         return render(request, 'main_app/landing.html', {'message': 'You need to logout first before enrolling.'}) #return the login page
+
+
 def enroll(request):
-    if request.method == "GET" and not request.user.is_authenticated: #if method is get
-        context = {}
-        return render(request, 'main_app/enrollment.html', context)#return the page
+    if request.method == 'POST':
+        #check if recaptcha is validated
+        # """These are all information related to setting up the google recaptcha,
+        # for more information, see https://www.google.com/recaptcha/admin/site/351143989"""
+        # recaptcha = request.POST['g-recaptcha-response']
+        # recaptcha_data = {
+        #     'secret': '6Lc1CO4UAAAAACs9XqPf35SGvdtP-0QmDM0n0K6V',
+        #     'response': recaptcha,
+        # }
+        # google_captcha_response = requests_library.post('https://www.google.com/recaptcha/api/siteverify', recaptcha_data)
 
-    elif request.method == "POST" and not request.user.is_authenticated: #if the method is post and the user is NOT logged in
-        """These are all information related to setting up the google recaptcha,
-        for more information, see https://www.google.com/recaptcha/admin/site/351143989"""
-        recaptcha = request.POST['g-recaptcha-response']
-        recaptcha_data = {
-            'secret': '6Lc1CO4UAAAAACs9XqPf35SGvdtP-0QmDM0n0K6V',
-            'response': recaptcha,
-        }
-        google_captcha_response = requests_library.post('https://www.google.com/recaptcha/api/siteverify', recaptcha_data)
+        #set the flag to True during development
+        debug = True
+        if True: #comment this out of you decide to re-enable google recaptcha
+        #if ('true' in google_captcha_response.text) or (debug): #if the google recaptcha confirms a valid human
+            form = StudentForm(request.POST, request.FILES)
+            if form.is_valid():
+                form.save() #save the form, which also saves the database entry
+                student = Student.objects.filter(first_name = request.POST['first_name']).filter(last_name = request.POST['last_name'])[0] #open the newly created student object
 
-        if ('true' in google_captcha_response.text) or (False): #if the google recaptch confirms a valid human
+                #check what program they enrolled to
+                # if student.course == 'ece':
+                #     form = ElectronicsStudentForm()
+                #     return render(request, 'main_app/enrollment_ece.html', {'form': form} )
+                # elif student.course == 'ee':
+                #     form = ElectricalStudentForm()
+                #     return render(request, 'main_app/enrollment_ee.html'. {'form':form})
+                # elif student.course == 'tutorial':
+                #     form = TutorialStudentForm()
+                #     return render(request, 'main_app/enrollment_tutorial.html'. {'form':form})
 
-            try: #this tries to catch any missing of wrong details
-                first_name = request.POST['first_name']
-                last_name = request.POST['last_name']
-                middle_name = request.POST['middle_name']
-                birthdate = datetime.datetime(int(request.POST['year']), int(request.POST['month']), int(request.POST['date']))
-                address = request.POST['address']
-                religion = request.POST['religion']
-                mobile_number = request.POST['mobile_number']
-                facebook_username = request.POST['facebook_username']
-                gender = request.POST['gender']
-                course = request.POST['course']
-                review_schedule = request.POST['review_schedule']
-                school = request.POST['school']
-                date_graduated = datetime.datetime(int(request.POST['year_graduated']), int(request.POST['month_graduated']), int(request.POST['date_graduated']))
-                honors = request.POST['honors']
+                if student.course == 'ece':
+                    return redirect('enroll_ece', first_name = student.first_name, last_name = student.last_name, middle_name = student.middle_name)
+                elif student.course == 'ee':
+                    return redirect('enroll_ee', first_name = student.first_name, last_name = student.last_name, middle_name = student.middle_name)
+                elif student.course == 'tutorial':
+                    return redirect('enroll_tutorial', first_name = student.first_name, last_name = student.last_name, middle_name = student.middle_name)
 
-                try:
-                    officer_position = request.POST['officer_position']
-                except:
-                    officer_position = ''
+                #return render(request, 'main_app/enrollment_page2.html', context)
 
-                scholarships = request.POST['scholarships']
-                email = request.POST['email']
-                review_status = request.POST['review_status']
+            else: #if form is invalid
+                return render(request, 'main_app/enrollment.html', {
+                    'form': form,
+                    'danger': 'The form was invalid.'
+                })
+        else: #if google recaptcha is invalid
+            return render(request, 'main_app/enrollment.html', {
+                'form': form,
+                'danger': 'Please answer the ReCaptcha.'
+            })
 
-                try:
-                    conditional_subject = request.POST['conditional_subject']
-                except:
-                    conditional_subject = ''
+    else: #if the method is GET
+        form = StudentForm()
+        return render(request, 'main_app/enrollment.html', {
+            'form': form
+        })
 
-                first_name_contact_person = request.POST['first_name_contact_person']
-                last_name_contact_person = request.POST['last_name_contact_person']
-                middle_name_contact_person = request.POST['middle_name_contact_person']
-                address_contact_person = request.POST['address_contact_person']
-                mobile_number_contact_person = request.POST['mobile_number_contact_person']
-                id_picture = request.FILES['id_picture']
-                payment_picture = request.FILES['payment_picture']
-                full_name = first_name.lower() + ' ' + last_name.lower()
-            except: #if some information is wrong or some required information is missing
-                return render(request, 'main_app/enrollment.html', {'danger': 'A required information is wrong or missing.'})
+def enroll_ece(request, **kwargs):
+    if request.method == 'POST':
+        secondary_form = ElectronicsStudentForm(request.POST, request.FILES)
+        first_name = request.POST['first_name']
+        middle_name = request.POST['middle_name']
+        last_name = request.POST['last_name']
+        
+        if secondary_form.is_valid():
+            main_student = Student.objects.filter(first_name = first_name).filter(last_name=last_name).filter(middle_name=middle_name)[0]
+            course_student = secondary_form.save(commit = False)
+            course_student.student = main_student
+            course_student.save()
+            send_email_student(course_student)
 
-            new_student = Student.objects.create(
-                full_name = full_name.lower(),
-                first_name = first_name.lower(),
-                last_name = last_name.lower(),
-                middle_name = middle_name.lower(),
-                birthdate = birthdate,
-                address = address.lower(),
-                religion = religion.lower(),
-                mobile_number = mobile_number,
-                facebook_username = facebook_username,
-                gender = gender.lower(),
-                course = course.lower(),
-                review_schedule = review_schedule.lower(),
-                school = school.lower(),
-                date_graduated = date_graduated,
-                honors = honors.lower(),
-                officer_position = officer_position.lower(),
-                scholarships = scholarships.lower(),
-                email = email,
-                review_status = review_status.lower(),
-                conditional_subject = conditional_subject.lower(),
-                first_name_contact_person = first_name_contact_person.lower(),
-                last_name_contact_person = last_name_contact_person.lower(),
-                middle_name_contact_person = middle_name_contact_person.lower(),
-                address_contact_person = address_contact_person.lower(),
-                mobile_number_contact_person = mobile_number_contact_person,
-                id_picture = id_picture,
-                payment_picture = payment_picture,
-            )  #create the student_object
+            return render(request, 'main_app/landing.html', {'message': 'Request for enrollment successful, your ACCOUNT details will be sent to you once we have verified your innformation.'})
+        else: #form not valid
+            return render(request, 'main_app/landing.html', {'danger': 'Enrollment failed'})
 
-            new_student.save() #attempt to save
+    else: #method is get
+        first_name = kwargs['first_name']
+        middle_name = kwargs['middle_name']
+        last_name = kwargs['last_name']
+        form = ElectronicsStudentForm(request.POST, request.FILES)
+        return render(request, 'main_app/enrollment_ece.html',
+        {
+            'form': form,
+            'first_name': first_name,
+            'last_name': last_name,
+            'middle_name': middle_name,
+        })
 
-            #handle the actual file upload
-            id_picture_file = request.FILES['id_picture'] #get the file from the request files
-            filename = FileSystemStorage(location = 'curiousweb/media/id_pictures/').save(id_picture_file.name, id_picture_file) #call the internal django function to store the files
-            payment_picture_file = request.FILES['payment_picture'] #get the file from the request files
-            filename = FileSystemStorage(location = 'curiousweb/media/payment_pictures/').save(payment_picture_file.name, payment_picture_file) #call the internal django function to store the files
+def enroll_ee(request, **kwargs):
+    pass
 
-            student = Student.objects.get(full_name = full_name) #open the newly created student object
-
-            """yagmail is a library to manage google smtp in a more simpler manner,
-            for more information, visit https://github.com/kootenpv/yagmail"""
-
-            yag = yagmail.SMTP('cortexsilicon','jnzbhrbqcsavnlhu') #input the email username and app password
-            contents = f"""
-            <html>
-            <body>
-                <h1>Enrollment: CERTC Online Review</h1>
-                <table>
-                  <ul>
-                    <tr><td>Name </td> <td>{student.last_name}, {student.first_name}, {student.middle_name}</td></tr>
-                    <tr><td>Course </td><td>{student.course}</td></tr>
-                    <tr><td>Date Graduated </td><td>{student.date_graduated}</td></tr>
-                    <tr><td>Honors </td><td>{student.honors}</td></tr>
-                    <tr><td>Officer Position </td><td>{student.officer_position}</td></tr>
-                    <tr><td>Scholarships </td><td>{student.scholarships}</td></tr>
-                    <tr><td>Review Status </td><td>{student.review_status}</td></tr>
-                    <tr><td>Conditional Subject </td><td>{student.conditional_subject}</td></tr>
-                    <tr><td>Mobile Number </td><td>{student.mobile_number}</td></tr>
-                    <tr><td>Facebook Username </td><td>{student.facebook_username}</td></tr>
-                    <tr><td>ID picture</td><td>http://siliconcortex.pythonanywhere.com{student.id_picture.url} </td></tr>
-                    <tr><td>Payment picture </td><td>http://siliconcortex.pythonanywhere.com{student.payment_picture.url}</td></tr>
-                    <tr><td>ID picture</td><td><img src=" http://siliconcortex.pythonanywhere.com{student.id_picture.url} " alt="id picture" title="ID" style="display:block" width="200"/> </td></tr>
-                    <tr><td>Payment picture </td><td><img src=" http://siliconcortex.pythonanywhere.com{student.payment_picture.url} " alt="payment picture" title="Payment Proof" style="display:block" width="200"/> </td></tr>
-                  </ul>
-                </table>
-              </body>
-            </html>""" #set the email content
-
-            yag.send(to = ['lesliecaminade@gmail.com', 'lesliecaminade@protonmail.com'], subject = 'CERTC CuriousWeb New Enrollment', contents = contents) #send the email
-            return render(request, 'main_app/landing.html', {'message': 'Enrollment successful, keep your lines open so we can contact you.'}) #return the enrollment page
-
-    else: #if the user is already logged in
-        return render(request, 'main_app/landing.html', {'message': 'You need to logout first before enrolling.'}) #return the login page
+def enroll_tutorial(request, **kwargs):
+    pass

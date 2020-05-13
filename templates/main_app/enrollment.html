@@ -1,4 +1,8 @@
 {% extends 'main_app/base.html' %}
+
+{% load crispy_forms_tags %}
+
+
 {% block content %}
 
 {%if danger %}
@@ -12,244 +16,125 @@
 </div>
 {% endif%}
 
-<form method="POST" enctype="multipart/form-data">
-
+<form  method="POST" enctype="multipart/form-data">
 <h1>Enrollment Form</h1>
+<p>All fields marked with asterisk are  required.</p>
+
+<div class="form-row">
+{{form.course | as_crispy_field}}
+</div>
 
 <hr class='my-4'>
 <h2>Personal Information</h2>
 <!-- Name -->
 <div class="form-row">
   <div class="form-group col-4">
-    <label for="first_name">First Name</label>
-    <input type="text" class="form-control" placeholder="First Name" name="first_name">
+    <!-- <input type="text" class="form-control" placeholder="First Name" name="first_name"> -->
+    {{ form.first_name | as_crispy_field }}
   </div>
 
   <div class="form-group col-4">
-    <label for="last_name">Last Name</label>
-    <input type="text" class="form-control" placeholder="Last Name" name="last_name">
+    <!-- <input type="text" class="form-control" placeholder="Last Name" name="last_name"> -->
+    {{ form.last_name | as_crispy_field }}
+
   </div>
 
   <div class="form-group col-4">
-    <label for="middle_name">Middle Name</label>
-    <input type="text" class="form-control" placeholder="Middle Name" name="middle_name">
+    <!-- <input type="text" class="form-control" placeholder="Middle Name" name="middle_name" placeholder="optional"> -->
+    {{ form.middle_name | as_crispy_field }}
   </div>
 </div>
 
-
-<!-- Date of birth -->
+<!-- date of birth -->
 <div class="form-row">
   <div class="form-group col-2">
-    <label for="date">Date</label>
-    <input type="number" class="form-control" placeholder="DD" name="date">
-  </div>
-
-  <div class="form-group col-2">
-    <label for=month">Month</label>
-    <input type="number" class="form-control" placeholder="MM" name="month">
-  </div>
-
-  <div class="form-group col-2">
-    <label for="year">Year</label>
-    <input type="number" class="form-control" placeholder="YYYY" name="year">
+    <!-- <input type="number" class="form-control" placeholder="MM" name="month"> -->
+    <!-- {{ form.birthdate | as_crispy_field }} -->
+    <label for="datepicker">Birthday</label>
+    <input id="datepicker" type="text" name="birthdate" class="form-control">
   </div>
 </div>
+
+
 
 
 <!-- Address -->
 <div class="form-group">
-  <label for="address">Address</label>
-  <textarea class="form-control" id="address" rows="3" name="address"></textarea>
+  <!-- <textarea class="form-control" id="address" rows="3" name="address"></textarea> -->
+  {{ form.address | as_crispy_field }}
 </div>
 
 <div class="form-row">
   <!-- Religion -->
   <div class="form-group col-6">
-    <label for="religion">Religion</label>
-    <input type="text" class="form-control" placeholder="Optional" name="religion">
+    <!-- <input type="text" class="form-control" placeholder="optional" name="religion"> -->
+    {{ form.religion | as_crispy_field }}
   </div>
 
   <!-- Mobile NUmber -->
   <div class="form-group col-6">
-    <label for="mobile_number">Mobile Number</label>
-    <input type="number" class="form-control" placeholder="09471234567" name="mobile_number">
+    <!-- <input type="number" class="form-control" placeholder="09471234567" name="mobile_number"> -->
+    {{ form.mobile_number | as_crispy_field }}
   </div>
 </div>
 
 <div class="form-group">
-  <label for="phone_number">Facebook Messenger Username</label>
-  <input type="text" class="form-control" placeholder="facebook.com/someusername" name="facebook_username">
+  <!-- <input type="text" class="form-control" placeholder="optional" name="facebook_username"> -->
+  {{ form.facebook_username | as_crispy_field }}
 </div>
 
 <div class="form-row">
   <!-- Gender -->
-  <div class="container">
-    <h5>Gender</h5>
-
-    <div class="form-check">
-      <input class="form-check-input" type="radio" name="gender" value="male">
-      <label class="form-check-label" for="gender">
-        Male
-      </label>
-    </div>
-    <div class="form-check">
-      <input class="form-check-input" type="radio" name="gender" value="female">
-      <label class="form-check-label" for="gender">
-        Female
-      </label>
-    </div>
-  </div>
+  <!-- <input type="text" class="form-control" placeholder="optional" name="facebook_username"> -->
+  {{ form.gender | as_crispy_field }}
 </div>
 
 
-<div class="form-row my-4">
-  <!-- profile picture -->
-  <div class="form-group col-6">
-    <label for="id_picture">ID picture</label>
-    <input type="file" class="form-control-file" name="id_picture" accept="image/*">
-  </div>
 
-  <!-- proof_of_payment -->
-  <div class="form-group col-6">
-    <label for="payment_picture">Proof of Payment</label>
-    <input type="file" class="form-control-file" name="payment_picture" accept="image/*">
-  </div>
+
+<!-- EMail address -->
+<div class="form-group">
+  <!-- <input type="email" class="form-control" placeholder="name@gmail.com" name="email"> -->
+  {{ form.email | as_crispy_field }}
 </div>
-
-<div class="form-row">
-<div class="container">
-  <!-- Course -->
-  <h5>Course</h5>
-
-  <div class="form-check">
-    <input class="form-check-input" type="radio" name="course" value="ECE">
-    <label class="form-check-label" for="course">
-      ECE
-    </label>
-  </div>
-  <div class="form-check">
-    <input class="form-check-input" type="radio" name="course" value="EE">
-    <label class="form-check-label" for="course">
-      EE
-    </label>
-  </div>
-</div>
-
-</div>
-
-<hr class="my-4">
-
-  <h5>Preferred Review Schedule</h5>
-  <!-- Preferred Review Schedule-->
-  <div class="form-check">
-    <input class="form-check-input" type="radio" name="review_schedule" value="morning">
-    <label class="form-check-label" for="gender">
-      Morning
-    </label>
-  </div>
-  <div class="form-check">
-    <input class="form-check-input" type="radio" name="review_schedule" value="afternoon">
-    <label class="form-check-label" for="gender">
-      Afternoon
-    </label>
-  </div>
-
-  <div class="form-check">
-    <input class="form-check-input" type="radio" name="review_schedule" value="evening">
-    <label class="form-check-label" for="gender">
-      Evening
-    </label>
-  </div>
-
-<hr class="my-4">
 
 <h2>Academic Information</h2>
 <!-- SChoold -->
 <div class="form-group">
-  <label for="school">School Graduated From</label>
-  <textarea class="form-control" id="school" rows="3" name="school"></textarea>
+  <!-- <textarea class="form-control" id="school" rows="3" name="school"></textarea> -->
+  {{ form.school | as_crispy_field }}
 </div>
 
+
+<!-- date of birth -->
 <div class="form-row">
-  <!-- Date Graduated -->
   <div class="form-group col-2">
-    <label for="date">Date</label>
-    <input type="number" class="form-control" placeholder="DD" name="date_graduated">
-  </div>
-
-  <div class="form-group col-2">
-    <label for=month">Month</label>
-    <input type="number" class="form-control" placeholder="MM" name="month_graduated">
-  </div>
-
-  <div class="form-group col-2">
-    <label for="year">Year</label>
-    <input type="number" class="form-control" placeholder="YYYY" name="year_graduated">
+    <!-- <input type="number" class="form-control" placeholder="MM" name="month"> -->
+    <!-- {{ form.birthdate | as_crispy_field }} -->
+    <label for="graddatepicker">Date Graduated</label>
+    <input id="graddatepicker" type="text" name="date_graduated" class="form-control">
   </div>
 </div>
-
 
 <!-- Honors Received -->
 <div class="form-group">
-  <label for="honors">Honors Received</label>
-  <textarea class="form-control" id="honors" rows="3" name="honors"></textarea>
-</div>
-
-<!-- are you an officer? -->
-<div class="form-check">
-  <input class="form-check-input" type="checkbox" value="officer" id='officer_checkbox'>
-  <label class="form-check-label">
-    Are you an officer?
-  </label>
+  <!-- <textarea class="form-control" id="honors" rows="3" name="honors"></textarea> -->
+  {{form.honors | as_crispy_field}}
 </div>
 
 <!-- Officer Position -->
 <div class="form-group">
-  <label for="position">Position</label>
-  <input type="text" class="form-control" placeholder="Office Position" id="officer_position_textbox" name="officer_position" disabled>
+  <!-- <input type="text" class="form-control" placeholder="Office Position" id="officer_position_textbox" name="officer_position" disabled> -->
+  {{form.officer_position | as_crispy_field }}
 </div>
 
 <!-- Scholarhips -->
 <div class="form-group">
-  <label for="scholarships">Scholarships</label>
-  <textarea class="form-control" id="scholarships" rows="3" name="scholarships"></textarea>
+  <!-- <textarea class="form-control" id="scholarships" rows="3" name="scholarships"></textarea> -->
+  {{form.scholarships | as_crispy_field }}
 </div>
 
-<!-- EMail address -->
-<div class="form-group">
-  <label for="email">Email</label>
-  <input type="email" class="form-control" placeholder="name@gmail.com" name="email">
-</div>
 
-<div class="container my-4">
-  <h5>Review Status</h5>
-  <!-- Review Status -->
-  <div class="form-check">
-    <input class="form-check-input custom-review-status" type="radio" name="review_status" value="first taker">
-    <label class="form-check-label" for="review_status">
-      First Taker
-    </label>
-  </div>
-  <div class="form-check">
-    <input class="form-check-input custom-review-status" type="radio" name="review_status" value="retaker">
-    <label class="form-check-label" for="review_status">
-      Retaker
-    </label>
-  </div>
-
-  <div class="form-check">
-    <input class="form-check-input custom-review-status" type="radio" name="review_status" id="conditional_checkbox" value=conditional">
-    <label class="form-check-label" for="review_status">
-      Conditional
-    </label>
-  </div>
-</div>
-
-<!-- if conditional, subject -->
-<div class="form-group">
-  <label for="conditional_subject">Conditional Subject</label>
-  <input type="text" class="form-control" name="conditional_subject" id="conditional_text_box" disabled>
-</div>
 
 
 <hr class="my-4">
@@ -257,32 +142,32 @@
 <div class="form-row">
   <!-- Contact Person -->
   <div class="form-group col-4">
-    <label for="first_name_contact">First Name</label>
-    <input type="text" class="form-control" placeholder="First Name" name="first_name_contact_person">
+    <!-- <input type="text" class="form-control" placeholder="First Name" name="first_name_contact_person"> -->
+{{form.first_name_contact_person | as_crispy_field}}
   </div>
 
   <div class="form-group col-4">
-    <label for="last_name_contact">Last Name</label>
-    <input type="text" class="form-control" placeholder="Last Name" name="last_name_contact_person">
+    <!-- <input type="text" class="form-control" placeholder="Last Name" name="last_name_contact_person"> -->
+{{form.last_name_contact_person | as_crispy_field}}
   </div>
 
   <div class="form-group col-4">
-    <label for="middle_name_contact">Middle Name</label>
-    <input type="text" class="form-control" placeholder="Middle Name" name="middle_name_contact_person">
-  </div>
+    <!-- <input type="text" class="form-control" placeholder="Middle Name" name="middle_name_contact_person"> -->
+{{form.middle_name_contact_person | as_crispy_field}}
+</div>
 </div>
 
 
 <!-- Contact Person adress -->
 <div class="form-group">
-  <label for="address_contact"> Address</label>
-  <textarea class="form-control" id="address" rows="3" name="address_contact_person"></textarea>
+  <!-- <textarea class="form-control" id="address" rows="3" name="address_contact_person"></textarea> -->
+{{form.address_contact_person | as_crispy_field}}
 </div>
 
 <!-- contact person nunmber -->
 <div class="form-group">
-  <label for="mobile_number">Mobile Number</label>
-  <input type="number" class="form-control" placeholder="09471234567" name="mobile_number_contact_person">
+  <!-- <input type="number" class="form-control" placeholder="09471234567" name="mobile_number_contact_person"> -->
+{{form.mobile_number_contact_person | as_crispy_field}}
 </div>
 
 
@@ -294,30 +179,13 @@
 
 <script type="text/javascript">
 
-  $('.custom-review-status').click(function(){
-    console.log('conditional_checkbox is clicked')
+    $(function () {
+      $("#datepicker").datepicker();
+    });
 
-    if($('#conditional_checkbox').prop('checked') == true){
-      $('#conditional_text_box').prop('disabled', false);
-    }
-    else{
-      $('#conditional_text_box').prop('disabled', true);
-    }
-
-  })
-
-  $('#officer_checkbox').click(function(){
-    console.log('officer_checkbox is clicked')
-
-    if($('#officer_checkbox').prop('checked') == true){
-      $('#officer_position_textbox').prop('disabled', false);
-    }
-    else{
-      $('#officer_position_textbox').prop('disabled', true);
-    }
-
-  })
-
+    $(function () {
+      $("#graddatepicker").datepicker();
+    });
 </script>
 
 {% endblock %}
