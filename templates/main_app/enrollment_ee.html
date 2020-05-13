@@ -1,0 +1,39 @@
+{% extends 'main_app/base.html' %}
+
+{% load crispy_forms_tags %}
+
+
+{% block content %}
+
+{%if danger %}
+<div class="alert alert-danger" role="alert">
+  {{danger}}
+</div>
+{%endif%}
+{%if message %}
+<div class="alert alert-primary" role="alert">
+  {{message}}
+</div>
+{% endif%}
+
+<form method="POST" enctype="multipart/form-data">
+<h1>Enrollment Form</h1>
+<p>All fields are required unless stated otherwise.</p>
+
+{{ secondary_form | crispy }}
+
+<div class="g-recaptcha" data-sitekey="6Lc1CO4UAAAAAP64v29D0oS3JZWx7Is6lACu47lI"></div>
+<button type="submit" class="btn btn-primary">Submit</button>
+
+
+<hr class='my-5'>
+
+
+<h2>Personal Information</h2>
+
+{{ form | crispy }}
+
+{% csrf_token %}
+</form>
+
+{% endblock %}
