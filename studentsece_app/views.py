@@ -8,6 +8,13 @@ from django.views.generic import (View,TemplateView,
 from . import models
 from . import forms
 from . import emailing
+
+from django.contrib import messages
+from django.contrib.auth.mixins import(
+    LoginRequiredMixin,
+    PermissionRequiredMixin
+)
+from django.shortcuts import get_object_or_404
 # Create your views here.
 
 # Original Function View:
@@ -16,37 +23,30 @@ from . import emailing
 #     return render(request,'index.html')
 #
 #
-
-# Pretty simple right?
-class IndexView(TemplateView):
-    # Just set this Class Object Attribute to the template page.
-    # template_name = 'app_name/site.html'
-    template_name = 'index.html'
-    def get_context_data(self,**kwargs):
-        context  = super().get_context_data(**kwargs)
-
-        context['injectme'] = "Basic Injection!" #this is how to insert context data into the template
-        return context
-
 class StudentECESuccessEnrollment(TemplateView):
-    # Just set this Class Object Attribute to the template page.
-    # template_name = 'app_name/site.html'
-    template_name = 'studentsece_app/success.html'
+    template_name = 'studentsece_app/enrollment_success.html'
 
-class StudentECEListView(ListView):
-    # If you don't pass in this attribute,
-    # Django will auto create a context name
-    # for you with object_list!
-    # Default would be 'school_list'
-
-    # Example of making your own:
-    # context_object_name = 'schools'
+class StudentECEListViewAll(PermissionRequiredMixin, ListView):
+    permission_required = ('studentsece_app.view_studentece')
     model = models.StudentECE
 
-class StudentECEDetailView(DetailView):
+class StudentECEListViewEnrolled(PermissionRequiredMixin, ListView):
+    permission_required = ('studentsece_app.view_studentece')
+    model = models.StudentECE
+    def get_queryset(self):
+        return models.StudentECE.objects.filter(enrolled = True)
+
+class StudentECEListViewNotEnrolled(PermissionRequiredMixin, ListView):
+    permission_required = ('studentsece_app.view_studentece')
+    model = models.StudentECE
+    def get_queryset(self):
+        return models.StudentECE.objects.filter(enrolled = False)
+
+class StudentECEDetailView(PermissionRequiredMixin, DetailView):
+    permission_required = ('studentsece_app.view_studentece')
     context_object_name = 'studentece_details'
     model = models.StudentECE
-    template_name = 'studentsece_app/studentece_detail.html'
+    #template_name = 'studentsece_app/studentece_detail.html'
 
 class StudentECECreateView(CreateView):
     model = models.StudentECE
@@ -54,27 +54,22 @@ class StudentECECreateView(CreateView):
     success_url = reverse_lazy('studentsece_app:success')
 
     def form_valid(self, form):
+        ""
         self.object = form.save(commit=False)
         #self.object.user = self.request.user
-
         emailing.send_email(self.object)
-
         self.object.save()
         return super().form_valid(form)
 
-
-class StudentECEUpdateView(UpdateView):
-    fields = [
-        'first_name',
-        'last_name',
-        'middle_name',
-        'birthdate',
-        'address',
-        'religion',
-        'mobile_number',
-    ]
+class StudentECEUpdateView(PermissionRequiredMixin, UpdateView):
+    permission_required = ('studentsece_app.change_studentece')
+    template_name = 'studentsece_app/studentsece_update.html'
+    fields = '__all__'
     model = models.StudentECE
+    success_url = reverse_lazy("studentsece_app:list_all")
 
-class StudentECEDeleteView(DeleteView):
+class StudentECEDeleteView(PermissionRequiredMixin, DeleteView):
+    permission_required = ('studentsece_app.delete_studentece')
+    permission_required = ('is_staff')
     model = models.StudentECE
-    success_url = reverse_lazy("studentsece_app:list")
+    success_url = reverse_lazy("studentsece_app:list_all")

@@ -30,7 +30,7 @@ urlpatterns = [
     path('login/', auth_views.LoginView.as_view(template_name="login.html"),name='login'),
     path('logout/', auth_views.LogoutView.as_view(), name="logout"),
     #i am starting to decide to migrate some of my work to class based view so here it is
-    path('main_app/',include('main_app.urls', namespace='main_app')),
-    path('studentsece_app/',include('studentsece_app.urls', namespace='studentsece_app')),
+    path('main_app/', include('main_app.urls', namespace='main_app')),
+    path('studentsece_app/', include('studentsece_app.urls', namespace='studentsece_app')),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

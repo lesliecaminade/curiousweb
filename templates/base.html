@@ -57,6 +57,25 @@
          </li>
          {% endif %}
 
+         {%if user.is_staff %}
+         <li class="nav-item dropdown">
+                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                   Admin Menu
+                 </a>
+                 <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                   <a class="dropdown-item" href="{%url 'studentsece_app:list'%}">ECE Students</a>
+                   <a class="dropdown-item disabled" href="#">EE Students</a>
+                   <a class="dropdown-item disabled" href="#">Tutorial Students</a>
+                   <a class="dropdown-item disabled" href="#">Exam Management</a>
+                   <a class="dropdown-item disabled" href="#">MCQ Management</a>
+                   <a class="dropdown-item disabled" href="#">Lesson Management</a>
+                   <a class="dropdown-item disabled" href="#">Enrollments</a>
+                   <a class="dropdown-item" href="{%url 'main_app:register'%}">Register Accounts</a>
+                 </div>
+          </li>
+
+          {%endif%}
+
          <li class="nav-item">
            <a class="nav-link disabled" href="#"> Exams </a>
          </li>
@@ -73,31 +92,9 @@
            <a class="nav-link disabled" href="#"> Lessons </a>
          </li>
 
-         {%if user.is_staff %}
-         <li class="nav-item">
-           <a class="nav-link disabled" href="#"> ECE Students</a>
-         </li>
 
-         <li class="nav-item">
-           <a class="nav-link disabled" href="#"> EE Students</a>
-         </li>
 
-         <li class="nav-item">
-           <a class="nav-link disabled" href="#"> Tutorial Students</a>
-         </li>
 
-         <li class="nav-item">
-           <a class="nav-link disabled" href="#"> Exam Management </a>
-         </li>
-
-         <li class="nav-item">
-           <a class="nav-link disabled" href="#"> MCQ Management </a>
-         </li>
-
-         <li class="nav-item">
-           <a class="nav-link disabled" href="#"> Lesson Management </a>
-         </li>
-         {%endif%}
 
        </ul>
      </div>

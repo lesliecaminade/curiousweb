@@ -1,15 +1,111 @@
 {% extends "base.html" %}
 {% block content %}
   <div class="jumbotron">
-    <h1>Welcome to the ECE Student Detail Page</h1>
     <h2>Student Details:</h2>
-    <p>Id_num: {{studentece_details.id}}</p>
-    <p>Name: {{studentece_details.last_name}}, {{studentece_details.first_name}}, {{studentece_details.middle_name}}</p>
-    <p>Review Status: {{studentece_details.review_status}}</p>
-    <p>School Graduated: {{studentece_details.school}}</p>
-  </div>
+<table class="table">
+  <tbody>
+    <tr>
+      <td>Student ID</td>
+      <td>{{studentece_details.id}}</td>
+    </tr>
+    <tr>
+      <td>Name</td>
+      <td>{{studentece_details.last_name}}, {{studentece_details.first_name}}, {{studentece_details.middle_name}}</td>
+    </tr>
+    <tr>
+      <td>Birthday</td>
+      <td>{{studentece_details.birthdate}}</td>
+    </tr>
+    <tr>
+      <td>Address</td>
+      <td>{{studentece_details.address}}</td>
+    </tr>
+    <tr>
+      <td>Religion</td>
+      <td>{{studentece_details.religion}}</td>
+    </tr>
+    <tr>
+      <td>Mobile Number</td>
+      <td>{{studentece_details.mobile_number}}</td>
+    </tr>
+    <tr>
+      <td>Facebook Username</td>
+      <td>{{studentece_details.facebook_username}}</td>
+    </tr>
+    <tr>
+      <td>Email</td>
+      <td>{{studentece_details.email}}</td>
+    </tr>
+    <tr>
+      <td>Gender</td>
+      <td>{{studentece_details.gender}}</td>
+    </tr>
+    <tr>
+      <td>School</td>
+      <td>{{studentece_details.school}}</td>
+    </tr>
+    <tr>
+      <td>Date Graduated</td>
+      <td>{{studentece_details.date_graduated}}</td>
+    </tr>
+    <tr>
+      <td>Honors</td>
+      <td>{{studentece_details.honors}}</td>
+    </tr>
+    <tr>
+      <td>Officer Position</td>
+      <td>{{studentece_details.officer_position}}</td>
+    </tr>
+    <tr>
+      <td>Scholarships</td>
+      <td>{{studentece_details.scholarships}}</td>
+    </tr>
+    <tr>
+      <td>Contact Person</td>
+      <td>{{studentece_details.last_name_contact_person}}, {{studentece_details.first_name_contact_person}}, {{studentece_details.middle_name_contact_person}}</td>
+    </tr>
+
+    <tr>
+      <td>Contact Person Address</td>
+      <td>{{studentece_details.address_contact_person}}</td>
+    </tr>
+
+    <tr>
+      <td>Contact Person Mobile Number</td>
+      <td>{{studentece_details.mobile_number_contact_person}}</td>
+    </tr>
+
+    <tr>
+      <td>Review Status</td>
+      <td>{{studentece_details.review_status}}</td>
+    </tr>
+
+    <tr>
+      <td>Conditional Subject</td>
+      <td>{{studentece_details.conditional_subject}}</td>
+    </tr>
+
+    <tr>
+      <td>ID Picture</td>
+      <td><img src="{{studentece_details.id_picture.url}}" alt="" height="300"></td>
+    </tr>
+
+    <tr>
+      <td>Proof of Payment</td>
+      <td><img src="{{studentece_details.payment_picture.url}}" alt="" height='300'></td>
+    </tr>
+
+    <tr>
+      <td>Enrolled</td>
+      <td>{{studentece_details.enrolled}}</td>
+    </tr>
+
+  </tbody>
+</table>
+
   <div class="container">
-    <p><a class='btn btn-warning' href="{% url 'studentsece_app:update' pk=studentece_details.pk %}">Update</a></p>
+    <a class='btn btn-warning' href="{% url 'studentsece_app:update' pk=studentece_details.pk %}">Update</a>
+
   </div>
 
 {% endblock %}

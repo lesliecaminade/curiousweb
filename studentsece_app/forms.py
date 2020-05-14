@@ -7,7 +7,7 @@ from studentsece_app.models import StudentECE
 class StudentECEForm(forms.ModelForm):
     class Meta:
         model = StudentECE
-        exclude = ('full_name', 'user', 'enrolled')
+        exclude = ('user' ,'enrolled')
 
         #this widgets atttribute changes the field behaviour on the HTML rendering
         widgets = {
@@ -50,3 +50,7 @@ class StudentECEForm(forms.ModelForm):
             'date_graduated': 'MM/DD/YYYY',
             'conditional_subject': 'Do not change if not conditional.',
         }
+
+
+
+        #this widgets atttribute changes the field behaviour on the HTML rendering
