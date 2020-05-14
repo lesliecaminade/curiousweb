@@ -25,7 +25,7 @@ from . import settings
 
 
 urlpatterns = [
-    path('admin/', admin.site.urls, name='admin-login'),
+    path('controlcenter/', admin.site.urls, name='admin-login'),
     path('', views.landing, name='home'),
     path('', views.landing, name='landing'),
     path('question/custom/', views.question_customize, name='question_customize'),

@@ -25,8 +25,8 @@ class StudentForm(forms.ModelForm):
                 )),
 
             'course': forms.Select(choices = (
-                ('ece', 'Electronics Engineering Review'),
-                ('ee', 'Electrical Engineering Review'),
+                ('ece', 'Electronics Engineering Review (ECE)'),
+                ('ee', 'Electrical Engineering Review (REE)'),
                 ('tutorial', 'Tutorial Classes'),
             )),
 
@@ -107,8 +107,8 @@ class ElectricalStudentForm(forms.ModelForm):
 
 class TutorialStudentForm(forms.ModelForm):
     class Meta():
-        model = ElectronicsStudent
-        exclude = ['student', 'enrolled']
+        model = TutorialStudent
+        exclude = ['student', 'enrolled',]
 
 
         #help_texts = {}
