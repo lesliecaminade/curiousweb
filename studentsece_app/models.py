@@ -32,8 +32,8 @@ class StudentECE(models.Model):
 
     review_status = models.CharField(max_length = 50)
     conditional_subject = models.CharField(max_length = 50)
-    id_picture = models.ImageField(blank = True, upload_to = 'id_pictures')
-    payment_picture = models.ImageField(upload_to = 'payment_pictures')
+    id_picture = models.ImageField(blank = True)
+    payment_picture = models.ImageField()
     enrolled = models.BooleanField(default = False)
 
     def get_absolute_url(self):
