@@ -912,7 +912,7 @@ def enroll_ece(request, **kwargs):
         first_name = request.POST['first_name']
         middle_name = request.POST['middle_name']
         last_name = request.POST['last_name']
-        
+
         if secondary_form.is_valid():
             main_student = Student.objects.filter(first_name = first_name).filter(last_name=last_name).filter(middle_name=middle_name)[0]
             course_student = secondary_form.save(commit = False)
@@ -920,7 +920,7 @@ def enroll_ece(request, **kwargs):
             course_student.save()
             send_email_student(course_student)
 
-            return render(request, 'main_app/landing.html', {'message': 'Request for enrollment successful, your ACCOUNT details will be sent to you once we have verified your innformation.'})
+            return render(request, 'main_app/landing.html', {'message': 'Request for enrollment successful, your ACCOUNT details will be sent to you once we have verified your information.'})
         else: #form not valid
             return render(request, 'main_app/landing.html', {'danger': 'Enrollment failed'})
 
@@ -929,7 +929,7 @@ def enroll_ece(request, **kwargs):
         middle_name = kwargs['middle_name']
         last_name = kwargs['last_name']
         form = ElectronicsStudentForm(request.POST, request.FILES)
-        return render(request, 'main_app/enrollment_ece.html',
+        return render(request, 'main_app/enrollment_page2.html',
         {
             'form': form,
             'first_name': first_name,
@@ -938,7 +938,63 @@ def enroll_ece(request, **kwargs):
         })
 
 def enroll_ee(request, **kwargs):
-    pass
+    if request.method == 'POST':
+        secondary_form = ElectricalStudentForm(request.POST, request.FILES)
+        first_name = request.POST['first_name']
+        middle_name = request.POST['middle_name']
+        last_name = request.POST['last_name']
+
+        if secondary_form.is_valid():
+            main_student = Student.objects.filter(first_name = first_name).filter(last_name=last_name).filter(middle_name=middle_name)[0]
+            course_student = secondary_form.save(commit = False)
+            course_student.student = main_student
+            course_student.save()
+            send_email_student(course_student)
+
+            return render(request, 'main_app/landing.html', {'message': 'Request for enrollment successful, your username and password will be sent to you once we have verified your information.'})
+        else: #form not valid
+            return render(request, 'main_app/landing.html', {'danger': 'Enrollment failed'})
+
+    else: #method is get
+        first_name = kwargs['first_name']
+        middle_name = kwargs['middle_name']
+        last_name = kwargs['last_name']
+        form = ElectricalStudentForm(request.POST, request.FILES)
+        return render(request, 'main_app/enrollment_page2.html',
+        {
+            'form': form,
+            'first_name': first_name,
+            'last_name': last_name,
+            'middle_name': middle_name,
+        })
 
 def enroll_tutorial(request, **kwargs):
-    pass
+    if request.method == 'POST':
+        secondary_form = TutorialStudentForm(request.POST, request.FILES)
+        first_name = request.POST['first_name']
+        middle_name = request.POST['middle_name']
+        last_name = request.POST['last_name']
+
+        if secondary_form.is_valid():
+            main_student = Student.objects.filter(first_name = first_name).filter(last_name=last_name).filter(middle_name=middle_name)[0]
+            course_student = secondary_form.save(commit = False)
+            course_student.student = main_student
+            course_student.save()
+            send_email_student(course_student)
+
+            return render(request, 'main_app/landing.html', {'message': 'Request for enrollment successful, your ACCOUNT details will be sent to you once we have verified your information.'})
+        else: #form not valid
+            return render(request, 'main_app/landing.html', {'danger': 'Enrollment failed'})
+
+    else: #method is get
+        first_name = kwargs['first_name']
+        middle_name = kwargs['middle_name']
+        last_name = kwargs['last_name']
+        form = TutorialStudentForm(request.POST, request.FILES)
+        return render(request, 'main_app/enrollment_page2.html',
+        {
+            'form': form,
+            'first_name': first_name,
+            'last_name': last_name,
+            'middle_name': middle_name,
+        })

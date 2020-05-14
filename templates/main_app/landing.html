@@ -16,18 +16,27 @@
   {%endif%}
 
 
-  <h1 class="display-4">Welcome To CERTC</h1>
-  <p class="lead">This is a site wherein you can find most common questions asked in the PRC Engineering Board Exams. You can find here problem solving questions with their corresponding solutions.</p>
+  <h1 class="display-4">Welcome To CERTC Online Review</h1>
+  <p class="lead">After receiving numerous messages requesting for an online platform to address your need of quality review during this trying time, we have finally made up something that would cater to your needs.</p>
+<p>Get in touch with us to know how to register and start reviewing now at the comfort of your home.</p>
+<p>How our online review platform can help you?</p>
+<ol>
+  <li>Our online platform is absolutely FREE to all our incoming regular reviewees.</li>
+  <li>Study with flexible schedule and environment amidst the ongoing ECQ.</li>
+  <li>24/7 access to our web for downloadable training modules.</li>
+  <li>24/7 access to our web for online quizzes, videos and other exercises.</li>
+  <li>PRC-based Table of Specifications (TOS) review platform.</li>
+</ol>
+<p>Join Us Now and Stay-at-Home productive!</p>
+
   <hr class="my-4">
-  <p>This is an ongoing project of CERTC <img src="/static/main_logo.png" width="30" height="30" class="d-inline-block align-top" alt=""></p>
 
   {% if not user.is_authenticated %}
-  <a class="btn btn-primary btn-lg m-1" href="{%url 'enroll' %}" role="button">Request for Enrollment</a>
+  <a class="btn btn-primary btn-lg m-1 btn-block" href="{%url 'enroll' %}" role="button">Click Here to Enroll!</a>
   {% endif %}
 
   <img src="/static/cover_photo_certc_1000p.png" class="img-fluid mt-4" alt="Responsive image">
 </div>
-
 
 
 {% endblock %}
