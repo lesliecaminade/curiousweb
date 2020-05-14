@@ -851,19 +851,20 @@ def exam_results(request):
 def enroll(request):
     if request.method == 'POST':
         #check if recaptcha is validated
-        # """These are all information related to setting up the google recaptcha,
-        # for more information, see https://www.google.com/recaptcha/admin/site/351143989"""
-        # recaptcha = request.POST['g-recaptcha-response']
-        # recaptcha_data = {
-        #     'secret': '6Lc1CO4UAAAAACs9XqPf35SGvdtP-0QmDM0n0K6V',
-        #     'response': recaptcha,
-        # }
-        # google_captcha_response = requests_library.post('https://www.google.com/recaptcha/api/siteverify', recaptcha_data)
+        """These are all information related to setting up the google recaptcha,
+        for more information, see https://www.google.com/recaptcha/admin/site/351143989"""
+
+        recaptcha = request.POST['g-recaptcha-response']
+        recaptcha_data = {
+            'secret': '6Lc1CO4UAAAAACs9XqPf35SGvdtP-0QmDM0n0K6V',
+            'response': recaptcha,
+        }
+        google_captcha_response = requests_library.post('https://www.google.com/recaptcha/api/siteverify', recaptcha_data)
 
         #set the flag to True during development
-        debug = True
-        if True: #comment this out of you decide to re-enable google recaptcha
-        #if ('true' in google_captcha_response.text) or (debug): #if the google recaptcha confirms a valid human
+        debug = False
+        #if True: #comment this out of you decide to re-enable google recaptcha
+        if ('true' in google_captcha_response.text) or (debug): #if the google recaptcha confirms a valid human
             form = StudentForm(request.POST, request.FILES)
             if form.is_valid():
                 form.save() #save the form, which also saves the database entry
@@ -908,19 +909,38 @@ def enroll(request):
 
 def enroll_ece(request, **kwargs):
     if request.method == 'POST':
-        secondary_form = ElectronicsStudentForm(request.POST, request.FILES)
-        first_name = request.POST['first_name']
-        middle_name = request.POST['middle_name']
-        last_name = request.POST['last_name']
 
-        if secondary_form.is_valid():
-            main_student = Student.objects.filter(first_name = first_name).filter(last_name=last_name).filter(middle_name=middle_name)[0]
-            course_student = secondary_form.save(commit = False)
-            course_student.student = main_student
-            course_student.save()
-            send_email_student(course_student)
 
-            return render(request, 'main_app/landing.html', {'message': 'Request for enrollment successful, your ACCOUNT details will be sent to you once we have verified your information.'})
+        #check if recaptcha is validated
+        """These are all information related to setting up the google recaptcha,
+        for more information, see https://www.google.com/recaptcha/admin/site/351143989"""
+
+        recaptcha = request.POST['g-recaptcha-response']
+        recaptcha_data = {
+            'secret': '6Lc1CO4UAAAAACs9XqPf35SGvdtP-0QmDM0n0K6V',
+            'response': recaptcha,
+        }
+        google_captcha_response = requests_library.post('https://www.google.com/recaptcha/api/siteverify', recaptcha_data)
+
+        #set the flag to True during development
+        debug = False
+        #if True: #comment this out of you decide to re-enable google recaptcha
+        if ('true' in google_captcha_response.text) or (debug): #if the google recaptcha confirms a valid human
+
+
+            secondary_form = ElectronicsStudentForm(request.POST, request.FILES)
+            first_name = request.POST['first_name']
+            middle_name = request.POST['middle_name']
+            last_name = request.POST['last_name']
+
+            if secondary_form.is_valid():
+                main_student = Student.objects.filter(first_name = first_name).filter(last_name=last_name).filter(middle_name=middle_name)[0]
+                course_student = secondary_form.save(commit = False)
+                course_student.student = main_student
+                course_student.save()
+                send_email_student(course_student)
+
+                return render(request, 'main_app/landing.html', {'message': 'Request for enrollment successful, your ACCOUNT details will be sent to you once we have verified your information.'})
         else: #form not valid
             return render(request, 'main_app/landing.html', {'danger': 'Enrollment failed'})
 
@@ -939,21 +959,39 @@ def enroll_ece(request, **kwargs):
 
 def enroll_ee(request, **kwargs):
     if request.method == 'POST':
-        secondary_form = ElectricalStudentForm(request.POST, request.FILES)
-        first_name = request.POST['first_name']
-        middle_name = request.POST['middle_name']
-        last_name = request.POST['last_name']
 
-        if secondary_form.is_valid():
-            main_student = Student.objects.filter(first_name = first_name).filter(last_name=last_name).filter(middle_name=middle_name)[0]
-            course_student = secondary_form.save(commit = False)
-            course_student.student = main_student
-            course_student.save()
-            send_email_student(course_student)
+        #check if recaptcha is validated
+        """These are all information related to setting up the google recaptcha,
+        for more information, see https://www.google.com/recaptcha/admin/site/351143989"""
 
-            return render(request, 'main_app/landing.html', {'message': 'Request for enrollment successful, your username and password will be sent to you once we have verified your information.'})
-        else: #form not valid
-            return render(request, 'main_app/landing.html', {'danger': 'Enrollment failed'})
+        recaptcha = request.POST['g-recaptcha-response']
+        recaptcha_data = {
+            'secret': '6Lc1CO4UAAAAACs9XqPf35SGvdtP-0QmDM0n0K6V',
+            'response': recaptcha,
+        }
+        google_captcha_response = requests_library.post('https://www.google.com/recaptcha/api/siteverify', recaptcha_data)
+
+        #set the flag to True during development
+        debug = False
+        #if True: #comment this out of you decide to re-enable google recaptcha
+        if ('true' in google_captcha_response.text) or (debug): #if the google recaptcha confirms a valid human
+
+
+            secondary_form = ElectricalStudentForm(request.POST, request.FILES)
+            first_name = request.POST['first_name']
+            middle_name = request.POST['middle_name']
+            last_name = request.POST['last_name']
+
+            if secondary_form.is_valid():
+                main_student = Student.objects.filter(first_name = first_name).filter(last_name=last_name).filter(middle_name=middle_name)[0]
+                course_student = secondary_form.save(commit = False)
+                course_student.student = main_student
+                course_student.save()
+                send_email_student(course_student)
+
+                return render(request, 'main_app/landing.html', {'message': 'Request for enrollment successful, your username and password will be sent to you once we have verified your information.'})
+            else: #form not valid
+                return render(request, 'main_app/landing.html', {'danger': 'Enrollment failed'})
 
     else: #method is get
         first_name = kwargs['first_name']
@@ -970,21 +1008,38 @@ def enroll_ee(request, **kwargs):
 
 def enroll_tutorial(request, **kwargs):
     if request.method == 'POST':
-        secondary_form = TutorialStudentForm(request.POST, request.FILES)
-        first_name = request.POST['first_name']
-        middle_name = request.POST['middle_name']
-        last_name = request.POST['last_name']
 
-        if secondary_form.is_valid():
-            main_student = Student.objects.filter(first_name = first_name).filter(last_name=last_name).filter(middle_name=middle_name)[0]
-            course_student = secondary_form.save(commit = False)
-            course_student.student = main_student
-            course_student.save()
-            send_email_student(course_student)
+        #check if recaptcha is validated
+        """These are all information related to setting up the google recaptcha,
+        for more information, see https://www.google.com/recaptcha/admin/site/351143989"""
 
-            return render(request, 'main_app/landing.html', {'message': 'Request for enrollment successful, your ACCOUNT details will be sent to you once we have verified your information.'})
-        else: #form not valid
-            return render(request, 'main_app/landing.html', {'danger': 'Enrollment failed'})
+        recaptcha = request.POST['g-recaptcha-response']
+        recaptcha_data = {
+            'secret': '6Lc1CO4UAAAAACs9XqPf35SGvdtP-0QmDM0n0K6V',
+            'response': recaptcha,
+        }
+        google_captcha_response = requests_library.post('https://www.google.com/recaptcha/api/siteverify', recaptcha_data)
+
+        #set the flag to True during development
+        debug = False
+        #if True: #comment this out of you decide to re-enable google recaptcha
+        if ('true' in google_captcha_response.text) or (debug): #if the google recaptcha confirms a valid human
+
+            secondary_form = TutorialStudentForm(request.POST, request.FILES)
+            first_name = request.POST['first_name']
+            middle_name = request.POST['middle_name']
+            last_name = request.POST['last_name']
+
+            if secondary_form.is_valid():
+                main_student = Student.objects.filter(first_name = first_name).filter(last_name=last_name).filter(middle_name=middle_name)[0]
+                course_student = secondary_form.save(commit = False)
+                course_student.student = main_student
+                course_student.save()
+                send_email_student(course_student)
+
+                return render(request, 'main_app/landing.html', {'message': 'Request for enrollment successful, your ACCOUNT details will be sent to you once we have verified your information.'})
+            else: #form not valid
+                return render(request, 'main_app/landing.html', {'danger': 'Enrollment failed'})
 
     else: #method is get
         first_name = kwargs['first_name']
