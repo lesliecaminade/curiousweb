@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+  <div class="jumbotron">
+
+    <h1>Welcome to the List of Students Page!</h1>
+      <ol>
+        {% for student in studentece_list %}
+          <h2><li><a href="{{student.id}}/">{{student.last_name}}, {{student.first_name}}, {{student.middle_name}} </a></li></h2>
+        {% endfor %}
+      </ol>
+
+  </div>
+
+
+{% endblock %}

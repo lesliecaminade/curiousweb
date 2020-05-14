@@ -1,9 +1,0 @@
-{% for subtopic in subtopics %}
-
-  {% if subtopic == previous_subtopic %}
-  <option selected>{{ previous_subtopic }}</option>
-  {% else %}
-  <option>{{ subtopic }}</option>
-  {% endif %}
-  
-{% endfor %}
