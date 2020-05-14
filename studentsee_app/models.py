@@ -31,8 +31,8 @@ class StudentEE(models.Model):
     mobile_number_contact_person = models.CharField(max_length = 1000)
 
     review_status = models.CharField(max_length = 50)
-    id_picture = models.ImageField(blank = True, upload_to = 'id_pictures')
-    payment_picture = models.ImageField(upload_to = 'payment_pictures')
+    id_picture = models.ImageField(blank = True)
+    payment_picture = models.ImageField()
     enrolled = models.BooleanField(default = False)
 
     def get_absolute_url(self):
