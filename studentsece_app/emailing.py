@@ -27,10 +27,10 @@ def send_email(student):
             {conditional_statement}
             <tr><td>Mobile Number </td><td>{student.mobile_number}</td></tr>
             <tr><td>Facebook Username </td><td>{student.facebook_username}</td></tr>
-            <tr><td>ID picture</td><td>{domain}{student.id_picture} </td></tr>
-            <tr><td>Payment picture </td><td>{domain}{student.payment_picture}</td></tr>
-            <tr><td>ID picture</td><td><img src=" {domain}{student.id_picture} " alt="id picture" title="ID" style="display:block" width="200"/> </td></tr>
-            <tr><td>Payment picture </td><td><img src=" {domain}{student.payment_picture} " alt="payment picture" title="Payment Proof" style="display:block" width="200"/> </td></tr>
+            <tr><td>ID picture</td><td>{domain}{student.id_picture.url} </td></tr>
+            <tr><td>Payment picture </td><td>{domain}{student.payment_picture.url}</td></tr>
+            <tr><td>ID picture</td><td><img src=" {domain}{student.id_picture.url} " alt="id picture" title="ID" style="display:block" width="200"/> </td></tr>
+            <tr><td>Payment picture </td><td><img src=" {domain}{student.payment_picture.url} " alt="payment picture" title="Payment Proof" style="display:block" width="200"/> </td></tr>
           </ul>
         </table>
       </body>
