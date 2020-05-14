@@ -7,7 +7,7 @@ def send_email(student):
 
     yag = yagmail.SMTP('cortexsilicon','jnzbhrbqcsavnlhu') #input the email username and app password
 
-    domain = "http://siliconcortex.pythonanywhere.com"
+    domain = "https://siliconcortex.pythonanywhere.com"
     conditional_statement = f""""""
     review_status = f"""<tr><td>Review Status </td><td>{student.review_status}</td></tr>"""
 
