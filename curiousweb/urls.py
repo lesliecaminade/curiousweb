@@ -16,7 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from django.urls import include, path
-from main_app import views
+from main_app import views as views
 from django.conf.urls.static import static
 
 """edit this to match projectname
@@ -26,27 +26,11 @@ from . import settings
 
 urlpatterns = [
     path('controlcenter/', admin.site.urls, name='admin-login'),
-    path('', views.landing, name='home'),
-    path('', views.landing, name='landing'),
-    path('question/custom/', views.question_customize, name='question_customize'),
-    path('question/reroll/', views.question_customize, name='question_customize_reroll'),
-    path('report-error/', views.report_error, name='report_error'),
-    path('login/', views.login_view, name='login'),
-    path('logout/', views.logout_view, name='logout'),
-    path('change_password/', views.change_password, name='change_password'),
-    path('enroll/',views.enroll, name='enroll'),
-    path('enroll/ece/<first_name>/<last_name>/<middle_name>',views.enroll_ece, name='enroll_ece'),
-    path('enroll/ee/<first_name>/<last_name>/<middle_name>',views.enroll_ee, name='enroll_ee'),
-    path('enroll/tutorial/<first_name>/<last_name>/<middle_name>',views.enroll_tutorial, name='enroll_tutorial'),
-    path('mcq/create', views.create_multiple_choice_question, name='create_multiple_choice_question'),
-    path('mcq/customize/', views.multiple_choice_question_customize, name='multiple_choice_question_customize'),
-    path('mcq/detail', views.multiple_choice_question_customize, name='multiple_choice_detail'),
-    path('mcq/detail/<pk>', views.multiple_choice_question_specific, name='multiple_choice_detail_specific'),
-    path('mcq/list/', views.multiple_choice_question_list, name='multiple_choice_question_list'),
-    path('mcq/list/select', views.multiple_choice_question_list, name='multiple_choice_question_list_select'),
-    path('mcq/delete/<pk>', views.multiple_choice_question_delete, name='multiple_choice_question_delete'),
-    path('load_subtopics/ajax/', views.load_subtopics, name='ajax_load_subtopics'),
-    path('mcq/exam/', views.exam_configure, name='exam_configure'),
-    path('mcq/exam/results/', views.exam_results, name='exam_results'),
+    path('', views.IndexView.as_view(), name='index'),
+    path('login/', auth_views.LoginView.as_view(template_name="login.html"),name='login'),
+    path('logout/', auth_views.LogoutView.as_view(), name="logout"),
+    #i am starting to decide to migrate some of my work to class based view so here it is
+    path('main_app/',include('main_app.urls', namespace='main_app')),
+    path('studentsece_app/',include('studentsece_app.urls', namespace='studentsece_app')),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
