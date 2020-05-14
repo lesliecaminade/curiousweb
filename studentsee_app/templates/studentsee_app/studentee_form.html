@@ -1,0 +1,210 @@
+{% extends "base.html" %}
+{% load bootstrap4 %}
+{% block content %}
+
+<h1> EE Student Enrollment Form</h1>
+
+{%if danger %}
+<div class="alert alert-danger" role="alert">
+  {{danger}}
+</div>
+{%endif%}
+{%if message %}
+<div class="alert alert-primary" role="alert">
+  {{message}}
+</div>
+{% endif%}
+
+<form method="POST" enctype="multipart/form-data">
+<p>All fields marked with asterisk are  required.</p>
+<hr class='my-4'>
+<h2>Personal Information</h2>
+<!-- Name -->
+<div class="form-row">
+  <div class="form-group col-4">
+    <!-- <input type="text" class="form-control" placeholder="First Name" name="first_name"> -->
+    {% bootstrap_field form.first_name  %}
+  </div>
+
+  <div class="form-group col-4">
+    <!-- <input type="text" class="form-control" placeholder="Last Name" name="last_name"> -->
+    {% bootstrap_field form.last_name  %}
+
+  </div>
+
+  <div class="form-group col-4">
+    <!-- <input type="text" class="form-control" placeholder="Middle Name" name="middle_name" placeholder="optional"> -->
+    {% bootstrap_field form.middle_name  %}
+  </div>
+</div>
+
+<!-- date of birth -->
+<div class="form-row">
+  <div class="form-group col-4">
+    <!-- <input type="number" class="form-control" placeholder="MM" name="month"> -->
+    <!-- {% bootstrap_field form.birthdate  %} -->
+    <label for="datepicker">Birthday</label>
+    <input id="datepicker" type="text" name="birthdate" class="form-control">
+  </div>
+</div>
+
+
+<!-- Address -->
+<div class="form-group">
+  <!-- <textarea class="form-control" id="address" rows="3" name="address"></textarea> -->
+  {% bootstrap_field form.address  %}
+</div>
+
+<div class="form-row">
+  <!-- Religion -->
+  <div class="form-group col-4">
+    <!-- <input type="text" class="form-control" placeholder="optional" name="religion"> -->
+    {% bootstrap_field form.religion  %}
+  </div>
+
+  <!-- Mobile NUmber -->
+<div class="form-group col-4">
+    <!-- <input type="number" class="form-control" placeholder="09471234567" name="mobile_number"> -->
+    {% bootstrap_field form.mobile_number  %}
+  </div>
+
+
+<div class="form-group col-4">
+  <!-- <input type="text" class="form-control" placeholder="optional" name="facebook_username"> -->
+  {% bootstrap_field form.facebook_username  %}
+</div>
+
+</div>
+
+<div class="form-row">
+  <div class="form-group col-4">
+    <!-- Gender -->
+    <!-- <input type="text" class="form-control" placeholder="optional" name="facebook_username"> -->
+    {% bootstrap_field form.gender  %}
+  </div>
+
+  <div class="form-group col-4">
+    <!-- <input type="email" class="form-control" placeholder="name@gmail.com" name="email"> -->
+    {% bootstrap_field form.email  %}
+  </div>
+
+</div>
+
+
+
+
+<!-- EMail address -->
+
+
+<hr class='my-4'>
+<h2>Academic Information</h2>
+<!-- SChoold -->
+<div class="form-row">
+  <div class="form-group col-6">
+    <!-- <textarea class="form-control" id="school" rows="3" name="school"></textarea> -->
+    {% bootstrap_field form.school  %}
+  </div>
+
+  <div class="form-group col-6">
+    <!-- <input type="number" class="form-control" placeholder="MM" name="month"> -->
+    <!-- {% bootstrap_field form.birthdate  %} -->
+    <label for="graddatepicker">Date Graduated</label>
+    <input id="graddatepicker" type="text" name="date_graduated" class="form-control">
+  </div>
+
+
+
+</div>
+
+<div class="form-row">
+  <div class="form-group col-6">
+    <!-- <textarea class="form-control" id="honors" rows="3" name="honors"></textarea> -->
+    {% bootstrap_field form.honors %}
+  </div>
+
+  <!-- Scholarhips -->
+  <div class="form-group col-6">
+    <!-- <textarea class="form-control" id="scholarships" rows="3" name="scholarships"></textarea> -->
+    {% bootstrap_field form.scholarships  %}
+  </div>
+
+</div>
+
+<!-- Officer Position -->
+<div class="form-group">
+  <!-- <input type="text" class="form-control" placeholder="Office Position" id="officer_position_textbox" name="officer_position" disabled> -->
+  {% bootstrap_field form.officer_position  %}
+</div>
+
+
+<!-- this part is specific for StudentECE -->
+<div class="form-row">
+  <div class="form-group col-4">
+      {% bootstrap_field form.review_status  %}
+  </div>
+
+  <div class="form-group col-4">
+      {% bootstrap_field form.id_picture  %}
+  </div>
+
+  <div class="form-group col-4">
+      {% bootstrap_field form.payment_picture %}
+  </div>
+
+</div>
+
+
+<hr class="my-4">
+<h2>Contact Person</h2>
+<div class="form-row">
+  <!-- Contact Person -->
+  <div class="form-group col-4">
+    <!-- <input type="text" class="form-control" placeholder="First Name" name="first_name_contact_person"> -->
+{%bootstrap_field form.first_name_contact_person %}
+  </div>
+
+  <div class="form-group col-4">
+    <!-- <input type="text" class="form-control" placeholder="Last Name" name="last_name_contact_person"> -->
+{%bootstrap_field form.last_name_contact_person %}
+  </div>
+
+  <div class="form-group col-4">
+    <!-- <input type="text" class="form-control" placeholder="Middle Name" name="middle_name_contact_person"> -->
+{%bootstrap_field form.middle_name_contact_person %}
+</div>
+</div>
+
+
+<div class="form-row">
+  <!-- Contact Person adress -->
+  <div class="form-group col-6">
+    <!-- <textarea class="form-control" id="address" rows="3" name="address_contact_person"></textarea> -->
+  {%bootstrap_field form.address_contact_person %}
+  </div>
+
+  <!-- contact person nunmber -->
+  <div class="form-group col-6">
+    <!-- <input type="number" class="form-control" placeholder="09471234567" name="mobile_number_contact_person"> -->
+  {%bootstrap_field form.mobile_number_contact_person %}
+  </div>
+
+</div>
+
+
+
+<button type="submit" class="btn btn-primary  btn-block">Submit</button>
+
+  {% csrf_token %}
+</form>
+
+<script type="text/javascript">
+
+    $(function () {
+      $("#datepicker").datepicker();
+    });
+
+    $(function () {
+      $("#graddatepicker").datepicker();
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+{% block content %}
+  <div class="jumbotron">
+    <h2>Student Details:</h2>
+<table class="table">
+  <tbody>
+    <tr>
+      <td>Student ID</td>
+      <td>{{studenttutorial_details.id}}</td>
+    </tr>
+    <tr>
+      <td>Name</td>
+      <td>{{studenttutorial_details.last_name}}, {{studenttutorial_details.first_name}}, {{studenttutorial_details.middle_name}}</td>
+    </tr>
+    <tr>
+      <td>Birthday</td>
+      <td>{{studenttutorial_details.birthdate}}</td>
+    </tr>
+    <tr>
+      <td>Address</td>
+      <td>{{studenttutorial_details.address}}</td>
+    </tr>
+    <tr>
+      <td>Religion</td>
+      <td>{{studenttutorial_details.religion}}</td>
+    </tr>
+    <tr>
+      <td>Mobile Number</td>
+      <td>{{studenttutorial_details.mobile_number}}</td>
+    </tr>
+    <tr>
+      <td>Facebook Username</td>
+      <td>{{studenttutorial_details.facebook_username}}</td>
+    </tr>
+    <tr>
+      <td>Email</td>
+      <td>{{studenttutorial_details.email}}</td>
+    </tr>
+    <tr>
+      <td>Gender</td>
+      <td>{{studenttutorial_details.gender}}</td>
+    </tr>
+    <tr>
+      <td>School</td>
+      <td>{{studenttutorial_details.school}}</td>
+    </tr>
+    <tr>
+      <td>Date Graduated</td>
+      <td>{{studenttutorial_details.date_graduated}}</td>
+    </tr>
+    <tr>
+      <td>Honors</td>
+      <td>{{studenttutorial_details.honors}}</td>
+    </tr>
+    <tr>
+      <td>Officer Position</td>
+      <td>{{studenttutorial_details.officer_position}}</td>
+    </tr>
+    <tr>
+      <td>Scholarships</td>
+      <td>{{studenttutorial_details.scholarships}}</td>
+    </tr>
+    <tr>
+      <td>Contact Person</td>
+      <td>{{studenttutorial_details.last_name_contact_person}}, {{studenttutorial_details.first_name_contact_person}}, {{studenttutorial_details.middle_name_contact_person}}</td>
+    </tr>
+
+    <tr>
+      <td>Contact Person Address</td>
+      <td>{{studenttutorial_details.address_contact_person}}</td>
+    </tr>
+
+    <tr>
+      <td>Contact Person Mobile Number</td>
+      <td>{{studenttutorial_details.mobile_number_contact_person}}</td>
+    </tr>
+
+    <tr>
+      <td>Review Status</td>
+      <td>{{studenttutorial_details.review_status}}</td>
+    </tr>
+
+    <tr>
+      <td>Conditional Subject</td>
+      <td>{{studenttutorial_details.conditional_subject}}</td>
+    </tr>
+
+    <tr>
+      <td>ID Picture</td>
+      <td><img src="{{studenttutorial_details.id_picture.url}}" alt="" height="300"></td>
+    </tr>
+
+    <tr>
+      <td>Proof of Payment</td>
+      <td><img src="{{studenttutorial_details.payment_picture.url}}" alt="" height='300'></td>
+    </tr>
+
+    <tr>
+      <td>Enrolled</td>
+      <td>{{studenttutorial_details.enrolled}}</td>
+    </tr>
+
+  </tbody>
+</table>
+
+  <div class="container">
+    <a class='btn btn-warning' href="{% url 'studentstutorial_app:update' pk=studenttutorial_details.pk %}">Update</a>
+
+  </div>
+
+{% endblock %}

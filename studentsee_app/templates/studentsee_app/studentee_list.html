@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block content %}
+  <div class="jumbotron">
+
+    <h1>List of EE Students</h1>
+
+<ul class="nav">
+  <li class="nav-item">
+    <a class="nav-link" href="{%url 'studentsee_app:list_all'%}">All</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="{%url 'studentsee_app:list_enrolled_true'%}">Enrolled</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="{%url 'studentsee_app:list_enrolled_false'%}">Not Enrolled</a>
+  </li>
+</ul>
+
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">ID</th>
+          <th scope="col">First</th>
+          <th scope="col">Middle</th>
+          <th scope="col">Last</th>
+          <th scope="col">Enrolled</th>
+        </tr>
+      </thead>
+      <tbody>
+
+        {% for student in studentee_list %}
+        <tr>
+          <th scope="row"> <a href="{%url 'studentsee_app:detail' pk=student.pk%}">{{student.id}}</a></th>
+          <td>{{student.first_name}}</td>
+          <td>{{student.middle_name}}</td>
+          <td>{{student.last_name}}</td>
+          <td>
+            {%if student.enrolled %}
+            Yes
+            {%else%}
+            No
+            {%endif%}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+  </div>
+
+
+{% endblock %}
