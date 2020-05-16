@@ -8,13 +8,19 @@ from django.views.generic import (View,TemplateView,
 from . import models
 from . import forms
 from . import emailing
-
+from main_app.models import User
 from django.contrib import messages
 from django.contrib.auth.mixins import(
     LoginRequiredMixin,
     PermissionRequiredMixin
 )
 from django.shortcuts import get_object_or_404
+
+import requests
+import random
+import string
+
+from django.contrib.auth.hashers import make_password
 # Create your views here.
 
 # Original Function View:
@@ -25,6 +31,9 @@ from django.shortcuts import get_object_or_404
 #
 class StudentEESuccessEnrollment(TemplateView):
     template_name = 'studentsee_app/enrollment_success.html'
+
+class StudentEEFailEnrollment(TemplateView):
+    template_name = 'studentsee_app/enrollment_fail.html'
 
 class StudentEEListViewAll(PermissionRequiredMixin, ListView):
     permission_required = ('studentsee_app.view_studentee')
@@ -56,9 +65,36 @@ class StudentEECreateView(CreateView):
     def form_valid(self, form):
         ""
         self.object = form.save(commit=False)
-        #self.object.user = self.request.user
-        emailing.send_email(self.object)
+
+        recaptcha_response = self.request.POST['g-recaptcha-response'] #get ggoogle recapthcha response from form
+        r = requests.post('https://www.google.com/recaptcha/api/siteverify', data = {
+            'secret':'6Lc1CO4UAAAAACs9XqPf35SGvdtP-0QmDM0n0K6V',
+            'response': recaptcha_response,
+        })
+        r = r.json()
+        if r['success'] == 'false':
+            return HttpResponseRedirect(reverse('studentsee_app:fail'))
+
+        #then we create a user account for the student
+        temp_password = ''.join(random.choice(string.ascii_lowercase + string.digits) for _ in range(10))
+        new_user = User.objects.create(
+            first_name = self.request.POST['first_name'],
+            last_name = self.request.POST['last_name'],
+            username = self.request.POST['first_name'].lower() + self.request.POST['last_name'].lower(),
+            password = make_password(temp_password),
+            email = self.request.POST['email'],
+            is_student = True,
+            is_ee = True,
+        )
+
+        self.object.user = new_user
         self.object.save()
+
+        try:
+            emailing.send_email(self.object, temp_password) #send an email with enrollment details
+        except:
+            pass
+
         return super().form_valid(form)
 
 class StudentEEUpdateView(PermissionRequiredMixin, UpdateView):

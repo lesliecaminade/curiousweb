@@ -23,6 +23,11 @@ class StudentEEForm(forms.ModelForm):
                 ('first taker', 'First Taker'),
                 ('retaker', 'Retaker'),
             )),
+
+            'address' : forms.TextInput(),
+            'address_contact_person' : forms.TextInput(),
+            'honors': forms.TextInput(),
+            'scholarships': forms.TextInput(),
         }
 
         labels = {
@@ -33,6 +38,7 @@ class StudentEEForm(forms.ModelForm):
             'last_name_contact_person': 'Last Name',
             'middle_name_contact_person': 'Middle Name',
             'mobile_number_contact_person': 'Mobile Number',
+            'address_contact_person' : 'Address'
         }
 
         help_texts = {

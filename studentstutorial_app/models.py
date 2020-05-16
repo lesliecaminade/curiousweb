@@ -1,12 +1,19 @@
 from django.db import models
 from django.utils import timezone
 from django.urls import reverse
-from django.contrib.auth.models import User
-from uuid import uuid4
+from main_app.models import User
+
+class Subjects(models.Model):
+    name = models.CharField(max_length = 100)
+
+    class Meta:
+        ordering = ['name']
+
+    def __str__(self):
+        return self.name
 
 class StudentTutorial(models.Model):
-    user = models.ForeignKey(User, on_delete = models.PROTECT, null = True)
-    #full_name = models.CharField(max_length = 200, primary_key = True) #this would just be simply firstname_lastname
+    user = models.ForeignKey(User, on_delete = models.CASCADE, null = True)
     first_name = models.CharField(max_length = 100)
     last_name = models.CharField(max_length = 100)
     middle_name = models.CharField(max_length = 100)
@@ -18,21 +25,18 @@ class StudentTutorial(models.Model):
     email = models.EmailField()
     gender = models.CharField(max_length = 100)
     school = models.CharField(max_length = 100)
-    date_graduated = models.DateField(blank = True, null = True) #date graduated is optional
-
-    honors = models.TextField(max_length = 1000, blank = True)
-    officer_position = models.CharField(max_length = 100, blank = True)
-    scholarships = models.TextField(max_length = 1000, blank = True)
-
     first_name_contact_person = models.CharField(max_length=100)
     last_name_contact_person = models.CharField(max_length=100)
     middle_name_contact_person = models.CharField(max_length=100, blank = True)
     address_contact_person = models.CharField(max_length=1000)
     mobile_number_contact_person = models.CharField(max_length = 1000)
-
     id_picture = models.ImageField(blank = True)
     payment_picture = models.ImageField()
     enrolled = models.BooleanField(default = False)
+    subjects_to_enroll = models.ManyToManyField(Subjects)
 
     def get_absolute_url(self):
         return reverse("studentstutorial_app:detail",kwargs={'pk':self.pk})
+
+    def __str__(self):
+        return self.last_name + ', ' + self.first_name + ', ' + self.middle_name

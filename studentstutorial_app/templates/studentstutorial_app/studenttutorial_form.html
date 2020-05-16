@@ -16,7 +16,6 @@
 {% endif%}
 
 <form method="POST" enctype="multipart/form-data">
-<p>All fields marked with asterisk are  required.</p>
 <hr class='my-4'>
 <h2>Personal Information</h2>
 <!-- Name -->
@@ -45,6 +44,18 @@
     <!-- {% bootstrap_field form.birthdate  %} -->
     <label for="datepicker">Birthday</label>
     <input id="datepicker" type="text" name="birthdate" class="form-control">
+    <small>MM/DD/YYY</small>
+  </div>
+
+  <div class="form-group col-4">
+      <!-- <input type="number" class="form-control" placeholder="09471234567" name="mobile_number"> -->
+      {% bootstrap_field form.mobile_number  %}
+    </div>
+
+
+  <div class="form-group col-4">
+    <!-- <input type="text" class="form-control" placeholder="optional" name="facebook_username"> -->
+    {% bootstrap_field form.facebook_username  %}
   </div>
 </div>
 
@@ -61,22 +72,6 @@
     <!-- <input type="text" class="form-control" placeholder="optional" name="religion"> -->
     {% bootstrap_field form.religion  %}
   </div>
-
-  <!-- Mobile NUmber -->
-<div class="form-group col-4">
-    <!-- <input type="number" class="form-control" placeholder="09471234567" name="mobile_number"> -->
-    {% bootstrap_field form.mobile_number  %}
-  </div>
-
-
-<div class="form-group col-4">
-  <!-- <input type="text" class="form-control" placeholder="optional" name="facebook_username"> -->
-  {% bootstrap_field form.facebook_username  %}
-</div>
-
-</div>
-
-<div class="form-row">
   <div class="form-group col-4">
     <!-- Gender -->
     <!-- <input type="text" class="form-control" placeholder="optional" name="facebook_username"> -->
@@ -88,12 +83,9 @@
     {% bootstrap_field form.email  %}
   </div>
 
+
+
 </div>
-
-
-
-
-<!-- EMail address -->
 
 
 <hr class='my-4'>
@@ -104,52 +96,7 @@
     <!-- <textarea class="form-control" id="school" rows="3" name="school"></textarea> -->
     {% bootstrap_field form.school  %}
   </div>
-
-  <div class="form-group col-6">
-    <!-- <input type="number" class="form-control" placeholder="MM" name="month"> -->
-    <!-- {% bootstrap_field form.birthdate  %} -->
-    <label for="graddatepicker">Date Graduated</label>
-    <input id="graddatepicker" type="text" name="date_graduated" class="form-control">
-  </div>
-
-
-
 </div>
-
-<div class="form-row">
-  <div class="form-group col-6">
-    <!-- <textarea class="form-control" id="honors" rows="3" name="honors"></textarea> -->
-    {% bootstrap_field form.honors %}
-  </div>
-
-  <!-- Scholarhips -->
-  <div class="form-group col-6">
-    <!-- <textarea class="form-control" id="scholarships" rows="3" name="scholarships"></textarea> -->
-    {% bootstrap_field form.scholarships  %}
-  </div>
-
-</div>
-
-<!-- Officer Position -->
-<div class="form-group">
-  <!-- <input type="text" class="form-control" placeholder="Office Position" id="officer_position_textbox" name="officer_position" disabled> -->
-  {% bootstrap_field form.officer_position  %}
-</div>
-
-
-<!-- this part is specific for StudentECE -->
-<div class="form-row">
-
-  <div class="form-group col-6">
-      {% bootstrap_field form.id_picture  %}
-  </div>
-
-  <div class="form-group col-6">
-      {% bootstrap_field form.payment_picture %}
-  </div>
-
-</div>
-
 
 <hr class="my-4">
 <h2>Contact Person</h2>
@@ -187,8 +134,24 @@
 
 </div>
 
+<hr class="my-4">
+<h2>Tutorial Information</h2>
+<div class="form-row">
+  <div class="form-group col-4">
+    {% bootstrap_field form.subjects_to_enroll  %}
+    <small>You can select multiple subjects by pressing CTRL or SHIFT</small>
+  </div>
 
+  <div class="form-group col-4">
+      {% bootstrap_field form.id_picture  %}
+  </div>
 
+  <div class="form-group col-4">
+      {% bootstrap_field form.payment_picture %}
+  </div>
+</div>
+
+<div class="g-recaptcha my-4" data-sitekey="6Lc1CO4UAAAAAP64v29D0oS3JZWx7Is6lACu47lI"></div>
 <button type="submit" class="btn btn-primary  btn-block">Submit</button>
 
   {% csrf_token %}

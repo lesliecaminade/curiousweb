@@ -28,15 +28,8 @@ class LogoutView(TemplateView):
     template_name = 'main_app/logout_success.html'
 
 # Create your views here.
-class RegisterView(PermissionRequiredMixin,CreateView):
+class RegisterView(PermissionRequiredMixin, CreateView):
     permission_required = 'auth.add_user'
     form_class = forms.UserCreateForm
     success_url = reverse_lazy("index")
     template_name = "main_app/register.html"
-
-    def get_permission_denied_message(self):
-        """
-        Override this method to override the permission_denied_message attribute.
-        """
-        self.permission_denied_message = 'Only certain accounts can register new accounts. You are not allowed.'
-        return self.permission_denied_message

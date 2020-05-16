@@ -18,6 +18,8 @@ class StudentTutorialForm(forms.ModelForm):
 
             'birthdate': forms.DateInput(),
             'date_graduated': forms.DateInput(),
+            'address' : forms.TextInput(),
+            'address_contact_person' : forms.TextInput(),
         }
 
         labels = {
@@ -28,6 +30,8 @@ class StudentTutorialForm(forms.ModelForm):
             'last_name_contact_person': 'Last Name',
             'middle_name_contact_person': 'Middle Name',
             'mobile_number_contact_person': 'Mobile Number',
+            'address_contact_person' : 'Address',
+            'subjects_to_enroll': 'Subject(s) to Enroll',
         }
 
         help_texts = {

@@ -34,4 +34,5 @@ urlpatterns = [
     path('studentsece_app/', include('studentsece_app.urls', namespace='studentsece_app')),
     path('studentsee_app/', include('studentsee_app.urls', namespace='studentsee_app')),
     path('studentstutorial_app/', include('studentstutorial_app.urls', namespace='studentstutorial_app')),
+    #path('exams/',include('exams_app.urls', namespace='exams_app')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
