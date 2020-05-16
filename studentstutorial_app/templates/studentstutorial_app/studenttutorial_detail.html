@@ -44,22 +44,21 @@
       <td>School</td>
       <td>{{studenttutorial_details.school}}</td>
     </tr>
+
     <tr>
-      <td>Date Graduated</td>
-      <td>{{studenttutorial_details.date_graduated}}</td>
+      <td>Subjects Enrolled</td>
+      <td>
+
+        <ol>
+          {%for subject in studenttutorial_details.subjects_to_enroll.all %}
+          <li>{{subject}}</li>
+          {%endfor%}
+        </ol>
+
+
+      </td>
     </tr>
-    <tr>
-      <td>Honors</td>
-      <td>{{studenttutorial_details.honors}}</td>
-    </tr>
-    <tr>
-      <td>Officer Position</td>
-      <td>{{studenttutorial_details.officer_position}}</td>
-    </tr>
-    <tr>
-      <td>Scholarships</td>
-      <td>{{studenttutorial_details.scholarships}}</td>
-    </tr>
+
     <tr>
       <td>Contact Person</td>
       <td>{{studenttutorial_details.last_name_contact_person}}, {{studenttutorial_details.first_name_contact_person}}, {{studenttutorial_details.middle_name_contact_person}}</td>
@@ -75,15 +74,7 @@
       <td>{{studenttutorial_details.mobile_number_contact_person}}</td>
     </tr>
 
-    <tr>
-      <td>Review Status</td>
-      <td>{{studenttutorial_details.review_status}}</td>
-    </tr>
 
-    <tr>
-      <td>Conditional Subject</td>
-      <td>{{studenttutorial_details.conditional_subject}}</td>
-    </tr>
 
     <tr>
       <td>ID Picture</td>

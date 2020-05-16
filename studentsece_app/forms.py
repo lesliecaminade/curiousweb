@@ -32,6 +32,11 @@ class StudentECEForm(forms.ModelForm):
                 ('retaker', 'Retaker'),
                 ('conditional', 'Conditional')
             )),
+
+            'address': forms.TextInput(),
+            'address_contact_person': forms.TextInput(),
+            'honors': forms.TextInput(),
+            'scholarships': forms.TextInput(),
         }
 
         labels = {
