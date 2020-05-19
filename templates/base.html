@@ -40,44 +40,11 @@
        <ul class="navbar-nav">
 
          <li class="nav-item">
-           <a class="nav-link" href="#"> Home</a>
-         </li>
-
-         {%if user.is_authenticated %}
-         <li class="nav-item">
-           <a class="nav-link" href="#"> User: {{user.username}}</a>
+           <a class="nav-link {{nav_home}}" href="{%url 'index'%}"> Home</a>
          </li>
 
          <li class="nav-item">
-           <a class="nav-link" href="{%url 'logout'%}">Log Out</a>
-         </li>
-         {% else %}
-         <li class="nav-item">
-           <a class="nav-link" href="{%url 'login'%}"> Log In</a>
-         </li>
-         {% endif %}
-
-         {%if user.is_staff %}
-         <li class="nav-item dropdown">
-                 <a class="nav-link dropdown-toggle active" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                   Admin Menu
-                 </a>
-                 <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                   <a class="dropdown-item" href="{%url 'studentsece_app:list'%}">ECE Students</a>
-                   <a class="dropdown-item" href="{%url 'studentsee_app:list'%}">EE Students</a>
-                   <a class="dropdown-item" href="{%url 'studentstutorial_app:list'%}">Tutorial Students</a>
-                   <a class="dropdown-item disabled" href="#">Exam Management</a>
-                   <a class="dropdown-item disabled" href="#">MCQ Management</a>
-                   <a class="dropdown-item disabled" href="#">Lesson Management</a>
-                   <a class="dropdown-item disabled" href="#">Enrollments</a>
-                   <a class="dropdown-item" href="{%url 'main_app:register'%}">Register Accounts</a>
-                 </div>
-          </li>
-
-          {%endif%}
-
-         <li class="nav-item">
-           <a class="nav-link disabled" href=""> Exams </a>
+           <a class="nav-link {{nav_exams}}" href="{%url 'exams_app:exams'%}"> Exams </a>
          </li>
 
          <li class="nav-item">
@@ -92,6 +59,45 @@
            <a class="nav-link disabled" href="#"> Lessons </a>
          </li>
 
+         <li class="nav-item">
+           <a class="nav-link {{nav_enroll}}" href="{%url 'main_app:enroll'%}"> Enroll </a>
+         </li>
+
+         {%if user.is_authenticated %}
+         <li class="nav-item">
+           <a class="nav-link {{nav_user}}" href="#"> User: {{user.username}}</a>
+         </li>
+
+         <li class="nav-item">
+           <a class="nav-link " href="{%url 'logout'%}">Log Out</a>
+         </li>
+         {% else %}
+         <li class="nav-item">
+           <a class="nav-link {{nav_login}}" href="{%url 'login'%}"> Log In</a>
+         </li>
+         {% endif %}
+
+         {%if user.is_staff %}
+         <li class="nav-item dropdown">
+                 <a class="nav-link dropdown-toggle {{nav_admin}}" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                   Admin Menu
+                 </a>
+                 <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                   <a class="dropdown-item" href="{%url 'studentsece_app:list'%}">ECE Students</a>
+                   <a class="dropdown-item" href="{%url 'studentsee_app:list'%}">EE Students</a>
+                   <a class="dropdown-item" href="{%url 'studentstutorial_app:list'%}">Tutorial Students</a>
+                   <a class="dropdown-item" href="{%url 'exams_app:exams'%}">Exams</a>
+                   <a class="dropdown-item disabled" href="#">MCQ Management</a>
+                   <a class="dropdown-item disabled" href="#">Lesson Management</a>
+                   <a class="dropdown-item disabled" href="#">Enrollments</a>
+                   <a class="dropdown-item" href="{%url 'main_app:users'%}">Users</a>
+                 </div>
+          </li>
+
+          {%endif%}
+
+
+
 
 
 
@@ -104,8 +110,6 @@
 
 
   </nav>
-
-
 <div class="container">
   <!-- Image and text -->
 

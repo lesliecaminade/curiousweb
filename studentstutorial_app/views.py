@@ -73,7 +73,7 @@ class StudentTutorialCreateView(CreateView):
         new_user = User.objects.create(
             first_name = self.request.POST['first_name'],
             last_name = self.request.POST['last_name'],
-            username = self.request.POST['first_name'].lower() + self.request.POST['last_name'].lower(),
+            username = self.request.POST['first_name'].lower() + self.request.POST['last_name'].lower() + ''.join(random.choice(string.ascii_lowercase + string.digits) for _ in range(10)),
             password = make_password(temp_password),
             email = self.request.POST['email'],
             is_student = True,

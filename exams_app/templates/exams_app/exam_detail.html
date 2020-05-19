@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% load bootstrap4 %}
+{% block content %}
+<form method="POST" enctype="multipart/form-data">
+
+<h1>{{exam.title}}</h1>
+
+{%if exam.description%}
+<p>{{exam.description}}</p>
+{%endif%}
+
+<hr class = 'my-4'>
+<input type="hidden" name="number_of_items" value="{{number_of_items}}">
+<input type="hidden" name="exam_pk" value="{{exam_pk}}">
+
+{% for item in items %}
+{%include "exams_app/item_detail.html" %}
+{%endfor%}
+
+<button type="submit" class="btn btn-primary  btn-block">Submit Exam</button>
+  {% csrf_token %}
+</form>
+
+
+{% endblock %}

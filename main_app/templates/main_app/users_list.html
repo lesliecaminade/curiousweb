@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h1>Users</h1>
+
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th scope="col">ID</th>
+      <th scope="col">First</th>
+      <th scope="col">Last</th>
+      <th scope="col">Username</th>
+      <th scope="col">Flags</th>
+    </tr>
+  </thead>
+  <tbody>
+
+
+
+    {%for user in users%}
+    <tr>
+      <th scope="row"><a href="{%url 'main_app:user' pk=user.pk%}">{{user.id}}</a></th>
+      <td>{{user.first_name}}</td>
+      <td>{{user.last_name}}</td>
+      <td>{{user.username}}</td>
+      <td>{%if user.is_teacher %}<span class="badge badge-danger">Teacher</span>{%endif%}
+      {%if user.is_student %}<span class="badge badge-secondary">Student</span>{%endif%}
+      {%if user.is_ece %}<span class="badge badge-primary">ECE</span>{%endif%}
+      {%if user.is_ee %}<span class="badge badge-success">EE</span>{%endif%}
+      {%if user.is_tutorial %}<span class="badge badge-info">Tutorial</span>{%endif%}
+      {%if user.is_premium %}<span class="badge badge-warning">Premium</span>{%endif%}</td>
+
+    </tr>
+    {%endfor%}
+  </tbody>
+</table>
+
+{% endblock %}

@@ -21,6 +21,7 @@ def send_email(student, temp_password):
             <tr><td>Course </td><td>ECE</td></tr>
             <tr><td>Username </td><td>{student.user.username}</td></tr>
             <tr><td>Password </td><td>{temp_password}</td></tr>
+            <tr><td>School </td><td>{student.school}</td></tr>
             <tr><td>Date Graduated </td><td>{student.date_graduated}</td></tr>
             <tr><td>Honors </td><td>{student.honors}</td></tr>
             <tr><td>Officer Position </td><td>{student.officer_position}</td></tr>

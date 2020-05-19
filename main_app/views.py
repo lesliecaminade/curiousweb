@@ -1,6 +1,6 @@
 from django.shortcuts import render
-from django.urls import reverse_lazy
-from django.http import HttpResponse
+from django.urls import reverse_lazy, reverse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.views.generic import (View,TemplateView,
                                 ListView,DetailView,
                                 DeleteView, CreateView,
@@ -15,21 +15,42 @@ from . import forms
 
 # Create your views here.
 class IndexView(TemplateView):
-    # Just set this Class Object Attribute to the template page.
-    # template_name = 'app_name/site.html'
     template_name = 'main_app/index.html'
+    extra_context = {
+        'nav_home': 'active',
+    }
 
 class EnrollView(TemplateView):
     template_name = 'main_app/enroll.html'
+    extra_context = {
+        'nav_enroll': 'active',
+    }
 
 class LogoutView(TemplateView):
-    # Just set this Class Object Attribute to the template page.
-    # template_name = 'app_name/site.html'
     template_name = 'main_app/logout_success.html'
 
-# Create your views here.
-class RegisterView(PermissionRequiredMixin, CreateView):
-    permission_required = 'auth.add_user'
-    form_class = forms.UserCreateForm
-    success_url = reverse_lazy("index")
-    template_name = "main_app/register.html"
+class UserListView(View):
+    def get(self, *args, **kwargs):
+        users = models.User.objects.all()
+        context = {
+            'users': users,
+            'nav_admin': 'active',
+        }
+        template_name = 'main_app/users_list.html'
+        if self.request.user.is_teacher:
+            return render(self.request, template_name, context)
+        else:
+            return HttpResponseRedirect(reverse('login'))
+
+class UserView(View):
+    def get(self, *args, **kwargs):
+        user = models.User.objects.get(pk = self.kwargs['pk'])
+        context = {
+            'user': user,
+            'nav_admin': 'active',
+        }
+        template_name = 'main_app/user_detail.html'
+        if self.request.user.is_teacher:
+            return render(self.request, template_name, context)
+        else:
+            return HttpResponseRedirect(reverse('login'))

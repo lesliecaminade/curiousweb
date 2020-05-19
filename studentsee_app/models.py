@@ -2,7 +2,7 @@ from django.db import models
 from django.utils import timezone
 from django.urls import reverse
 from main_app.models import User
-from uuid import uuid4
+from exams_app.models import ExamTicket
 
 class StudentEE(models.Model):
     user = models.ForeignKey(User, on_delete = models.CASCADE, null = True)
@@ -34,6 +34,7 @@ class StudentEE(models.Model):
     id_picture = models.ImageField(blank = True)
     payment_picture = models.ImageField()
     enrolled = models.BooleanField(default = False)
+
 
     def get_absolute_url(self):
         return reverse("studentsee_app:detail",kwargs={'pk':self.pk})

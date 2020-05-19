@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% load bootstrap4 %}
+{% block content %}
+
+<h1>Create/Update {{category.name}}</h1>
+<hr class="my-4">
+<div class="container">
+  <h1>{{category.name}}</h1>
+</div>
+
+<form class="" action="" method="post">
+  {%bootstrap_form form%}
+  {%csrf_token%}
+  <input type="hidden" name="categoryb_pk" value="{{categoryb_pk}}">
+  <button type="submit" class="btn btn-warning">Save</button>
+
+  <a class="btn btn-primary" href="{%url 'exams_app:exams'%}" role="button">Back</a>
+
+</form>
+
+{% endblock %}
