@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.urls import reverse_lazy, reverse
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 from django.views.generic import (View,TemplateView,
                                 ListView,DetailView,
                                 DeleteView, CreateView,
@@ -44,7 +44,7 @@ class ExamCategoryACreate(View):
         return render(self.request, template_name, extra_context)
 
     def post(self, *args, **kwargs):
-        categorybpk = int(self.request.POST['categorybpk'])
+        categorybpk = int(self.request.POST.get('categorybpk'))
 
         new_categorya = models.CategoryA(
             name = self.request.POST['name'],
@@ -95,82 +95,88 @@ class ExamCategoryAView(View):
         # categoryb = models.CategoryB.objects.get(pk = self.kwargs['pk'])
         categoryb = models.CategoryB.objects.get(pk = self.kwargs['pk'])
 
-        if not self.request.user.is_authenticated:
-            categoryas = categoryb.categoryas.all()
-        else:
-            #check course:
-            if self.request.user.is_teacher:
+        if categoryb.is_accessible:
+            if not self.request.user.is_authenticated:
                 categoryas = categoryb.categoryas.all()
-            elif self.request.user.is_ece:
-                categoryas = categoryb.categoryas.filter(is_ece = True)
-            elif self.request.user.is_ee:
-                categoryas = categoryb.categoryas.filter(is_ee = True)
-            elif self.request.user.is_tutorial:
-                categoryas = categoryb.categoryas.filter(is_tutorial = True)
             else:
-                categoryas = categoryb.categoryas.none()
+                #check course:
+                if self.request.user.is_teacher:
+                    categoryas = categoryb.categoryas.all()
+                elif self.request.user.is_ece:
+                    categoryas = categoryb.categoryas.filter(is_ece = True)
+                elif self.request.user.is_ee:
+                    categoryas = categoryb.categoryas.filter(is_ee = True)
+                elif self.request.user.is_tutorial:
+                    categoryas = categoryb.categoryas.filter(is_tutorial = True)
+                else:
+                    categoryas = categoryb.categoryas.none()
 
-        context = {
-            'category_title': categoryb.name.title(),
-            'categories': categoryas,
-            'categoryb': categoryb, #this used to send the primary key of categoryb in the creadcrums
-            'category_letter': 'A',
-            'folder1': 'Exams',
-            'folder2': categoryb.name,
-            'nav_exams': 'active',
-        }
-        return render(self.request, 'exams_app/category_list.html', context)
+            context = {
+                'category_title': categoryb.name.title(),
+                'categories': categoryas,
+                'categoryb': categoryb, #this used to send the primary key of categoryb in the creadcrums
+                'category_letter': 'A',
+                'folder1': 'Exams',
+                'folder2': categoryb.name,
+                'nav_exams': 'active',
+            }
+            return render(self.request, 'exams_app/category_list.html', context)
+        else:
+            raise Http404()
 
 class ExamListView(View):
     def get(self, *args, **kwargs):
         categorya = models.CategoryA.objects.get(pk = self.kwargs['pk'])
         categoryb = categorya.categoryb_set.get()
 
-        if not self.request.user.is_authenticated:
-            exams = categorya.exams.all()
-        else:
-            #check course:
-            if self.request.user.is_teacher:
+        if categorya.is_accessible:
+            if not self.request.user.is_authenticated:
                 exams = categorya.exams.all()
-            elif self.request.user.is_ece:
-                exams = categorya.exams.filter(is_ece = True)
-            elif self.request.user.is_ee:
-                exams = categorya.exams.filter(is_ee = True)
-            elif self.request.user.is_tutorial:
-                exams = categorya.exams.filter(is_tutorial = True)
             else:
-                exams = categorya.exams.none()
+                #check course:
+                if self.request.user.is_teacher:
+                    exams = categorya.exams.all()
+                elif self.request.user.is_ece:
+                    exams = categorya.exams.filter(is_ece = True)
+                elif self.request.user.is_ee:
+                    exams = categorya.exams.filter(is_ee = True)
+                elif self.request.user.is_tutorial:
+                    exams = categorya.exams.filter(is_tutorial = True)
+                else:
+                    exams = categorya.exams.none()
+        else:
+            raise Http404()
 
-        context = {
-            'category_title': categorya.name.title(),
-            'categories': exams,
-            'category_letter': 'exam',
-            'categoryb': categoryb, #used to send the pk to the breadcrumb and links
-            'categorya': categorya, #used to send the pk to the breadcrumb and links
-            'folder1': 'Exams',
-            'folder2': categoryb.name, #this is
-            'folder3': categorya.name, #this is
-            'nav_exams': 'active',
+            context = {
+                'category_title': categorya.name.title(),
+                'categories': exams,
+                'category_letter': 'exam',
+                'categoryb': categoryb, #used to send the pk to the breadcrumb and links
+                'categorya': categorya, #used to send the pk to the breadcrumb and links
+                'folder1': 'Exams',
+                'folder2': categoryb.name, #this is
+                'folder3': categorya.name, #this is
+                'nav_exams': 'active',
 
-        }
-        return render(self.request, 'exams_app/category_list.html', context)
-
-    def post():
-        pass
+            }
+            return render(self.request, 'exams_app/category_list.html', context)
 
 class ExamView(View):
     def get(self, *args, **kwargs):
         exam = models.Exam.objects.get(pk = self.kwargs['pk'])
-        items = list(exam.items.all())
-        number_of_items = len(items)
-        context = {
-            'exam': exam,
-            'items': items,
-            'number_of_items': number_of_items,
-            'exam_pk': self.kwargs['pk'],
-            'nav_exams': 'active',
-        }
-        return render(self.request, 'exams_app/exam_detail.html', context)
+        if exam.is_accessible:
+            items = list(exam.items.all())
+            number_of_items = len(items)
+            context = {
+                'exam': exam,
+                'items': items,
+                'number_of_items': number_of_items,
+                'exam_pk': self.kwargs['pk'],
+                'nav_exams': 'active',
+            }
+            return render(self.request, 'exams_app/exam_detail.html', context)
+        else:
+            raise Http404()
 
     def post(self, *args, **kwargs):
         #answers in self.request.POST['question_n_selected_answer']

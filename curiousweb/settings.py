@@ -49,9 +49,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'bootstrap4',
     'main_app',
-    'studentsece_app',
-    'studentsee_app',
-    'studentstutorial_app',
+    'students_app_1',
+    'students_app_2',
+    'students_app_3',
     'exams_app',
 ]
 
@@ -146,4 +146,4 @@ LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = 'index'
 LOGOUT_REDIRECT_URL = 'index'
 
-AUTH_USER_MODEL = 'main_app.User' 
+AUTH_USER_MODEL = 'main_app.User'

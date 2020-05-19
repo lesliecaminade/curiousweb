@@ -1,25 +1,66 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block content %}
 
 <div class="container">
 
-<div class="row my-4">
-  <div class="container">
-    <h2>Programs Offered</h2>
-  </div>
+<div class="container mb-4">
+  <h1 class="display-4">Programs Offered</h1>
+  <p class='text-muted'>Select one of the programs below to enroll to</p>
 </div>
 
-<div class="row my-4">
-  <div class="col-4">
-    <a href="{% url 'studentsece_app:create'%}" class="btn btn-primary btn-lg active btn-block" role="button">ECE</a>
+<div class="container mb-4">
+  <div class="card mb-3">
+    <div class="row no-gutters">
+      <div class="col-md-4">
+        <img src="{%static 'programs-photo-2.jpg'%}" class="card-img" alt="...">
+      </div>
+      <div class="col-md-8">
+        <div class="card-body">
+          <h5 class="card-title">Electronics Engineering Review</h5>
+          <p class="card-text">Review for Mathematics, General Engineering and Applied Sciences, Electronics Engineering and Electronics Systems and Technologies</p>
+          <p class="card-text"><small class="text-muted">includes Diagnostic Exams, Weekly and Monthly Exams, Pre-board Exams. Only Cloudroom classes are available because of the current pandemic</small></p>
+          <a href="{% url 'studentsece_app:create'%}" class="btn btn-primary btn-lg active btn-block" role="button">Enroll ECE Review</a>
+        </div>
+      </div>
+    </div>
   </div>
-  <div class="col-4">
-    <a href="{% url 'studentsee_app:create'%}" class="btn btn-primary btn-lg active btn-block" role="button" aria-pressed="true">REE</a>
+
+  <div class="card mb-3" >
+    <div class="row no-gutters">
+      <div class="col-md-4">
+        <img src="{%static 'photo-programs-3.jpg'%}" class="card-img" alt="...">
+      </div>
+      <div class="col-md-8">
+        <div class="card-body">
+          <h5 class="card-title">Electrical Engineering Review</h5>
+          <p class="card-text">Review for Mathematics, Engineering Sciences and Allied Subjects (ESAS), and Professional Subjects (EE)</p>
+          <p class="card-text"><small class="text-muted">includes Diagnostic Exams, Weekly and Monthly Exams, Pre-board Exams. Only Cloudroom classes are available because of the current pandemic</small></p>
+          <a href="{% url 'studentsee_app:create'%}" class="btn btn-primary btn-lg active btn-block" role="button" aria-pressed="true">Enroll EE Review</a>
+        </div>
+      </div>
+    </div>
   </div>
-  <div class="col-4">
-    <a href="{% url 'studentstutorial_app:create'%}" class="btn btn-primary btn-lg active btn-block" role="button" aria-pressed="true">Tutorial</a>
+
+  <div class="card mb-3" >
+    <div class="row no-gutters">
+      <div class="col-md-4">
+        <img src="{%static 'photo-programs-4.jpg'%}" class="card-img" alt="...">
+      </div>
+      <div class="col-md-8">
+        <div class="card-body">
+          <h5 class="card-title">Tutorial Center</h5>
+          <p class="card-text">Offers a selection tutorials for Mathematics and Sciences, Review for Philippine Science Examinations (PhilSci Review), and College Entrance Examination Review</p>
+          <p class="card-text"><small class="text-muted">Only Cloudroom classes are available because of the current pandemic</small></p>
+          <a href="{% url 'studentstutorial_app:create'%}" class="btn btn-primary btn-lg active btn-block" role="button" aria-pressed="true">Enroll Tutorial</a>
+        </div>
+      </div>
+    </div>
   </div>
+
 </div>
+
+
 
 
 

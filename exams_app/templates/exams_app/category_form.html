@@ -11,7 +11,7 @@
 <form class="" action="" method="post">
   {%bootstrap_form form%}
   {%csrf_token%}
-  <input type="hidden" name="categoryb_pk" value="{{categoryb_pk}}">
+  <input type="hidden" name="categorybpk" value="{{categorybpk}}">
   <button type="submit" class="btn btn-warning">Save</button>
 
   <a class="btn btn-primary" href="{%url 'exams_app:exams'%}" role="button">Back</a>
