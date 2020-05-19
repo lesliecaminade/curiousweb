@@ -31,10 +31,10 @@ urlpatterns = [
     path('logout/', auth_views.LogoutView.as_view(), name="logout"),
     #i am starting to decide to migrate some of my work to class based view so here it is
     path('main_app/', include('main_app.urls', namespace='main_app')),
-    path('studentsece_app/', include('studentsece_app.urls', namespace='studentsece_app')),
-    path('studentsee_app/', include('studentsee_app.urls', namespace='studentsee_app')),
-    path('studentstutorial_app/', include('studentstutorial_app.urls', namespace='studentstutorial_app')),
+    path('students_app_1/', include('students_app_1.urls', namespace='students_app_1')),
+    path('students_app_2/', include('students_app_2.urls', namespace='students_app_2')),
+    path('students_app_3/', include('students_app_3.urls', namespace='students_app_3')),
     path('exams_app/',include('exams_app.urls', namespace='exams_app')),
 
-    
+
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

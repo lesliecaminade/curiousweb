@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% load bootstrap4 %}
+{% block content %}
+<h1 class='display-4'>Update Student</h1>
+
+<form method="post">
+{%bootstrap_form form%}
+
+    <a href="{% url 'students_app_3:detail' pk=student.pk %}" class="btn btn-primary">Cancel</a>
+    <button type="submit" class="btn btn-warning">Submit</button>
+
+    {% csrf_token %}
+  </form>
+{% endblock %}

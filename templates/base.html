@@ -25,7 +25,7 @@
     <title>CERTC Online Review</title>
   </head>
 <body>
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
     <div class="container">
       <a class="navbar-brand" href="{%url 'index' %}">
         <img src="/static/main_logo.png" width="30" height="30" class="d-inline-block align-top" alt="">
@@ -52,7 +52,7 @@
          </li>
 
          <li class="nav-item">
-           <a class="nav-link disabled" href="#"> MCQ Gold </a>
+           <a class="nav-link disabled" href="#"> MCQ Premium </a>
          </li>
 
          <li class="nav-item">
@@ -83,9 +83,9 @@
                    Admin Menu
                  </a>
                  <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                   <a class="dropdown-item" href="{%url 'studentsece_app:list'%}">ECE Students</a>
-                   <a class="dropdown-item" href="{%url 'studentsee_app:list'%}">EE Students</a>
-                   <a class="dropdown-item" href="{%url 'studentstutorial_app:list'%}">Tutorial Students</a>
+                   <a class="dropdown-item" href="{%url 'students_app_1:list'%}">ECE Students</a>
+                   <a class="dropdown-item" href="{%url 'students_app_2:list'%}">EE Students</a>
+                   <a class="dropdown-item" href="{%url 'students_app_3:list'%}">Tutorial Students</a>
                    <a class="dropdown-item" href="{%url 'exams_app:exams'%}">Exams</a>
                    <a class="dropdown-item disabled" href="#">MCQ Management</a>
                    <a class="dropdown-item disabled" href="#">Lesson Management</a>
@@ -111,16 +111,16 @@
 
   </nav>
 <div class="container">
-  <!-- Image and text -->
-
-
-  <div class="jumbotron">
+    <!-- Image and text -->
+    <div class="jumbotron">
     {%block content%}
 
-<!-- MAIN CONTENT HERE -->
-    {% endblock %}
 
-  </div>
+
+
+    {% endblock %}
+    </div>
+    <!-- MAIN CONTENT HERE -->
   <small>Developed by <a href="https://github.com/siliconcortex">siliconcortex</a></small>
 </div>
 

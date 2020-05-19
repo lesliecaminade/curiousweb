@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<form method="post">
+  {%csrf_token%}
+  <div class="alert alert-danger" role="alert">
+    <h4 class="alert-heading">Delete {{student.last_name}}, {{student.first_name}}?</h4>
+    <p>This operation cannot be undone!</p>
+    <hr>
+    <input type="submit" class="btn btn-danger" value="Delete">
+    <a href="{% url 'students_app_3:detail' pk=student.pk %}" class="btn btn-primary">Cancel</a>
+  </div>
+</form>
+
+{% endblock %}
