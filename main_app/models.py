@@ -16,3 +16,7 @@ class User(AbstractUser):
     is_ece = models.BooleanField('ece status', default = False)
     is_ee = models.BooleanField('ee status', default = False)
     is_tutorial = models.BooleanField('tutorial status', default = False)
+    exam_credits = models.PositiveSmallIntegerField(default = 0)
+
+    def get_absolute_url(self):
+        return reverse('main_app:user', kwargs = {'pk':self.pk})

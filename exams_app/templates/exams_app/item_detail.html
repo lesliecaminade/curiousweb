@@ -1,0 +1,66 @@
+<div class="card my-2">
+  <div class="card-header">
+    Item {{forloop.counter}}
+  </div>
+  <div class="card-body">
+    <h5 class="card-title">{{item.question}}</h5>
+    <!-- <p class="card-text">With supporting text below as a natural lead-in to additional content.</p> -->
+    <!-- <a href="#" class="btn btn-primary">Go somewhere</a> -->
+
+    {%if item.image%}
+    <div class="container col-8">
+      <img src="{{item.image.url}}" class="img-fluid" alt="Responsive image">
+    </div>
+    {% endif%}
+
+    <hr>
+
+    <div class="custom-control custom-radio">
+      <input type="radio" id="question_{{forloop.counter}}_radio1" name="question_{{forloop.counter}}_selected_answer" class="custom-control-input" value="1">
+      <label class="custom-control-label" for="question_{{forloop.counter}}_radio1">{{item.choice1}}</label>
+    </div>
+
+    {%if item.image1%}
+    <div class="container col-8">
+      <img src="{{item.image1.url}}" class="img-fluid" alt="Responsive image">
+    </div>
+    {% endif%}
+
+    <div class="custom-control custom-radio">
+      <input type="radio" id="question_{{forloop.counter}}_radio2" name="question_{{forloop.counter}}_selected_answer" class="custom-control-input" value="2">
+      <label class="custom-control-label" for="question_{{forloop.counter}}_radio2">{{item.choice2}}</label>
+    </div>
+
+    {%if item.image2%}
+    <div class="container col-8">
+      <img src="{{item.image2.url}}" class="img-fluid" alt="Responsive image">
+    </div>
+    {% endif%}
+
+    <div class="custom-control custom-radio">
+      <input type="radio" id="question_{{forloop.counter}}_radio3" name="question_{{forloop.counter}}_selected_answer" class="custom-control-input" value="3">
+      <label class="custom-control-label" for="question_{{forloop.counter}}_radio3">{{item.choice3}}</label>
+    </div>
+
+    {%if item.image2%}
+    <div class="container col-8">
+      <img src="{{item.image3.url}}" class="img-fluid" alt="Responsive image">
+    </div>
+    {% endif%}
+
+    <div class="custom-control custom-radio">
+      <input type="radio" id="question_{{forloop.counter}}_radio4" name="question_{{forloop.counter}}_selected_answer" class="custom-control-input" value="4">
+      <label class="custom-control-label" for="question_{{forloop.counter}}_radio4">{{item.choice4}}</label>
+    </div>
+
+    {%if item.image4%}
+    <div class="container col-8">
+      <img src="{{item.image4.url}}" class="img-fluid" alt="Responsive image">
+    </div>
+    {%endif%}
+
+
+
+
+  </div>
+</div>

@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block content %}
+
+
+<h1>How many items will the exam have?</h1>
+<br>
+<form method="POST">
+  {%csrf_token%}
+  <div class="form-group">
+    <label for="exampleInputEmail1">Number of items</label>
+    <input name="items" type="number" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Number of items">
+    <input type="hidden" name="categoryapk" value="{{categoryapk}}">
+  </div>
+  <button type="submit" class="btn btn-primary">OK</button>
+</form>
+
+{% endblock %}

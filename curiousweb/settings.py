@@ -33,6 +33,8 @@ DEBUG = True
 ALLOWED_HOSTS = [
     'siliconcortex.pythonanywhere.com',
     '127.0.0.1',
+    '192.168.0.105',
+    '192.168.1.5',
 ]
 
 
@@ -50,7 +52,7 @@ INSTALLED_APPS = [
     'studentsece_app',
     'studentsee_app',
     'studentstutorial_app',
-    #'exams_app',
+    'exams_app',
 ]
 
 MIDDLEWARE = [
@@ -143,3 +145,5 @@ MEDIA_URL = '/media/'
 LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = 'index'
 LOGOUT_REDIRECT_URL = 'index'
+
+AUTH_USER_MODEL = 'main_app.User' 

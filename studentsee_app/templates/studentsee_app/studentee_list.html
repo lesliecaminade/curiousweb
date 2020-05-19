@@ -16,14 +16,15 @@
   </li>
 </ul>
 
-    <table class="table">
+    <table class="table table-bordered">
       <thead>
         <tr>
           <th scope="col">ID</th>
           <th scope="col">First</th>
           <th scope="col">Middle</th>
           <th scope="col">Last</th>
-          <th scope="col">Enrolled</th>
+          <th scope="col">School</th>
+          <th scope="col">Flags</th>
         </tr>
       </thead>
       <tbody>
@@ -34,12 +35,10 @@
           <td>{{student.first_name}}</td>
           <td>{{student.middle_name}}</td>
           <td>{{student.last_name}}</td>
+          <td>{{student.school}}</td>
           <td>
-            {%if student.enrolled %}
-            Yes
-            {%else%}
-            No
-            {%endif%}
+            {%if student.is_enrolled %}<span class="badge badge-success">Enrolled</span>{%endif%}
+            {%if student.is_premium %}<span class="badge badge-warning">Premium</span>{%endif%}
           </td>
         </tr>
         {% endfor %}

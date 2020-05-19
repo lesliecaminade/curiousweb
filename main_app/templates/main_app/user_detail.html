@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h1>{{user.username}}</h1>
+
+<dl class="row">
+  <dt class="col-sm-3">Username</dt>
+  <dd class="col-sm-9">{{user.username}}</dd>
+
+  <dt class="col-sm-3">Last Name</dt>
+  <dd class="col-sm-9">{{user.last_name}}</dd>
+
+  <dt class="col-sm-3">First Name</dt>
+  <dd class="col-sm-9">{{user.first_name}}</dd>
+
+  <dt class="col-sm-3">Teacher</dt>
+  <dd class="col-sm-9">{%if user.is_teacher%}<span class="badge badge-success">Yes</span>{%else%}<span class="badge badge-danger">No</span>{%endif%}</dd>
+
+  <dt class="col-sm-3">Student</dt>
+  <dd class="col-sm-9">{%if user.is_student%}<span class="badge badge-success">Yes</span>{%else%}<span class="badge badge-danger">No</span>{%endif%}</dd>
+
+  <dt class="col-sm-3">ECE</dt>
+  <dd class="col-sm-9">{%if user.is_ece%}<span class="badge badge-success">Yes</span>{%else%}<span class="badge badge-danger">No</span>{%endif%}</dd>
+
+  <dt class="col-sm-3">EE</dt>
+  <dd class="col-sm-9">{%if user.is_ee%}<span class="badge badge-success">Yes</span>{%else%}<span class="badge badge-danger">No</span>{%endif%}</dd>
+
+  <dt class="col-sm-3">Tutorial</dt>
+  <dd class="col-sm-9">{%if user.is_tutorial%}<span class="badge badge-success">Yes</span>{%else%}<span class="badge badge-danger">No</span>{%endif%}</dd>
+
+  <dt class="col-sm-3">Premium</dt>
+  <dd class="col-sm-9">{%if user.is_premium%}<span class="badge badge-success">Yes</span>{%else%}<span class="badge badge-danger">No</span>{%endif%}</dd>
+
+</dl>
+
+<a class="btn btn-primary" href="{%url 'main_app:users'%}" role="button">Back</a>
+
+{% endblock %}

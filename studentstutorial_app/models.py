@@ -2,6 +2,7 @@ from django.db import models
 from django.utils import timezone
 from django.urls import reverse
 from main_app.models import User
+from exams_app.models import ExamTicket
 
 class Subjects(models.Model):
     name = models.CharField(max_length = 100)
@@ -34,6 +35,7 @@ class StudentTutorial(models.Model):
     payment_picture = models.ImageField()
     enrolled = models.BooleanField(default = False)
     subjects_to_enroll = models.ManyToManyField(Subjects)
+
 
     def get_absolute_url(self):
         return reverse("studentstutorial_app:detail",kwargs={'pk':self.pk})

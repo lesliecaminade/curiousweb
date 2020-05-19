@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% load bootstrap4 %}
+{% block content %}
+
+<div class="container">
+  <h1>{{category_title}}</h1>
+</div>
+<hr>
+
+<div class="container">
+  {%if category_letter == 'B' %}
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item active" aria-current="page">{{folder1}}</li>
+    </ol>
+  </nav>
+
+  {%elif category_letter == 'A'%}
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="{%url 'exams_app:exams'%}">{{folder1}}</a></li>
+      <li class="breadcrumb-item active" aria-current="page">{{folder2}}</li>
+    </ol>
+  </nav>
+  {%elif category_letter == 'exam'%}
+
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="{%url 'exams_app:exams'%}">{{folder1}}</a></li>
+      <li class="breadcrumb-item"><a href="{%url 'exams_app:categorya' pk=categoryb.pk%}">{{folder2}}</a></li>
+      <li class="breadcrumb-item active" aria-current="page">{{folder3}}</li>
+    </ol>
+  </nav>
+  {%endif%}
+</div>
+
+
+
+
+<hr>
+<div class="container">
+  {%if user.is_teacher %}
+    {%if category_letter == 'B'%}
+    <a class="btn btn-warning" href="{%url 'exams_app:create_categoryb' %}" role="button">Create Main Category</a>
+    {%elif category_letter == 'A'%}
+    <a class="btn btn-warning" href="{%url 'exams_app:create_categorya' pk=categoryb.pk%}" role="button">Create Subcategory</a>
+    {%elif category_letter == 'exam'%}
+    <a class="btn btn-warning" href="{%url 'exams_app:create_exam_items_ask' pk=categorya.pk%}" role="button">Create Exam</a>
+    {%endif%}
+
+  {%endif%}
+</div>
+
+<hr>
+
+<div class="d-flex justify-content-left flex-wrap">
+{%if categories%}
+{%for category in categories %}
+
+  {% include 'exams_app/category_card.html'%}
+
+{%endfor%}
+</div>
+{%else%}
+<div class="alert alert-info" role="alert">
+  This category has no entries available.
+</div>
+{%endif%}
+
+{% endblock %}

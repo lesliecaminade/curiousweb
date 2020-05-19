@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+
+<form class="" method="post">
+  {%csrf_token%}
+  <div class="alert alert-danger" role="alert">
+    <h4 class="alert-heading">Are you sure you want to delete this?</h4>
+    <p>This action is irreversible. If you are deleting an object containing other objects, they will be deleted as well.</p>
+    <hr>
+    <a class="btn btn-primary" href="{%url 'exams_app:exams'%}" role="button">Back</a>
+    <button class="btn btn-danger" type="submit" value="Confirm">Delete</button>
+  </div>
+</form>
+
+
+{% endblock %}
