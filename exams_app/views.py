@@ -17,6 +17,8 @@ from django.shortcuts import get_object_or_404
 from datetime import datetime
 from django.http import HttpResponse, HttpResponseRedirect
 from django.utils.timezone import make_aware
+from openpyxl import Workbook
+from openpyxl import load_workbook
 
 class ExamCategoryBCreate(CreateView):
     template_name = 'exams_app/category_form.html'
@@ -81,7 +83,7 @@ class ExamCategoryBView(View):
                 categorybs = models.CategoryB.objects.none()
 
         extra_context = {
-            'category_title': 'Main Categories',
+            'category_title': 'Exams',
             'categories': categorybs,
             'category_letter': 'B',
             'folder1': 'Exams',
@@ -95,7 +97,7 @@ class ExamCategoryAView(View):
         # categoryb = models.CategoryB.objects.get(pk = self.kwargs['pk'])
         categoryb = models.CategoryB.objects.get(pk = self.kwargs['pk'])
 
-        if categoryb.is_accessible:
+        if categoryb.is_accessible or self.request.user.is_teacher:
             if not self.request.user.is_authenticated:
                 categoryas = categoryb.categoryas.all()
             else:
@@ -129,7 +131,7 @@ class ExamListView(View):
         categorya = models.CategoryA.objects.get(pk = self.kwargs['pk'])
         categoryb = categorya.categoryb_set.get()
 
-        if categorya.is_accessible:
+        if categorya.is_accessible or self.request.user.is_teacher:
             if not self.request.user.is_authenticated:
                 exams = categorya.exams.all()
             else:
@@ -147,24 +149,24 @@ class ExamListView(View):
         else:
             raise Http404()
 
-            context = {
-                'category_title': categorya.name.title(),
-                'categories': exams,
-                'category_letter': 'exam',
-                'categoryb': categoryb, #used to send the pk to the breadcrumb and links
-                'categorya': categorya, #used to send the pk to the breadcrumb and links
-                'folder1': 'Exams',
-                'folder2': categoryb.name, #this is
-                'folder3': categorya.name, #this is
-                'nav_exams': 'active',
+        context = {
+            'category_title': categorya.name.title(),
+            'categories': exams,
+            'category_letter': 'exam',
+            'categoryb': categoryb, #used to send the pk to the breadcrumb and links
+            'categorya': categorya, #used to send the pk to the breadcrumb and links
+            'folder1': 'Exams',
+            'folder2': categoryb.name, #this is
+            'folder3': categorya.name, #this is
+            'nav_exams': 'active',
 
-            }
-            return render(self.request, 'exams_app/category_list.html', context)
+        }
+        return render(self.request, 'exams_app/category_list.html', context)
 
 class ExamView(View):
     def get(self, *args, **kwargs):
         exam = models.Exam.objects.get(pk = self.kwargs['pk'])
-        if exam.is_accessible:
+        if exam.is_accessible or self.request.user.is_teacher:
             items = list(exam.items.all())
             number_of_items = len(items)
             context = {
@@ -409,3 +411,55 @@ class DeleteExamView(DeleteView):
     model = models.Exam
     success_url = reverse_lazy('exams_app:exams')
     extra_context = {'nav_exams': 'active',}
+
+class CreateExamUploadView(View):
+    def get(self, *args, **kwargs):
+        pk = int(self.kwargs['pk'])
+        template_name = 'exams_app/exam_create_upload.html'
+        return render(self.request, template_name, {'pk': pk})
+
+    def post(self, *args, **kwarg):
+
+        pk = self.request.POST.get('pk')
+
+        file = self.request.FILES['examfile']
+
+
+        new_exam = models.Exam(
+            title = self.request.POST.get('title'),
+            description = self.request.POST.get('description'),
+            author = self.request.user,
+            is_ece = bool(self.request.POST.get('is_ece')),
+            is_ee = bool(self.request.POST.get('is_ee')),
+            is_tutorial = bool(self.request.POST.get('is_tutorial')),
+            is_accessible = bool(self.request.POST.get('is_accessible'))
+        )
+        new_exam.save()
+
+        wb = load_workbook(file, read_only = True)
+        sheetnames = wb.sheetnames #this is a list of sheetnames
+        ws = wb[sheetnames[0]] #ill just take the first whatever the first sheet is
+
+        mcqs = [] #this will be the container for the mcqs for the bulk create later
+
+        for row in ws.rows:
+            new_mcq = models.MCQ(
+                question = row[0].value,
+                choice1 = row[1].value,
+                choice2 = row[2].value,
+                choice3 = row[3].value,
+                choice4 = row[4].value,
+                correct1 = True,
+                correct2 = False,
+                correct3 = False,
+                correct4 = False,
+            )
+            new_mcq.save()
+            new_exam.items.add(new_mcq)
+
+        new_exam.save()
+        categorya = models.CategoryA.objects.get(pk = pk)
+        categorya.exams.add(new_exam)
+        categorya.save()
+
+        return HttpResponseRedirect(reverse('exams_app:exams_list', kwargs = {'pk':categorya.pk}))

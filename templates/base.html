@@ -24,12 +24,11 @@
 
     <title>CERTC Online Review</title>
   </head>
-<body>
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+<body style="background-color: lightgray">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
     <div class="container">
       <a class="navbar-brand" href="{%url 'index' %}">
         <img src="/static/main_logo.png" width="30" height="30" class="d-inline-block align-top" alt="">
-        CERTC Online Review
       </a>
 
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -43,41 +42,108 @@
            <a class="nav-link {{nav_home}}" href="{%url 'index'%}"> Home</a>
          </li>
 
+         {%if not user.is_teacher %}
+         <li class="nav-item dropdown">
+                 <a class="nav-link dropdown-toggle {{nav_about_us}}" href="#" id="about_us" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                   About Us
+                 </a>
+                 <div class="dropdown-menu" aria-labelledby="about_us">
+                   <a class="dropdown-item disabled" href="#">About CERTC</a>
+                   <a class="dropdown-item disabled" href="#">Reviewers</a>
+                   <a class="dropdown-item disabled" href="#">Location</a>
+                 </div>
+          </li>
+
+         <li class="nav-item dropdown">
+                 <a class="nav-link dropdown-toggle {{nav_review}}" href="#" id="review" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                   Review Programs
+                 </a>
+                 <div class="dropdown-menu" aria-labelledby="review">
+                   <a class="dropdown-item disabled" href="#">Electronics Engineering (ECE)</a>
+                   <a class="dropdown-item disabled" href="#">Electrical Engineering (REE)</a>
+                   <a class="dropdown-item disabled" href="#">Electronics Technician (ECT)</a>
+                   <a class="dropdown-item disabled" href="#">Registered Master Electrician (RME)</a>
+
+                 </div>
+          </li>
+
+          <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle {{nav_tutorial}}" href="#" id="tutorial" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Tutorial Center
+                  </a>
+                  <div class="dropdown-menu" aria-labelledby="tutorial">
+                    <a class="dropdown-item disabled" href="#">Tutorial Center</a>
+                    <a class="dropdown-item disabled" href="#">Schedules</a>
+                  </div>
+           </li>
+
+          <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle {{nav_schedule}}" href="#" id="schedule" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Schedules
+                  </a>
+                  <div class="dropdown-menu" aria-labelledby="tutorial">
+
+                  <a class="dropdown-item disabled" href="#">Electronics Engineering (ECE)</a>
+                  <a class="dropdown-item disabled" href="#">Electrical Engineering (REE)</a>
+                  <a class="dropdown-item disabled" href="#">Electronics Technician (ECT)</a>
+                  <a class="dropdown-item disabled" href="#">Registered Master Electrician (RME)</a>
+                </div>
+           </li>
+
+           <li class="nav-item dropdown">
+                 <a class="nav-link dropdown-toggle {{nav_online_review}}" href="#" id="online_review" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                   Online Review
+                 </a>
+                 <div class="dropdown-menu" aria-labelledby="online_review">
+                   <a class="dropdown-item disabled" href="#">Electronics Engineering</a>
+                   <a class="dropdown-item disabled" href="#">Electrical Engineering</a>
+                   <a class="dropdown-item disabled" href="#">Tutorial</a>
+                   <a class="dropdown-item" href="{%url 'exams_app:exams'%}"> Exams </a>
+
+                   {%if user.is_authenticated %}
+                     <a class="dropdown-item" href="#"><p class="font-weight-bolder">{{user.username}}</p></a>
+                     <a class="dropdown-item" href="{%url 'logout'%}">Log Out</a>
+                   {% else %}
+                     <a class="dropdown-item" href="{%url 'login'%}">Log In</a>
+                   {% endif %}
+
+                 </div>
+            </li>
+
+            <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle {{nav_testimonials}}" href="#" id="testimonials" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Testimonials
+                  </a>
+                  <div class="dropdown-menu" aria-labelledby="online_review">
+                    <a class="dropdown-item disabled" href="#">Testimonials</a>
+                    <a class="dropdown-item disabled" href="#">Topnothchers</a>
+                  </div>
+             </li>
+
          <li class="nav-item">
-           <a class="nav-link {{nav_exams}}" href="{%url 'exams_app:exams'%}"> Exams </a>
+           <a class="nav-link {{nav_login}}" href="{%url 'login'%}">Login</a>
          </li>
 
          <li class="nav-item">
-           <a class="nav-link disabled" href="#"> MCQs </a>
+           <a class="btn btn-primary" href="{%url 'main_app:enroll'%}" style="background-color: maroon; border-color: maroon"> Enroll Here </a>
+         </li>
+         {%endif%}
+
+         {%if user.is_teacher %}
+         <li class="nav-item">
+           <a class="nav-link {{nav_user}}" href="#" data-toggle="tooltip" data-placement="bottom" title="{{user.username}}">User</a>
          </li>
 
-         <li class="nav-item">
-           <a class="nav-link disabled" href="#"> MCQ Premium </a>
-         </li>
+         <li class="nav-item dropdown">
+                 <a class="nav-link dropdown-toggle {{nav_admin}}" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" data-placement="bottom" title="{{user.username}}"aria-haspopup="true" aria-expanded="false">
+                   User Menu
+                 </a>
+                 <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                   <a class="dropdown-item" href="{%url 'logout'%}">Logout</a>
+                   <a class="dropdown-item" href="{%url 'main_app:change_password'%}">Change your password</a>
+                 </div>
+          </li>
 
-         <li class="nav-item">
-           <a class="nav-link disabled" href="#"> Lessons </a>
-         </li>
-
-         <li class="nav-item">
-           <a class="nav-link {{nav_enroll}}" href="{%url 'main_app:enroll'%}"> Enroll </a>
-         </li>
-
-         {%if user.is_authenticated %}
-         <li class="nav-item">
-           <a class="nav-link {{nav_user}}" href="#"> User: {{user.username}}</a>
-         </li>
-
-         <li class="nav-item">
-           <a class="nav-link " href="{%url 'logout'%}">Log Out</a>
-         </li>
-         {% else %}
-         <li class="nav-item">
-           <a class="nav-link {{nav_login}}" href="{%url 'login'%}"> Log In</a>
-         </li>
-         {% endif %}
-
-         {%if user.is_staff %}
          <li class="nav-item dropdown">
                  <a class="nav-link dropdown-toggle {{nav_admin}}" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                    Admin Menu
@@ -95,12 +161,6 @@
           </li>
 
           {%endif%}
-
-
-
-
-
-
 
        </ul>
      </div>
@@ -136,7 +196,12 @@
 <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
 <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 
+<script type="text/javascript">
+$(function () {
+$('[data-toggle="tooltip"]').tooltip()
+})
 
+</script>
 
   </body>
 </html>

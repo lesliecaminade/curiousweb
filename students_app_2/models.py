@@ -34,7 +34,6 @@ class Student(models.Model):
 
     id_picture = models.ImageField(blank = True)
     payment_picture = models.ImageField()
-    enrolled = models.BooleanField(default = False)
 
     def get_absolute_url(self):
         return reverse("students_app_2:detail",kwargs={'pk':self.pk})

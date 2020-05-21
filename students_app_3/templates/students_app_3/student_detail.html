@@ -88,7 +88,11 @@
   <div class="container">
     <a class='btn btn-primary' href="{% url 'students_app_3:list'%}">Back</a>
     <a class='btn btn-warning' href="{% url 'students_app_3:update' pk=student_details.pk %}">Update</a>
-    <a class='btn btn-danger' href="{% url 'students_app_3:delete' pk=student_details.pk %}">Delete</a>
+    {%if student_details.user.is_active%}
+    <a class='btn btn-danger' href="{% url 'students_app_3:deactivate' pk=student_details.pk %}">Deactivate</a>
+    {%else%}
+    <a class='btn btn-success' href="{% url 'students_app_3:activate' pk=student_details.pk %}">Activate</a>
+    {%endif%}
   </div>
 
 {% endblock %}

@@ -29,8 +29,6 @@
       <p class="card-text">{{category.description}}</p>
       {%endif%}
 
-
-
   {%if category_letter == 'exam'%}
     {% if user.is_enrolled and category.is_accessible or user.is_teacher %}
     <a class="btn btn-primary my-1" href="{%url 'exams_app:exam' pk=category.pk%}" role="button">Start Exam</a>
@@ -44,8 +42,6 @@
     {%else%}
     <a class="btn btn-primary disabled my-1"  role="button">Locked</a>
     {%endif%}
-
-
 
 
   {%elif category_letter == 'B'%}

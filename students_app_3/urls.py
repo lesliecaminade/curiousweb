@@ -14,4 +14,8 @@ urlpatterns = [
     path('delete/<int:pk>/',views.StudentDeleteView.as_view(),name='delete'),
     path('success/', views.StudentSuccessEnrollment.as_view(),name='success'),
     path('fail/', views.StudentFailEnrollment.as_view(),name='fail'),
+
+    path('activate/<pk>', views.StudentActivateView.as_view(), name='activate'),
+    path('deactivate/<pk>', views.StudentDeactivateView.as_view(), name='deactivate'),
+
 ]
