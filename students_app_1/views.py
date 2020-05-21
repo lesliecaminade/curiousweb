@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.urls import reverse_lazy, reverse
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.views.generic import (View,TemplateView,
                                 ListView,DetailView,
                                 DeleteView, CreateView,
@@ -21,6 +21,7 @@ from django.contrib.auth.hashers import make_password
 import requests
 import random
 import string
+
 
 class StudentSuccessEnrollment(TemplateView):
     template_name = 'students_app_1/enrollment_success.html'
@@ -100,3 +101,23 @@ class StudentDeleteView(PermissionRequiredMixin, DeleteView):
     permission_required = ('is_staff')
     model = models.Student
     success_url = reverse_lazy("students_app_1:list_all")
+
+class StudentActivateView(View):
+    def get(self, *args, **kwargs):
+        if self.request.user.is_staff:
+            pk = int(self.kwargs['pk'])
+            userpk = models.Student.objects.get(pk = pk).user.pk
+            user = models.User.objects.filter(pk = userpk).update(is_active = True)
+            return HttpResponseRedirect(reverse('students_app_1:detail', kwargs ={'pk': pk}))
+
+        raise Http404()
+
+class StudentDeactivateView(View):
+    def get(self, *args, **kwargs):
+        if self.request.user.is_staff:
+            pk = int(self.kwargs['pk'])
+            userpk = models.Student.objects.get(pk = pk).user.pk
+            user = models.User.objects.filter(pk = userpk).update(is_active = False)
+            return HttpResponseRedirect(reverse('students_app_1:detail', kwargs ={'pk': pk}))
+
+        raise Http404()

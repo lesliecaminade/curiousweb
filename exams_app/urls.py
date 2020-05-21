@@ -29,4 +29,6 @@ urlpatterns = [
     path('delete/categoryb/<pk>', views.ExamCategoryBDelete.as_view(), name='delete_categoryb'),
     path('delete/exam/<pk>', views.DeleteExamView.as_view(), name='delete_exam'),
 
+    path('upload/exam/<pk>', views.CreateExamUploadView.as_view(), name='create_exam_upload'),
+
 ]

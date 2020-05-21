@@ -103,7 +103,7 @@
 
     <tr>
       <td>Enrolled</td>
-      <td>{%if student.is_enrolled %}<span class="badge badge-success">Enrolled</span>{%else%}<span class="badge badge-danger">Not Enrolled</span>{%endif%}</td>
+      <td>{%if student_details.user.is_active %}<span class="badge badge-success">Active</span>{%else%}<span class="badge badge-danger">Inactive</span>{%endif%}</td>
     </tr>
 
   </tbody>
@@ -112,7 +112,12 @@
   <div class="container">
     <a class='btn btn-primary' href="{% url 'students_app_1:list'%}">Back</a>
     <a class='btn btn-warning' href="{% url 'students_app_1:update' pk=student_details.pk %}">Update</a>
-    <a class='btn btn-danger' href="{% url 'students_app_1:delete' pk=student_details.pk %}">Delete</a>
+    {%if student_details.user.is_active%}
+    <a class='btn btn-danger' href="{% url 'students_app_1:deactivate' pk=student_details.pk %}">Deactivate</a>
+    {%else%}
+    <a class='btn btn-success' href="{% url 'students_app_1:activate' pk=student_details.pk %}">Activate</a>
+    {%endif%}
+
   </div>
 
 {% endblock %}

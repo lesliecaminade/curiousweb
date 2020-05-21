@@ -35,7 +35,6 @@ class Student(models.Model):
     conditional_subject = models.CharField(max_length = 50) #remove for tutorial and EE
     id_picture = models.ImageField(blank = True)
     payment_picture = models.ImageField()
-    enrolled = models.BooleanField(default = False)
 
     def get_absolute_url(self):
         return reverse("students_app_1:detail",kwargs={'pk':self.pk})

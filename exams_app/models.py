@@ -3,21 +3,21 @@ from main_app.models import User
 from django.urls import reverse_lazy, reverse
 
 class MCQ(models.Model):
-    question = models.TextField(max_length = 1000, default = '')
-    choice1 = models.TextField(max_length = 500, default = '')
-    choice2 = models.TextField(max_length = 500, default = '')
-    choice3 = models.TextField(max_length = 500, default = '')
-    choice4 = models.TextField(max_length = 500, default = '')
-    correct1 = models.BooleanField(default = False)
-    correct2 = models.BooleanField(default = False)
-    correct3 = models.BooleanField(default = False)
-    correct4 = models.BooleanField(default = False)
+    question = models.TextField(max_length = 1000, default = '', null = True, blank = True)
+    choice1 = models.TextField(max_length = 500, default = '', null = True, blank = True)
+    choice2 = models.TextField(max_length = 500, default = '', null = True, blank = True)
+    choice3 = models.TextField(max_length = 500, default = '', null = True, blank = True)
+    choice4 = models.TextField(max_length = 500, default = '', null = True, blank = True)
+    correct1 = models.BooleanField(default = False, null = True, blank = True)
+    correct2 = models.BooleanField(default = False, null = True, blank = True)
+    correct3 = models.BooleanField(default = False, null = True, blank = True)
+    correct4 = models.BooleanField(default = False, null = True, blank = True)
     image = models.ImageField(blank = True, null = True)
     image1 = models.ImageField(blank = True, null = True)
     image2 = models.ImageField(blank = True, null = True)
     image3 = models.ImageField(blank = True, null = True)
     image4 = models.ImageField(blank = True, null = True)
-    explanation = models.TextField(max_length = 1000)
+    explanation = models.TextField(max_length = 1000, default = '')
 
     def get_absolute_url(self):
         return reverse("exams_app:mcq_detail",kwargs={'pk':self.pk})

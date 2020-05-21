@@ -3,59 +3,35 @@
 
   <div class="card-body">
   <div class="form-group">
-    <label for="question_{{i}}">Question</label>
     <textarea name= "question_{{i}}" class="form-control" id="question_{{i}}" rows="3" placeholder="Question"></textarea>
   </div>
 
   <hr>
-  <div class="form-group">
-    <label for="question_{{i}}_choice_1">Choice 1</label>
-    <textarea name="question_{{i}}_choice_1" class="form-control" id="question_{{i}}_choice_1" rows="1" placeholder="Choice 1"></textarea>
-  </div>
-  <div class="custom-control custom-radio">
-    <input type="radio" id="question_{{forloop.counter}}_radio1" name="question_{{i}}_choice_correct" class="custom-control-input" value="1" checked>
-    <label class="custom-control-label" for="question_{{forloop.counter}}_radio1">Correct Choice 1</label>
-  </div>
+
+<div class="container">
+<input class="form-check-input" type="radio" name="question_{{i}}_choice_correct" id="question_{{i}}_choice_1_correct" value="1" checked>
+<textarea name="question_{{i}}_choice_1" class="form-control" id="question_{{i}}_choice_1" rows="1" placeholder="Choice 1"></textarea>
+</div>
 
 
+<div class="container">
+<input class="form-check-input" type="radio" name="question_{{i}}_choice_correct" id="question_{{i}}_choice_2_correct" value="2">
+<textarea name="question_{{i}}_choice_2" class="form-control" id="question_{{i}}_choice_2" rows="1" placeholder="Choice 2"></textarea>
+</div>
 
-  <hr>
-  <div class="form-group">
-    <label for="question_{{i}}_choice_2">Choice 2</label>
-    <textarea name="question_{{i}}_choice_2" class="form-control" id="question_{{i}}_choice_2" rows="1" placeholder="Choice 2"></textarea>
-  </div>
-  <div class="custom-control custom-radio">
-    <input type="radio" id="question_{{forloop.counter}}_radio2" name="question_{{i}}_choice_correct" class="custom-control-input" value="2">
-    <label class="custom-control-label" for="question_{{forloop.counter}}_radio2">Correct Choice 2</label>
-  </div>
+<div class="container">
+<input class="form-check-input" type="radio" name="question_{{i}}_choice_correct" id="question_{{i}}_choice_3_correct" value="3">
+<textarea name="question_{{i}}_choice_3" class="form-control" id="question_{{i}}_choice_3" rows="1" placeholder="Choice 3"></textarea>
+</div>
 
+<div class="container">
+<input class="form-check-input" type="radio" name="question_{{i}}_choice_correct" id="question_{{i}}_choice_2_correct" value="4">
+<textarea name="question_{{i}}_choice_4" class="form-control" id="question_{{i}}_choice_4" rows="1" placeholder="Choice 4"></textarea>
+</div>
 
-  <hr>
-  <div class="form-group">
-    <label for="question_{{i}}_choice_3">Choice 3</label>
-    <textarea name="question_{{i}}_choice_3" class="form-control" id="question_{{i}}_choice_3" rows="1" placeholder="Choice 1"></textarea>
-  </div>
-  <div class="custom-control custom-radio">
-    <input type="radio" id="question_{{forloop.counter}}_radio3" name="question_{{i}}_choice_correct" class="custom-control-input" value="3">
-    <label class="custom-control-label" for="question_{{forloop.counter}}_radio3">Correct Choice 3</label>
-  </div>
-
-
-<hr>
-  <div class="form-group">
-    <label for="question_{{i}}_choice_4">Choice 4</label>
-    <textarea name="question_{{i}}_choice_4" class="form-control" id="question_{{i}}_choice_4" rows="1" placeholder="Choice 1"></textarea>
-  </div>
-  <div class="custom-control custom-radio">
-    <input type="radio" id="question_{{forloop.counter}}_radio4" name="question_{{i}}_choice_correct" class="custom-control-input" value="4">
-    <label class="custom-control-label" for="question_{{forloop.counter}}_radio4">Correct Choice 4</label>
-  </div>
-
-  <hr>
-    <div class="form-group">
-      <label for="question_{{i}}_explanation">Explanation</label>
-      <textarea name="question_{{i}}_explanation" class="form-control" id="question_{{i}}_explanation" rows="1" placeholder="Explanation"></textarea>
-    </div>
+<div class="container">
+  <textarea name="question_{{i}}_explanation" class="form-control" id="question_{{i}}_explanation" rows="1" placeholder="Explanation"></textarea>
+</div>
 
   <div class="form-group">
     <button class="btn btn-secondary" type="button" data-toggle="collapse" data-target="#question_{{i}}_attach_images_id" aria-expanded="false" aria-controls="collapseExample">

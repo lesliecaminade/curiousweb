@@ -12,6 +12,7 @@ from django.contrib.auth.mixins import(
 )
 from . import models
 from . import forms
+from django.contrib import messages
 
 # Create your views here.
 class IndexView(TemplateView):
@@ -54,3 +55,22 @@ class UserView(View):
             return render(self.request, template_name, context)
         else:
             return HttpResponseRedirect(reverse('login'))
+
+class ChangePasswordView(View):
+    def get(self, *args, **kwargs):
+        template = 'main_app/change_password.html'
+        return render(self.request, template)
+
+    def post(self, *args, **kwargs):
+        password = self.request.POST.get('password')
+        confirm_password = self.request.POST.get('confirm_password')
+        if password == confirm_password:
+            user = self.request.user
+            user.set_password(password)
+            user.save()
+            return HttpResponseRedirect(reverse('index'))
+        else:
+            return render(self.request, 'main_app/basic_feedback', {
+                'title': 'Passwords do not match',
+                'description': 'Please press Back on you browser to try again.',
+            } )

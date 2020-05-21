@@ -26,7 +26,7 @@
           <td><a href="{%url 'students_app_3:detail' pk=student.pk%}" class="btn btn-primary">Details</a></td>
           <td>
 
-            {%if student.is_enrolled %}<span class="badge badge-success">Enrolled</span>{%else%}<span class="badge badge-danger">Not Enrolled</span>{%endif%}
+            {%if student.user.is_active %}<span class="badge badge-success">Active</span>{%else%}<span class="badge badge-danger">Inactive</span>{%endif%}
             {%if student.is_premium %}<span class="badge badge-warning">Premium</span>{%endif%}
           </td>
         </tr>

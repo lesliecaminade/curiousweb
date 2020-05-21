@@ -88,13 +88,19 @@
 
     <tr>
       <td>ID Picture</td>
+      {%if student_details.id_picture%}
       <td><img src="{{student_details.id_picture.url}}" alt="" height="300"></td>
+      {%endif%}
     </tr>
 
     <tr>
       <td>Proof of Payment</td>
+      {%if student_details.payment_picture%}
       <td><img src="{{student_details.payment_picture.url}}" alt="" height='300'></td>
+      {%endif%}
+
     </tr>
+
 
     <tr>
       <td>Enrolled</td>
@@ -107,7 +113,10 @@
   <div class="container">
     <a class='btn btn-primary' href="{% url 'students_app_2:list'%}">Back</a>
     <a class='btn btn-warning' href="{% url 'students_app_2:update' pk=student_details.pk %}">Update</a>
-    <a class='btn btn-danger' href="{% url 'students_app_2:delete' pk=student_details.pk %}">Delete</a>
-  </div>
+    {%if student_details.user.is_active%}
+    <a class='btn btn-danger' href="{% url 'students_app_2:deactivate' pk=student_details.pk %}">Deactivate</a>
+    {%else%}
+    <a class='btn btn-success' href="{% url 'students_app_2:activate' pk=student_details.pk %}">Activate</a>
+    {%endif%}  </div>
 
 {% endblock %}
