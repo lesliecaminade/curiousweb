@@ -35,15 +35,15 @@ def create_random_mcqs(n = 100):
     many_mcqs = MCQ.objects.bulk_create(mcqs)
 
 def set_user_flags(username):
-    superuser = User.objects.get(username = username)
-    superuser.is_teacher = True
-    superuser.is_ece = True
-    superuser.is_ee = True
-    superuser.is_tutorial = True
-    superuser.is_premium = True
-    superuser.is_student = True
-    superuser.is_enrolled = True
-    superuser.save()
+    superuser = User.objects.filter(username = username).update(
+        is_teacher = True,
+        is_ece = True,
+        is_ee = True,
+        is_tutorial = True,
+        is_premium = True,
+        is_student = True,
+        is_enrolled = True,
+    )
 
 def create_test_superuser():
     superuser = User(

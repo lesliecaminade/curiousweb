@@ -1,0 +1,56 @@
+<div class="card my-2" style ="font-family: courier; font-weight: bold;">
+  <div class="card-header">
+    Item {{forloop.counter}}
+  </div>
+  <div class="card-body">
+    <h5 class="card-title">{{item.question}}</h5>
+    <!-- <p class="card-text">With supporting text below as a natural lead-in to additional content.</p> -->
+    <!-- <a href="#" class="btn btn-primary">Go somewhere</a> -->
+
+    {%if item.image%}
+    <div class="container col-8">
+      <img src="{{item.image.url}}" class="img-fluid" alt="Responsive image">
+    </div>
+    {% endif%}
+
+    <hr>
+
+
+    <table>
+
+    </table>
+    {%for choice in item.choices.all %}
+        <tr>
+          <td>        {%if choice.correct %}
+                  <div class="container" style="background-color: lightgray">
+                    <p>{{choice.content}}</p>
+                  </div>
+                  {%else%}
+                  <div class="container">
+                    <p>{{choice.content}}</p>
+                  </div>
+                  {%endif%}
+            </td>
+
+            <td>      {%if choice.image %}
+                  <div class="container col-8">
+                    <img src="{{choice.image.url}}" class="img-fluid" alt="Responsive image">
+                  </div>
+                  {% endif%}
+
+                </td>
+        </tr>
+
+
+
+
+
+
+
+    {%endfor%}
+
+
+
+
+  </div>
+</div>
