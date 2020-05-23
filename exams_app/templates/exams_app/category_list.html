@@ -40,7 +40,7 @@
     {%elif category_letter == 'A'%}
     <a class="btn btn-warning" href="{%url 'exams_app:create_categorya' pk=categoryb.pk%}" role="button">Create Subcategory</a>
     {%elif category_letter == 'exam'%}
-    <a class="btn btn-warning" href="{%url 'exams_app:create_exam_items_ask' pk=categorya.pk%}" role="button">Create Exam Manually</a>
+    <a class="btn btn-warning" href="{%url 'exams_app:create_exam_manual' pk=categorya.pk%}" role="button">Create Exam Manually</a>
     <a class="btn btn-warning" href="{%url 'exams_app:create_exam_upload' pk=categorya.pk%}" role="button">Upload Exam using Excel / CSV file</a>
     {%endif%}
     <hr>

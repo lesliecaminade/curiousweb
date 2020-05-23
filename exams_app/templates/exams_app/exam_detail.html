@@ -10,10 +10,11 @@
 {%endif%}
 
 <hr class = 'my-4'>
-<input type="hidden" name="number_of_items" value="{{number_of_items}}">
-<input type="hidden" name="exam_pk" value="{{exam_pk}}">
+<input type="hidden" name="categoryapk" value="{{categoryapk}}">
+<input type="hidden" name="exampk" value="{{exampk}}">
+<input type="hidden" name="ticketpk" value="{{ticketpk}}">
 
-{% for item in items %}
+{% for item in exam.items.all %}
 {%include "exams_app/item_detail.html" %}
 {%endfor%}
 

@@ -3,111 +3,85 @@
 <h1 class="display-4">Student Details</h1>
 
 
-<table class="table table-bordered">
-  <tbody>
-    <tr>
-      <td>Student ID</td>
-      <td>{{student_details.id}}</td>
-    </tr>
-    <tr>
-      <td>Name</td>
-      <td>{{student_details.last_name}}, {{student_details.first_name}}, {{student_details.middle_name}}</td>
-    </tr>
-    <tr>
-      <td>Birthday</td>
-      <td>{{student_details.birthdate}}</td>
-    </tr>
-    <tr>
-      <td>Address</td>
-      <td>{{student_details.address}}</td>
-    </tr>
-    <tr>
-      <td>Religion</td>
-      <td>{{student_details.religion}}</td>
-    </tr>
-    <tr>
-      <td>Mobile Number</td>
-      <td>{{student_details.mobile_number}}</td>
-    </tr>
-    <tr>
-      <td>Facebook Username</td>
-      <td>{{student_details.facebook_username}}</td>
-    </tr>
-    <tr>
-      <td>Email</td>
-      <td>{{student_details.email}}</td>
-    </tr>
-    <tr>
-      <td>Gender</td>
-      <td>{{student_details.gender}}</td>
-    </tr>
-    <tr>
-      <td>School</td>
-      <td>{{student_details.school}}</td>
-    </tr>
-    <tr>
-      <td>Date Graduated</td>
-      <td>{{student_details.date_graduated}}</td>
-    </tr>
-    <tr>
-      <td>Honors</td>
-      <td>{{student_details.honors}}</td>
-    </tr>
-    <tr>
-      <td>Officer Position</td>
-      <td>{{student_details.officer_position}}</td>
-    </tr>
-    <tr>
-      <td>Scholarships</td>
-      <td>{{student_details.scholarships}}</td>
-    </tr>
-    <tr>
-      <td>Contact Person</td>
-      <td>{{student_details.last_name_contact_person}}, {{student_details.first_name_contact_person}}, {{student_details.middle_name_contact_person}}</td>
-    </tr>
+{%if id_picture_url %}
+<img src="{{id_picture_url}}" alt="" height="300">
+{%else%}
+<p>No available ID picture</p>
+{%endif%}
 
-    <tr>
-      <td>Contact Person Address</td>
-      <td>{{student_details.address_contact_person}}</td>
-    </tr>
+<dl class="row">
+  <dt class="col-3">Name</dt>
+  <dd class="col-9">{{student_details.last_name}}, {{student_details.first_name}}, {{student_details.middle_name}}{%if student_details.user.is_active %}   <span class="badge badge-success">Active</span>{%else%}<span class="badge badge-danger">Inactive</span>{%endif%}</dd>
 
-    <tr>
-      <td>Contact Person Mobile Number</td>
-      <td>{{student_details.mobile_number_contact_person}}</td>
-    </tr>
+  <dt class="col-3">Username</dt>
+  <dd class="col-9"><a href="{%url 'main_app:user' pk=student_details.user.pk%}">{{student_details.user.username}}</a></dd>
 
-    <tr>
-      <td>Review Status</td>
-      <td>{{student_details.review_status}}</td>
-    </tr>
+  <dt class="col-3">Email</dt>
+  <dd class="col-9">{{student_details.user.email}}</dd>
 
-    <tr>
-      <td>Conditional Subject</td>
-      <td>{{student_details.conditional_subject}}</td>
-    </tr>
+  <dt class="col-3">Birthday</dt>
+  <dd class="col-9">{{student_details.birthdate}}</dd>
 
-    <tr>
-      <td>ID Picture</td>
-      {%if student_details.id_picture%}
-      <td><img src="{{student_details.id_picture.url}}" alt="" height="300"></td>
-      {%endif%}
-    </tr>
+  <dt class="col-3">Address</dt>
+  <dd class="col-9">{{student_details.address}}</dd>
 
-    <tr>
-      <td>Proof of Payment</td>
-      {%if student_details.payment_picture%}
-      <td><img src="{{student_details.payment_picture.url}}" alt="" height='300'></td>
-      {%endif%}
+  <dt class="col-3">Religion</dt>
+  <dd class="col-9">{{student_details.religion}}</dd>
 
-    </tr>
+  <dt class="col-3">Mobile Number</dt>
+  <dd class="col-9">{{student_details.mobile_number}}</dd>
 
-    <tr>
-      <td>Enrolled</td>
-      <td>{%if student_details.user.is_active %}<span class="badge badge-success">Active</span>{%else%}<span class="badge badge-danger">Inactive</span>{%endif%}</td>
-    </tr>
+  <dt class="col-3">Facebook</dt>
+  <dd class="col-9">{{student_details.facebook_username}}</dd>
 
-  </tbody>
-</table>
+  <dt class="col-3">Gender</dt>
+  <dd class="col-9">{{student_details.gender}}</dd>
+
+  <dt class="col-3">School</dt>
+  <dd class="col-9">{{student_details.school}}</dd>
+
+  <dt class="col-3">Date Graduated</dt>
+  <dd class="col-9">{{student_details.date_graduated}}</dd>
+
+  <dt class="col-3">Honors</dt>
+  <dd class="col-9">{{student_details.honors}}</dd>
+
+  <dt class="col-3">Officer Position</dt>
+  <dd class="col-9">{{student_details.officer_position}}</dd>
+
+  <dt class="col-3">Scholarships</dt>
+  <dd class="col-9">{{student_details.scholarships}}</dd>
+
+  <dt class="col-3">Contact Person</dt>
+  <dd class="col-9">{{student_details.last_name_contact_person}}, {{student_details.first_name_contact_person}}, {{student_details.middle_name_contact_person}}</dd>
+
+  <dt class="col-3">Contact Person Address</dt>
+  <dd class="col-9">{{student_details.address_contact_person}}</dd>
+
+  <dt class="col-3">Contact Person Mobile Number</dt>
+  <dd class="col-9">{{student_details.mobile_number_contact_person}}</dd>
+
+  <dt class="col-3">Review Status</dt>
+  <dd class="col-9">{{student_details.review_status}}</dd>
+
+  <dt class="col-3">Condition Subject</dt>
+  <dd class="col-9">{{student_details.conditional_subject}}</dd>
+
+  <dt class="col-3">Proof of Payment</dt>
+  <dd class="col-9"><img src="{{student_details.payment_picture.url}}" alt="" height='300'></dd>
+
+
+  <hr>
+  <dt class="col-sm-3">Exams Taken</dt>
+  <dd class="col-sm-9">
+    {%for ticket in tickets %}
+      {{ticket}}<br>
+    {%endfor%}
+  </dd>
+
+
+</dl>
+
 
   <div class="container">
     <a class='btn btn-primary' href="{% url 'students_app_1:list'%}">Back</a>

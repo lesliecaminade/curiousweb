@@ -13,6 +13,7 @@ from django.contrib.auth.mixins import(
 from . import models
 from . import forms
 from django.contrib import messages
+import exams_app
 
 # Create your views here.
 class IndexView(TemplateView):
@@ -46,9 +47,11 @@ class UserListView(View):
 class UserView(View):
     def get(self, *args, **kwargs):
         user = models.User.objects.get(pk = self.kwargs['pk'])
+        tickets = exams_app.models.ExamTicket.objects.filter(user = user)
         context = {
             'user': user,
             'nav_admin': 'active',
+            'tickets': tickets,
         }
         template_name = 'main_app/user_detail.html'
         if self.request.user.is_teacher:

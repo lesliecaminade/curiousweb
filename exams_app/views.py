@@ -30,9 +30,6 @@ class ExamCategoryBCreate(CreateView):
     }
 
 class ExamCategoryACreate(View):
-
-    success_url = reverse_lazy('exams_app:exams')
-
     def get(self, *args, **kwargs):
         categorybpk = self.kwargs['pk']
         template_name = 'exams_app/category_form.html'
@@ -97,7 +94,7 @@ class ExamCategoryAView(View):
         # categoryb = models.CategoryB.objects.get(pk = self.kwargs['pk'])
         categoryb = models.CategoryB.objects.get(pk = self.kwargs['pk'])
 
-        if categoryb.is_accessible or self.request.user.is_teacher:
+        if categoryb.is_accessible or self.request.user.is_teacher or self.request.user.is_staff:
             if not self.request.user.is_authenticated:
                 categoryas = categoryb.categoryas.all()
             else:
@@ -131,7 +128,7 @@ class ExamListView(View):
         categorya = models.CategoryA.objects.get(pk = self.kwargs['pk'])
         categoryb = categorya.categoryb_set.get()
 
-        if categorya.is_accessible or self.request.user.is_teacher:
+        if categorya.is_accessible or self.request.user.is_teacher or self.request.user.is_staff:
             if not self.request.user.is_authenticated:
                 exams = categorya.exams.all()
             else:
@@ -165,213 +162,156 @@ class ExamListView(View):
 
 class ExamView(View):
     def get(self, *args, **kwargs):
-        exam = models.Exam.objects.get(pk = self.kwargs['pk'])
-        if exam.is_accessible or self.request.user.is_teacher:
-            items = list(exam.items.all())
-            number_of_items = len(items)
-            context = {
-                'exam': exam,
-                'items': items,
-                'number_of_items': number_of_items,
-                'exam_pk': self.kwargs['pk'],
-                'nav_exams': 'active',
-            }
-            return render(self.request, 'exams_app/exam_detail.html', context)
-        else:
-            raise Http404()
+        categoryapk = int(self.kwargs['categoryapk'])
+        exam = models.Exam.objects.get(pk = int(self.kwargs['exampk']))
+        exampk = int(self.kwargs['exampk'])
+        if self.request.user.is_authenticated:
+            if exam.is_accessible or self.request.user.is_staff or self.request.user.is_teacher:
+                ticket = models.ExamTicket.objects.create(
+                    user = self.request.user,
+                    date_start = datetime.now(),
+                    exam = exam,
+                )
+                ticket.save()
+                ticketpk = ticket.pk
+
+                template_name = 'exams_app/exam_detail.html'
+                context = {
+                    'exam': exam,
+                    'categoryapk': categoryapk,
+                    'exampk': exampk,
+                    'ticketpk' : ticketpk,
+                    }
+                return render(self.request, template_name, context)
 
     def post(self, *args, **kwargs):
-        #answers in self.request.POST['question_n_selected_answer']
-        #with values ranging from 1 to 4
-        exam_pk = self.request.POST.get('exam_pk')
-        exam = models.Exam.objects.get(pk = exam_pk)
-        items = exam.items.all()
+        categoryapk = int(self.request.POST.get('categoryapk'))
+        exampk = int(self.request.POST.get('exampk'))
+        ticketpk = int(self.request.POST.get('ticketpk'))
+        exam = models.Exam.objects.get(pk = exampk) #read only
+        ticket = models.ExamTicket.objects.get(pk = ticketpk)
+        score = 0
 
-        selected_answers = []
+        for item in exam.items.all():
+            itempk = item.pk
+            for choice in item.choices.all():
+                choicepk = choice.pk
+                #radio buttons contain values, their values would be the pk of the choices
+                if choice.correct and int(self.request.POST.get('item_' + str(itempk) + '_answer')) == int(choice.pk):
+                    score = score + 1
+                    ticket.answers.add(choice)
+                if bool(self.request.POST.get('item_' + str(itempk) + '_choice_' + str(choicepk))):
+                    ticket.answers.add(choice)
 
-        number_of_items = int(self.request.POST['number_of_items'])
-        for i in range(1, number_of_items + 1):
-            try:
-                name_to_query = f"""question_{i}_selected_answer"""
-                selected_answers.append(self.request.POST[name_to_query])
-            except:
-                selected_answers.append(99) #99 means no answer
+        ticket = models.ExamTicket.objects.filter(pk = ticketpk).update(
+            score = score,
+            items = exam.items.all().count(),
+            percentage = (score / exam.items.all().count()) * 100,
+            date_finish = datetime.now()
+            )
 
-        counter = 0
-        correct_answer_count = 0
-        for item in items:
-            if item.correct1 == True and int(selected_answers[counter]) == 1:
-                #compare the selected answers to the correct answers
-                correct_answer_count = correct_answer_count + 1
-
-            if item.correct2 == True and int(selected_answers[counter]) == 2:
-                #compare the selected answers to the correct answers
-                correct_answer_count = correct_answer_count + 1
-
-            if item.correct3 == True and int(selected_answers[counter]) == 3:
-                #compare the selected answers to the correct answers
-                correct_answer_count = correct_answer_count + 1
-
-            if item.correct4 == True and int(selected_answers[counter]) == 4:
-                #compare the selected answers to the correct answers
-                correct_answer_count = correct_answer_count + 1
-            counter = counter + 1
+        return HttpResponseRedirect(reverse('exams_app:exam_result', kwargs = {
+            'categoryapk': categoryapk,
+            'exampk': exampk,
+            'ticketpk': ticketpk,
+        }))
 
 
-        ticket = models.ExamTicket.objects.create(
-            exam = exam,
-            date_taken = make_aware(datetime.now()),
-            score = correct_answer_count,
-            percentage = round((correct_answer_count / number_of_items) * 100,2),
-            user = self.request.user,
-            items = number_of_items,
-        )
-
-        return HttpResponseRedirect(reverse('exams_app:exam_result', kwargs = {'pk': ticket.pk}))
-
-class ExamTicketView(DetailView):
-    template_name = 'exams_app/exam_ticket.html'
-    model = models.ExamTicket
-    context_object_name = 'ticket'
-    extra_context = {'nav_exams': 'active',}
-
-
-class CreateExamSuccessView(TemplateView):
-    extra_context = {'nav_exams': 'active',}
-    template_name = 'exams_app/exam_create_success.html'
-
-class CreateExamItemsAskView(View):
+class ExamTicketView(View):
     def get(self, *args, **kwargs):
-        categoryapk = self.kwargs['pk']
-        template_name = 'exams_app/exam_create_items_ask.html'
+        categoryapk = self.kwargs['categoryapk']
+        exampk = self.kwargs['exampk']
+        ticketpk = self.kwargs['ticketpk']
+        ticket = models.ExamTicket.objects.get(pk = ticketpk)
+
+        template_name = 'exams_app/exam_ticket.html'
+        context = {
+            'ticket': ticket,
+            'categoryapk': categoryapk,
+            'exampk': exampk,
+            'ticketpk': ticketpk,
+        }
+
+        return render(self.request, template_name, context)
+
+class CreateExamManual(View):
+    def get(self, *args, **kwargs):
+        categoryapk = int(self.kwargs['pk'])
+        template_name = 'exams_app/create_exam_manual.html'
         context = {
             'categoryapk': categoryapk,
-            'nav_exams': 'active',
         }
         return render(self.request, template_name, context)
 
     def post(self, *args, **kwargs):
-        categoryapk = self.request.POST.get('categoryapk')
-        items = int(self.request.POST.get('items'))
-        return HttpResponseRedirect(reverse('exams_app:create_exam', kwargs = {'items': items, 'pk': categoryapk,}))
-
-class CreateExamView(View):
-    def get(self, *args, **kwargs):
-        template_name = 'exams_app/exam_form.html'
-        if self.kwargs['items'] is not None:
-            #if the previous page specified number of items
-            items = int(self.kwargs['items'])
-        else:
-            items = 100
-
-        categorya_pk = self.kwargs['pk']
-
-        context = {
-            'items': [i for i in range(1, items + 1)],
-            'categorya_pk': categorya_pk,
-            'nav_exams': 'active',
-        }
-        return render(self.request, template_name, context)
-
-    def post(self, *args, **kwargs):
-
-        mcq_ids = []
-        #this will be a temporary container for the ids
-        #of the mcqs that will be created
-        title = self.request.POST.get('title')
-        description = self.request.POST.get('description')
-        items = int(self.kwargs['items'])
-        categorya_pk = int(self.request.POST.get('categorya_pk'))
-
-        new_exam = models.Exam(
-            title = title,
-            description = description,
-            author = self.request.user,
+        exam = models.Exam.objects.create(
+            title = str(self.request.POST.get('title')),
+            description = str(self.request.POST.get('description')),
             is_ece = bool(self.request.POST.get('is_ece')),
             is_ee = bool(self.request.POST.get('is_ee')),
             is_tutorial = bool(self.request.POST.get('is_tutorial')),
-            is_accessible = bool(self.request.POST.get('is_accessible'))
+            is_accessible = bool(self.request.POST.get('is_accessible')),
+            author = self.request.user,
         )
-        new_exam.save()
+        exam.save()
 
-        categorya = models.CategoryA.objects.get(pk = categorya_pk)
-        categorya.exams.add(new_exam)
+        categoryapk = int(self.request.POST.get('categoryapk'))
+        categorya = models.CategoryA.objects.get(pk = categoryapk)
+        categorya.exams.add(exam)
+        return HttpResponseRedirect(reverse('exams_app:create_exam_manual_add_item', kwargs = {'exampk': exam.pk, 'categoryapk': categoryapk,}))
 
-        #create an mcq instance for every mcq created on the form
-        for i in range(1, items + 1):
-            question = self.request.POST['question_' + str(i)]
-            correct = int(self.request.POST['question_' + str(i) + '_choice_correct'])
+class CreateExamManualAddItem(View):
+    def get(self, *args, **kwargs):
+        template_name = 'exams_app/exam_form.html'
+        exampk = int(self.kwargs['exampk'])
+        exam = models.Exam.objects.get(pk = exampk)
 
-            correct1 = False
-            correct2 = False
-            correct3 = False
-            correct4 = False
+        categoryapk = int(self.kwargs['categoryapk'])
+        context = {
+            'exampk': exampk,
+            'categoryapk': categoryapk,
+            'exam': exam,
+        }
+        return render(self.request, template_name, context)
 
-            if correct == 1:
-                correct1 = True
-            elif correct == 2:
-                correct2 = True
-            elif correct == 3:
-                correct3 == True
-            elif correct == 4:
-                correct4 == True
+    def post(self, *args, **kwargs):
+        exampk = int(self.request.POST.get('exampk'))
+        categoryapk = int(self.request.POST.get('categoryapk'))
 
-            choice1 = self.request.POST['question_' + str(i) + '_choice_1']
-            choice2 = self.request.POST['question_' + str(i) + '_choice_2']
-            choice3 = self.request.POST['question_' + str(i) + '_choice_3']
-            choice4 = self.request.POST['question_' + str(i) + '_choice_4']
-
-            explanation = self.request.POST['question_' + str(i) + '_explanation']
-
-            try:
-                image = self.request.FILES['question_' + str(i) + '_main_image']
-            except:
-                image = None
-            try:
-                image1 = self.request.FILES['question_' + str(i) + '_choice_1_image']
-            except:
-                image1 = None
-            try:
-                image2 = self.request.FILES['question_' + str(i) + '_choice_2_image']
-            except:
-                image2 = None
-            try:
-                image3 = self.request.FILES['question_' + str(i) + '_choice_3_image']
-            except:
-                image3 = None
-            try:
-                image4 = self.request.FILES['question_' + str(i) + '_choice_4_image']
-            except:
-                image4 = None
-
-            new_mcq = models.MCQ(
-                question = question,
-                choice1 = choice1,
-                choice2 = choice2,
-                choice3 = choice3,
-                choice4 = choice4,
-                explanation = explanation,
-                correct1 = correct1,
-                correct2 = correct2,
-                correct3 = correct3,
-                correct4 = correct4,
-                image = image,
-                image1 = image1,
-                image2 = image2,
-                image3 = image3,
-                image4 = image4,
+        try:
+            question = models.MCQ.objects.create(
+                question = self.request.POST.get('question'),
+                image = self.request.FILES['image'],
+                )
+        except:
+            question = models.MCQ.objects.create(
+                question = self.request.POST.get('question'),
             )
+        question.save()
 
+        letters = ['a', 'b', 'c', 'd']
+        for letter in letters:
+            try:
+                choice = models.Choice.objects.create(
+                    content = self.request.POST.get('choice_' + letter),
+                    correct = bool(self.request.POST.get('choice_' + letter + '_correct')),
+                    image = self.request.FILES['choice_' + letter + '_image'],
+                    explanation = self.request.POST.get('choice_' + letter + '_explanation'),
+                )
 
-            #also add and save the question to the new_exam
-            new_mcq.save()
-            new_exam.items.add(new_mcq)
+            except:
+                choice = models.Choice.objects.create(
+                    content = self.request.POST.get('choice_' + letter ),
+                    correct = bool(self.request.POST.get('choice_' + letter + '_correct')),
+                    explanation = self.request.POST.get('choice_' + letter + '_explanation'),
+                )
+            choice.save()
+            question.choices.add(choice)
 
-        #finally commit the saves to the database
-        new_exam.save()
-        categorya.save()
+        exam = models.Exam.objects.get(pk = exampk)
+        exam.items.add(question)
 
-        return HttpResponseRedirect(reverse('exams_app:exams_list', kwargs = {'pk':categorya.pk}))
+        return HttpResponseRedirect(reverse('exams_app:create_exam_manual_add_item', kwargs = {'exampk': exampk, 'categoryapk': categoryapk,}))
 
 class ExamCategoryAUpdate(UpdateView):
     template_name = 'exams_app/category_form.html'
@@ -387,12 +327,95 @@ class ExamCategoryBUpdate(UpdateView):
     success_url = reverse_lazy('exams_app:exams')
     extra_context = {'nav_exams': 'active',}
 
-class UpdateExamView(UpdateView):
-    template_name = 'exams_app/category_form.html'
-    model = models.Exam
-    fields = '__all__'
-    success_url = reverse_lazy('exams_app:exams')
-    extra_context = {'nav_exams': 'active',}
+class UpdateExamView(View):
+    def get(self, *args, **kwargs):
+        if self.request.user.is_authenticated:
+            if self.request.user.is_staff or self.request.user.is_teacher:
+                categoryapk = int(self.kwargs['categoryapk'])
+                exampk = int(self.kwargs['exampk'])
+                template_name = 'exams_app/update_exam.html'
+                exam = models.Exam.objects.get(pk = exampk)
+                context = {
+                    'categoryapk': categoryapk,
+                    'exampk': exampk,
+                    'exam': exam,
+                }
+                return render(self.request, template_name, context)
+
+    def post(self, *args, **kwargs):
+        categoryapk = int(self.request.POST.get('categoryapk'))
+        return HttpResponseRedirect(reverse('exams_app:exams_list', kwargs = {
+            'pk': categoryapk,
+        }))
+
+
+class DeleteItemView(View):
+    def get(self, *args, **kwargs):
+        itempk = int(self.kwargs['itempk'])
+        categoryapk = int(self.kwargs['categoryapk'])
+        exampk = int(self.kwargs['exampk'])
+
+        item = models.MCQ.objects.get(pk = itempk)
+        item.delete()
+
+        return HttpResponseRedirect(reverse('exams_app:update_exam', kwargs = {
+            'categoryapk': categoryapk,
+            'exampk': exampk,
+        }))
+
+class UpdateExamManualAddItemView(View):
+    def get(self, *args, **kwargs):
+        template_name = 'exams_app/exam_form.html'
+        exampk = int(self.kwargs['exampk'])
+        exam = models.Exam.objects.get(pk = exampk)
+
+        categoryapk = int(self.kwargs['categoryapk'])
+        context = {
+            'exampk': exampk,
+            'categoryapk': categoryapk,
+            'exam': exam,
+        }
+        return render(self.request, template_name, context)
+
+    def post(self, *args, **kwargs):
+        exampk = int(self.request.POST.get('exampk'))
+        categoryapk = int(self.request.POST.get('categoryapk'))
+
+        try:
+            question = models.MCQ.objects.create(
+                question = self.request.POST.get('question'),
+                image = self.request.FILES['image'],
+                )
+        except:
+            question = models.MCQ.objects.create(
+                question = self.request.POST.get('question'),
+            )
+        question.save()
+
+        letters = ['a', 'b', 'c', 'd']
+        for letter in letters:
+            try:
+                choice = models.Choice.objects.create(
+                    content = self.request.POST.get('choice_' + letter),
+                    correct = bool(self.request.POST.get('choice_' + letter + '_correct')),
+                    image = self.request.FILES['choice_' + letter + '_image'],
+                    explanation = self.request.POST.get('choice_' + letter + '_explanation'),
+                )
+
+            except:
+                choice = models.Choice.objects.create(
+                    content = self.request.POST.get('choice_' + letter ),
+                    correct = bool(self.request.POST.get('choice_' + letter + '_correct')),
+                    explanation = self.request.POST.get('choice_' + letter + '_explanation'),
+                )
+            choice.save()
+            question.choices.add(choice)
+
+        exam = models.Exam.objects.get(pk = exampk)
+        exam.items.add(question)
+
+        return HttpResponseRedirect(reverse('exams_app:update_exam', kwargs = {'exampk': exampk, 'categoryapk': categoryapk,}))
+
 
 class ExamCategoryADelete(DeleteView):
     template_name = 'exams_app/confirm_delete.html'
@@ -421,10 +444,7 @@ class CreateExamUploadView(View):
     def post(self, *args, **kwarg):
 
         pk = self.request.POST.get('pk')
-
         file = self.request.FILES['examfile']
-
-
         new_exam = models.Exam(
             title = self.request.POST.get('title'),
             description = self.request.POST.get('description'),
@@ -445,21 +465,24 @@ class CreateExamUploadView(View):
         for row in ws.rows:
             new_mcq = models.MCQ(
                 question = row[0].value,
-                choice1 = row[1].value,
-                choice2 = row[2].value,
-                choice3 = row[3].value,
-                choice4 = row[4].value,
-                correct1 = True,
-                correct2 = False,
-                correct3 = False,
-                correct4 = False,
             )
             new_mcq.save()
+
+            for col in range(1, 5):
+                if '##' in row[col].value:
+                    correct = True
+                else:
+                    correct = False
+
+                new_choice = models.Choice(
+                    content = row[col].value,
+                    correct = correct,
+                )
+                new_choice.save()
+                new_mcq.choices.add(new_choice)
             new_exam.items.add(new_mcq)
 
-        new_exam.save()
         categorya = models.CategoryA.objects.get(pk = pk)
         categorya.exams.add(new_exam)
-        categorya.save()
 
         return HttpResponseRedirect(reverse('exams_app:exams_list', kwargs = {'pk':categorya.pk}))

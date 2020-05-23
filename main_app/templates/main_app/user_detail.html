@@ -13,26 +13,24 @@
   <dt class="col-sm-3">First Name</dt>
   <dd class="col-sm-9">{{user.first_name}}</dd>
 
-  <dt class="col-sm-3">Teacher</dt>
-  <dd class="col-sm-9">{%if user.is_teacher%}<span class="badge badge-success">Yes</span>{%else%}<span class="badge badge-danger">No</span>{%endif%}</dd>
+  <dt class="col-sm-3">Flags</dt>
+  <dd class="col-sm-9">
+    {%if user.is_teacher %}Teacher,{%endif%}
+    {%if user.is_student %}Student,{%endif%}
+    {%if user.is_ece %}ECE,{%endif%}
+    {%if user.is_ee %}EE,{%endif%}
+    {%if user.is_premium %}Premium,{%endif%}
+  </dd>
 
-  <dt class="col-sm-3">Student</dt>
-  <dd class="col-sm-9">{%if user.is_student%}<span class="badge badge-success">Yes</span>{%else%}<span class="badge badge-danger">No</span>{%endif%}</dd>
+  <dt class="col-sm-3">Exams Taken</dt>
+  <dd class="col-sm-9">
+    {%for ticket in tickets %}
+      {{ticket}}<br>
+    {%endfor%}
+  </dd>
 
-  <dt class="col-sm-3">ECE</dt>
-  <dd class="col-sm-9">{%if user.is_ece%}<span class="badge badge-success">Yes</span>{%else%}<span class="badge badge-danger">No</span>{%endif%}</dd>
-
-  <dt class="col-sm-3">EE</dt>
-  <dd class="col-sm-9">{%if user.is_ee%}<span class="badge badge-success">Yes</span>{%else%}<span class="badge badge-danger">No</span>{%endif%}</dd>
-
-  <dt class="col-sm-3">Tutorial</dt>
-  <dd class="col-sm-9">{%if user.is_tutorial%}<span class="badge badge-success">Yes</span>{%else%}<span class="badge badge-danger">No</span>{%endif%}</dd>
-
-  <dt class="col-sm-3">Premium</dt>
-  <dd class="col-sm-9">{%if user.is_premium%}<span class="badge badge-success">Yes</span>{%else%}<span class="badge badge-danger">No</span>{%endif%}</dd>
 
 </dl>
 
-<a class="btn btn-primary" href="{%url 'main_app:users'%}" role="button">Back</a>
 
 {% endblock %}

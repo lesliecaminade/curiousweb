@@ -7,46 +7,31 @@
 
 <form method="POST" enctype="multipart/form-data">
 {%csrf_token%}
-<div class="form-row">
-    <div class="form-group col-12">
-      <label for="exam_title">Title</label>
-      <input name="title" type="text" class="form-control" id="exam_title" placeholder="Title">
-    </div>
+<dl class="row">
+  <dt class="col-sm-3">Title</dt>
+  <dd class="col-sm-9">{{exam.title}}</dd>
+  <dt class="col-sm-3">Description</dt>
+  <dd class="col-sm-9">{{exam.description}}</dd>
+  <dt class="col-sm-3">Flags</dt>
+  <dd class="col-sm-9">
+    {%if exam.is_ece %}<span class="badge badge-primary">ECE</span>{%endif%}
+    {%if exam.is_ee%}<span class="badge badge-success">EE</span>{%endif%}
+    {%if exam.is_tutorial%}<span class="badge badge-info">Tutorial</span>{%endif%}
+    {%if not exam.is_accessible%}<span class="badge badge-danger">Locked</span>{%endif%}
+  </dd>
+</dl>
 
-    <div class="form-group col-12">
-      <label for="exam_description">Description</label>
-      <input name="description" type="text" class="form-control" id="exam_description" placeholder="Description">
-    </div>
+{%include "exams_app/item_form.html"%}
 
-    <div class="custom-control custom-checkbox mx-4">
-      <input name="is_ece" type="checkbox" class="custom-control-input" id="customCheck1">
-      <label class="custom-control-label" for="customCheck1">is ECE</label>
-    </div>
-
-    <div class="custom-control custom-checkbox mx-4">
-      <input name="is_ee" type="checkbox" class="custom-control-input" id="customCheck2">
-      <label class="custom-control-label" for="customCheck2">is EE</label>
-    </div>
-
-    <div class="custom-control custom-checkbox mx-4">
-      <input name="is_tutorial" type="checkbox" class="custom-control-input" id="customCheck3">
-      <label class="custom-control-label" for="customCheck3">is Tutorial</label>
-    </div>
-
-    <div class="custom-control custom-checkbox mx-4">
-      <input name="is_accessible" type="checkbox" class="custom-control-input" id="customCheck4">
-      <label class="custom-control-label" for="customCheck4">is Accessible</label>
-    </div>
-
-    <input type="hidden" name="categorya_pk" value="{{categorya_pk}}">
-</div>
-
-{% for i in items %}
-{%include "exams_app/item_form.html" with i=i %}
-{%endfor%}
-
-<button type="submit" class="btn btn-primary  btn-block">Save Exam</button>
+<input type="hidden" name="exampk" value="{{exampk}}">
+<input type="hidden" name="categoryapk" value="{{categoryapk}}">
+<button type="submit" class="btn btn-primary">Save and Add Item </button>
+<a class="btn btn-secondary" href="{%url 'exams_app:exams_list' pk=categoryapk%}" role="button">Save and Exit</a>
   {% csrf_token %}
+
+{% for item in exam.items.all %}
+  {%include "exams_app/item_detail_create.html"%}
+{% endfor %}
 </form>
 
 

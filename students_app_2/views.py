@@ -9,6 +9,7 @@ from . import models
 from . import forms
 from . import emailing
 from main_app.models import User
+from exams_app.models import ExamTicket
 
 from django.contrib import messages
 from django.contrib.auth.mixins import(
@@ -44,10 +45,25 @@ class StudentListViewNotEnrolled(PermissionRequiredMixin, ListView):
     def get_queryset(self):
         return models.Student.objects.filter(enrolled = False)
 
-class StudentDetailView(PermissionRequiredMixin, DetailView):
-    permission_required = ('students_app_2.view_student')
-    context_object_name = 'student_details'
-    model = models.Student
+class StudentDetailView(View):
+    def get(self, *args, **kwargs):
+        studentpk = int(self.kwargs['pk'])
+        student = models.Student.objects.get(pk = studentpk)
+        tickets = ExamTicket.objects.filter(user = student.user)
+
+        try:
+            id_picture_url = student.id_picture.url
+        except:
+            id_picture_url = None
+
+        context = {
+            'student_details': student,
+            'tickets': tickets,
+            'id_picture_url': id_picture_url,
+        }
+
+        template_name = 'students_app_2/student_detail.html'
+        return render(self.request, template_name, context)
 
 class StudentCreateView(CreateView):
     model = models.Student

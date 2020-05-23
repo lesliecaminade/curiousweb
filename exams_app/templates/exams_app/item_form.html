@@ -1,70 +1,65 @@
 <div class="card my-2">
-  <h5 class="card-header">Item {{i}}</h5>
+  <h5 class="card-header">Add Item</h5>
 
   <div class="card-body">
   <div class="form-group">
-    <textarea name= "question_{{i}}" class="form-control" id="question_{{i}}" rows="3" placeholder="Question"></textarea>
+    <textarea name= "question" class="form-control" id="question" rows="3" placeholder="Question"></textarea>
   </div>
 
   <hr>
 
 <div class="container">
-<input class="form-check-input" type="radio" name="question_{{i}}_choice_correct" id="question_{{i}}_choice_1_correct" value="1" checked>
-<textarea name="question_{{i}}_choice_1" class="form-control" id="question_{{i}}_choice_1" rows="1" placeholder="Choice 1"></textarea>
-</div>
-
-
-<div class="container">
-<input class="form-check-input" type="radio" name="question_{{i}}_choice_correct" id="question_{{i}}_choice_2_correct" value="2">
-<textarea name="question_{{i}}_choice_2" class="form-control" id="question_{{i}}_choice_2" rows="1" placeholder="Choice 2"></textarea>
+<input class="form-check-input" type="checkbox" name="choice_a_correct" id="choice_1_correct" checked>
+<textarea name="choice_a" class="form-control" id="choice_1" rows="1" placeholder="Choice 1"></textarea>
 </div>
 
 <div class="container">
-<input class="form-check-input" type="radio" name="question_{{i}}_choice_correct" id="question_{{i}}_choice_3_correct" value="3">
-<textarea name="question_{{i}}_choice_3" class="form-control" id="question_{{i}}_choice_3" rows="1" placeholder="Choice 3"></textarea>
+<input class="form-check-input" type="checkbox" name="choice_b_correct" id="choice_2_correct">
+<textarea name="choice_b" class="form-control" id="choice_2" rows="1" placeholder="Choice 2"></textarea>
 </div>
 
 <div class="container">
-<input class="form-check-input" type="radio" name="question_{{i}}_choice_correct" id="question_{{i}}_choice_2_correct" value="4">
-<textarea name="question_{{i}}_choice_4" class="form-control" id="question_{{i}}_choice_4" rows="1" placeholder="Choice 4"></textarea>
+<input class="form-check-input" type="checkbox" name="choice_c_correct" id="choice_3_correct">
+<textarea name="choice_c" class="form-control" id="choice_3" rows="1" placeholder="Choice 3"></textarea>
 </div>
 
 <div class="container">
-  <textarea name="question_{{i}}_explanation" class="form-control" id="question_{{i}}_explanation" rows="1" placeholder="Explanation"></textarea>
+<input class="form-check-input" type="checkbox" name="choice_d_correct" id="choice_2_correct">
+<textarea name="choice_d" class="form-control" id="choice_4" rows="1" placeholder="Choice 4"></textarea>
 </div>
 
   <div class="form-group">
-    <button class="btn btn-secondary" type="button" data-toggle="collapse" data-target="#question_{{i}}_attach_images_id" aria-expanded="false" aria-controls="collapseExample">
+    <button class="btn btn-secondary" type="button" data-toggle="collapse" data-target="#attach_images_id" aria-expanded="false" aria-controls="collapseExample">
       Attach images
     </button>
   </div>
 
-  <div class="collapse" id="question_{{i}}_attach_images_id">
+  <div class="collapse" id="attach_images_id">
     <div class="card card-body">
 
       <div class="form-group">
-      <label for="question_{{i}}_main_image_attach_id">Question Image</label>
-      <input name="question_{{i}}_main_image" type="file" class="form-control-file" id="question_{{i}}_main_image_attach_id" accept="image/*">
+      <label for="main_image_attach_id">Question Image</label>
+      <input name="image" type="file" class="form-control-file" id="main_image_attach_id" accept="image/*">
     </div>
 
     <div class="form-group">
-    <label for="question_{{i}}_choice_1_image_attach_id">Choice 1 Image</label>
-    <input name="question_{{i}}_choice_1_image" type="file" class="form-control-file" id="question_{{i}}_choice_1_image_attach_id" accept="image/*">
+    <label for="choice_a_image_attach_id">Choice A Image</label>
+    <input name="choice_a_image" type="file" class="form-control-file" id="choice_a_image_attach_id" accept="image/*">
   </div>
 
   <div class="form-group">
-  <label for="question_{{i}}_choice_2_image_attach_id">Choice 2 Image</label>
-  <input name="question_{{i}}_choice_2_image" type="file" class="form-control-file" id="question_{{i}}_choice_2_image_attach_id" accept="image/*">
+  <label for="choice_b_image_attach_id">Choice B Image</label>
+  <input name="choice_b_image" type="file" class="form-control-file" id="choice_b_image_attach_id" accept="image/*">
 </div>
 
 <div class="form-group">
-<label for="question_{{i}}_choice_3_image_attach_id">Choice 3 image</label>
-<input name="question_{{i}}_choice_3_image" type="file" class="form-control-file" id="question_{{i}}_choice_3_image_attach_id" accept="image/*">
+<label for="choice_c_image_attach_id">Choice C image</label>
+<input name="choice_c_image" type="file" class="form-control-file" id="choice_c_image_attach_id" accept="image/*">
 </div>
 
 <div class="form-group">
-<label for="question_{{i}}_choice_4_image_attach_id">Choice 4 image</label>
-<input name="question_{{i}}_choice_4_image" type="file" class="form-control-file" id="question_{{i}}_choice_4_image_attach_id" accept="image/*">
+<label for="choice_d_image_attach_id">Choice D image</label>
+<input name="choice_d_image" type="file" class="form-control-file" id="choice_d_image_attach_id" accept="image/*">
 </div>
 
     </div>

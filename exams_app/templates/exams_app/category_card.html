@@ -30,8 +30,8 @@
       {%endif%}
 
   {%if category_letter == 'exam'%}
-    {% if user.is_enrolled and category.is_accessible or user.is_teacher %}
-    <a class="btn btn-primary my-1" href="{%url 'exams_app:exam' pk=category.pk%}" role="button">Start Exam</a>
+    {% if user.is_active and category.is_accessible or user.is_teacher %}
+    <a class="btn btn-primary my-1" href="{%url 'exams_app:exam' exampk=category.pk categoryapk=categorya.pk %}" role="button">Start Exam</a>
     {%else%}
     <a class="btn btn-primary disabled my-1"  role="button">Locked</a>
     {%endif%}
@@ -65,7 +65,7 @@
   {%elif category_letter == 'B' and user.is_teacher%}
   <a href="{%url 'exams_app:update_categoryb' pk=category.pk%}" class="btn btn-warning my-1">Edit</a>
   {%elif category_letter == 'exam' and user.is_teacher%}
-  <a href="{%url 'exams_app:update_exam' pk=category.pk%}" class="btn btn-warning my-1">Edit</a>
+  <a href="{%url 'exams_app:update_exam' exampk=category.pk categoryapk=categorya.pk%}" class="btn btn-warning my-1">Edit</a>
   {%endif%}
 
 
