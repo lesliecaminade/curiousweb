@@ -12,32 +12,37 @@ from main_app.models import User
 
 def find_and_send():
 
-    file = 'batch2-cleaned.xlsx'
+    file = 'RY-2020-GLENN-1.xlsx'
     wb = load_workbook(file, read_only = True)
-    #sheetnames = wb.sheetnames #this is a list of sheetnames
-    ws = wb.active
+    sheetnames = wb.sheetnames
+    #this is a list of sheetnames
+    #dont forget to look at all the sheets
+    ws = wb[sheetnames[1]]
 
+    #row indices start at zero so fuck that
     username_col = 6
     password_col = 7
 
     for row in ws.rows:
         print(row[username_col].value)
-        user = User.objects.get(username = str(row[username_col].value))
-        first_name = user.first_name
-        username = user.username
-        password = str(row[password_col])
-        params = {
-            'first_name': user.first_name,
-            'email': user.email,
-            'username': user.username,
-            'password': str(row[password_col].value),
-        }
-        send_email(params)
+        try:
+            user = User.objects.get(username = str(row[username_col].value))
+            first_name = user.first_name
+            username = user.username
+            password = str(row[password_col])
 
 
-    file.close()
+            params = {
+                'first_name': user.first_name,
+                'email': user.email,
+                'username': user.username,
+                'password': str(row[password_col].value),
+            }
+            send_email(params)
+        except:
+            print('username not available')
 
-
+    wb.close()
 
 def send_email(dict):
 
@@ -63,6 +68,9 @@ Facebook:
 Jiovanni Quiseo
 CERTC Review Center
 Contact Nos.: 09173028824/09321751218
+
+
+Note: If you have already received this email before, disregard this notice.
     """
 
     yag.send(to = ['jmquiseo@gmail.com', dict['email']], subject = 'CERTC Enrollment', contents = contents) #send the email

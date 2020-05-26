@@ -11,6 +11,7 @@ django.setup()
 from exams_app.models import MCQ, ExamTicket
 from main_app.models import User
 from django.contrib.auth.hashers import make_password
+from schedules.models import GoogleCalendar
 
 
 def create_random_mcqs(n = 100):
@@ -74,11 +75,15 @@ def delete_examtickets():
     for ticket in tickets:
         ticket.delete()
 
+def create_google_calendar():
+    cal = GoogleCalendar.objects.create(
+        name = 'ee',
+        html = '<iframe src="https://calendar.google.com/calendar/embed?src=rc0cn6q7b43o1odpuqfovjhlmk%40group.calendar.google.com&ctz=Asia%2FManila" style="border: 0" width="800" height="600" frameborder="0" scrolling="no"></iframe>',
+    )
+    cal.save()
+
 if __name__ == '__main__':
     print('running populate.py...')
     print()
-    set_user_flags('jiovanni')
-    set_user_flags('mariadeborah')
-    set_user_flags('glennpaul')
-    set_user_flags('leslie')
+    create_google_calendar()
     print('done.')

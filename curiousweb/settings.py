@@ -37,6 +37,7 @@ ALLOWED_HOSTS = [
     '192.168.0.105',
     '192.168.1.5',
     '192.168.0.104',
+    'www.certconlinereview.com',
 ]
 
 
@@ -51,10 +52,12 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'bootstrap4',
     'main_app',
+    'exams_app',
     'students_app_1',
     'students_app_2',
     'students_app_3',
-    'exams_app',
+    'staticpages',
+    'handouts',
 ]
 
 MIDDLEWARE = [
