@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h1 class='display-4'>Handouts</h1>
+
+{%if user.is_superuser%}
+<div class="container mb-4">
+  <a class="btn btn-warning" href="{%url 'handouts:add'%}" role="button">Add Handout</a>
+</div>
+{%endif%}
+<div class="container mb-4">
+  {%for handout in handouts%}
+  <div class="media mb-4">
+    <img src="{{handout.image.url}}" class="mr-3" alt="" width='200px' >
+    <div class="media-body">
+      <h5 class="mt-0">{{handout.name}}</h5>
+      <p>{{handout.description}}
+
+        {%if user.is_superuser %}
+          {%if handout.is_ece%}
+          <span class="badge badge-primary">ECE</span>
+          {%endif%}
+          {%if handout.is_ee%}
+          <span class="badge badge-success">EE</span>
+          {%endif%}
+          {%if handout.is_tutorial%}
+          <span class="badge badge-info">Tutorial</span>
+          {%endif%}
+          {%if not handout.is_accessible%}
+          <span class="badge badge-danger">Locked</span>
+          {%endif%}
+        {%endif%}
+
+
+       </p>
+      <a class="btn btn-primary" href="{%url 'handouts:download' handout=handout.pk %}" role="button">Download File</a>
+      {%if user.is_superuser%}
+        <a class="btn btn-warning" href="#" role="button">Edit</a>
+        <a class="btn btn-danger" href="#" role="button">Delete</a>
+      {%endif%}
+
+    </div>
+  </div>
+  {%endfor%}
+
+
+</div>
+
+
+{% endblock %}

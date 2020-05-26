@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{%load bootstrap4 %}
+{% block content %}
+
+<h1 class='display-4'>Add Handout</h1>
+<form method = "POST" enctype="multipart/form-data">
+  {%csrf_token%}
+  {% bootstrap_form form %}
+<button type="submit" name="button" class='btn btn-primary'>Add Handout</button>
+
+</form>
+
+
+
+
+{% endblock %}

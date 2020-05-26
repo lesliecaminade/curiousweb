@@ -42,7 +42,9 @@
            <a class="nav-link {{nav_home}}" href="{%url 'index'%}"> Home</a>
          </li>
 
-         {%if not user.is_teacher %}
+         {%if not user.is_superuser %}
+         <!-- this part will be seen if you are NOT a superuser -->
+         <!-- this will be seen if you are a enrolled or not student -->
          <li class="nav-item dropdown">
                  <a class="nav-link dropdown-toggle {{nav_about_us}}" href="#" id="about_us" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                    About Us
@@ -50,7 +52,7 @@
                  <div class="dropdown-menu" aria-labelledby="about_us">
                    <a class="dropdown-item disabled" href="#">About CERTC</a>
                    <a class="dropdown-item disabled" href="#">Reviewers</a>
-                   <a class="dropdown-item disabled" href="#">Location</a>
+                   <a class="dropdown-item" href="{%url 'staticpages:location' %}">Location</a>
                  </div>
           </li>
 
@@ -67,6 +69,7 @@
                  </div>
           </li>
 
+
           <li class="nav-item dropdown">
                   <a class="nav-link dropdown-toggle {{nav_tutorial}}" href="#" id="tutorial" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Tutorial Center
@@ -77,6 +80,8 @@
                   </div>
            </li>
 
+          {%if not user.is_authenticated%}
+          <!-- for non auth -->
           <li class="nav-item dropdown">
                   <a class="nav-link dropdown-toggle {{nav_schedule}}" href="#" id="schedule" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Schedules
@@ -89,10 +94,47 @@
                   <a class="dropdown-item disabled" href="#">Registered Master Electrician (RME)</a>
                 </div>
            </li>
-
+           {%else%}
+           <!-- for auth -->
            <li class="nav-item dropdown">
-                 <a class="nav-link dropdown-toggle {{nav_online_review}}" href="#" id="online_review" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                   Online Review
+                   <a class="nav-link dropdown-toggle {{nav_schedule}}" href="#" id="schedule" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                     Calendars
+                   </a>
+                   <div class="dropdown-menu" aria-labelledby="tutorial">
+
+                   <a class="dropdown-item" href="{%url 'staticpages:calendar_ece' %}">Electronics Engineering (ECE)</a>
+                   <a class="dropdown-item" href="{%url 'staticpages:calendar_ee' %}">Electrical Engineering (REE)</a>
+                   <a class="dropdown-item disabled" href="#">Electronics Technician (ECT)</a>
+                   <a class="dropdown-item disabled" href="#">Registered Master Electrician (RME)</a>
+                 </div>
+            </li>
+           {%endif%}
+
+                   {%if user.is_authenticated %}
+                   <!-- student and enrolled -->
+                   <li class="nav-item dropdown">
+                         <a class="nav-link dropdown-toggle {{nav_online_review}}" href="#" id="online_review" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                           {{user.first_name}}
+                         </a>
+                         <div class="dropdown-menu" aria-labelledby="online_review">
+                           <a class="dropdown-item" href="{%url 'handouts:main'%}"> Handouts </a>
+                           <a class="dropdown-item" href="{%url 'exams_app:exams'%}"> Exams </a>
+                             <a class="dropdown-item" href="{%url 'logout'%}">Log Out</a>
+                           </div>
+                      </li>
+                           {% else %}
+                           <!-- student and not enrolled -->
+                           <li class="nav-item dropdown">
+                                 <a class="nav-link dropdown-toggle {{nav_online_review}}" href="#" id="online_review" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                   Online Review
+                                 </a>
+                                 <div class="dropdown-menu" aria-labelledby="online_review">
+                                   <a class="dropdown-item" href="{%url 'exams_app:exams'%}"> Exams </a>
+                                     <a class="dropdown-item" href="{%url 'login'%}">Log In</a>
+                                   </div>
+                              </li>
+                           {% endif %}
+
                  </a>
                  <div class="dropdown-menu" aria-labelledby="online_review">
                    <a class="dropdown-item disabled" href="#">Electronics Engineering</a>
@@ -120,6 +162,7 @@
                   </div>
              </li>
 
+        {%if not user.is_authenticated%}
          <li class="nav-item">
            <a class="nav-link {{nav_login}}" href="{%url 'login'%}">Login</a>
          </li>
@@ -127,7 +170,13 @@
          <li class="nav-item">
            <a class="btn btn-primary" href="{%url 'main_app:enroll'%}" style="background-color: maroon; border-color: maroon"> Enroll Here </a>
          </li>
+
          {%endif%}
+
+
+
+
+     {%endif%}
 
          {%if user.is_teacher %}
          <li class="nav-item">
@@ -153,6 +202,7 @@
                    <a class="dropdown-item" href="{%url 'students_app_2:list'%}">EE Students</a>
                    <a class="dropdown-item" href="{%url 'students_app_3:list'%}">Tutorial Students</a>
                    <a class="dropdown-item" href="{%url 'exams_app:exams'%}">Exams</a>
+                   <a class="dropdown-item" href="{%url 'handouts:main'%}">Handouts</a>
                    <a class="dropdown-item disabled" href="#">MCQ Management</a>
                    <a class="dropdown-item disabled" href="#">Lesson Management</a>
                    <a class="dropdown-item disabled" href="#">Enrollments</a>

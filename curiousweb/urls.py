@@ -35,6 +35,8 @@ urlpatterns = [
     path('students_app_2/', include('students_app_2.urls', namespace='students_app_2')),
     path('students_app_3/', include('students_app_3.urls', namespace='students_app_3')),
     path('exams_app/',include('exams_app.urls', namespace='exams_app')),
+    path('staticpages/', include('staticpages.urls', namespace='staticpages')),
+    path('handouts/', include('handouts.urls', namespace='handouts')),
 
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
