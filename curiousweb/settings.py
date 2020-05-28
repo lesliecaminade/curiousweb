@@ -31,6 +31,8 @@ SECRET_KEY = '-k)w3)n6$h#i*(b!kp8(y0+145syat&(&a3v&i-ptij-mla4h#'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+ADMIN_EMAILS = ['lesliecaminade@gmail.com', ]
+
 ALLOWED_HOSTS = [
     'siliconcortex.pythonanywhere.com',
     '127.0.0.1',
@@ -152,3 +154,5 @@ LOGIN_REDIRECT_URL = 'index'
 LOGOUT_REDIRECT_URL = 'index'
 
 AUTH_USER_MODEL = 'main_app.User'
+
+DOMAIN = "https://www.certconlinereview.com"

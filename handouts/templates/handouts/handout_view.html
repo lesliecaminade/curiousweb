@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{%load bootstrap4 %}
+{% block content %}
+
+<h1 class='display-4'>{{handout.name}}</h1>
+
+<dl class="row">
+  <dt class="col-sm-3">Handout Name</dt>
+  <dd class="col-sm-9">{{handout.name}}</dd>
+
+  <dt class="col-sm-3">Handout Description</dt>
+  <dd class="col-sm-9">{{handout.description}}</dd>
+
+  <dt class="col-sm-3">Handout Thumbnail</dt>
+  <dd class="col-sm-9"><img src="{{handout.image.url}}" class="img-fluid" alt="Responsive image" height='300px'></dd>
+
+
+{%for file in handout.files.all %}
+  <dt class="col-sm-3">File {{forloop.counter}}</dt>
+  <dd class="col-sm-9"><a class="btn btn-primary" href="{%url 'handouts:download' filepk=file.pk%}" role="button">File {{forloop.counter}}</a></dd>
+{%endfor%}
+
+{%if user.is_superuser%}
+<a class="btn btn-warning" href="{%url 'handouts:addhandoutfile' handoutpk=handout.pk%}" role="button">Add Handout File</a>
+{%endif%}
+
+</dl>
+
+
+
+
+{% endblock %}

@@ -11,4 +11,5 @@ urlpatterns = [
     path('users/', views.UserListView.as_view(), name='users'),
     path('user/<pk>', views.UserView.as_view(), name='user'),
     path('changepassword/', views.ChangePasswordView.as_view(), name='change_password'),
+    path('users_filter/<filter>', views.UserListFilterView.as_view(), name='users_filter'),
 ]

@@ -1,4 +1,5 @@
 import yagmail
+import curiousweb
 
 def send_email(student, temp_password):
 
@@ -7,7 +8,7 @@ def send_email(student, temp_password):
 
     yag = yagmail.SMTP('cortexsilicon','jnzbhrbqcsavnlhu') #input the email username and app password
 
-    domain = "https://siliconcortex.pythonanywhere.com"
+    domain = curiousweb.setting.DOMAIN
     conditional_statement = ''
     #convert to blank for ee and tutorial
     review_status = ''
