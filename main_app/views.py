@@ -14,6 +14,8 @@ from . import models
 from . import forms
 from django.contrib import messages
 import exams_app
+import communications
+import curiousweb
 
 # Create your views here.
 class IndexView(TemplateView):
@@ -37,12 +39,45 @@ class UserListView(View):
         context = {
             'users': users,
             'nav_admin': 'active',
+            'active_filter': 'all',
         }
         template_name = 'main_app/users_list.html'
-        if self.request.user.is_teacher:
+        if self.request.user.is_superuser:
             return render(self.request, template_name, context)
         else:
             return HttpResponseRedirect(reverse('login'))
+
+class UserListFilterView(View):
+    def get(self, *args, **kwargs):
+        try:
+            filter = self.kwargs.get('filter')
+            if filter.lower() == 'ece':
+                users = models.User.objects.filter(is_ece = True)
+            elif filter.lower() == 'ee':
+                users = models.User.objects.filter(is_ee = True)
+            elif filter.lower() == 'tutorial':
+                users = models.User.objects.filter(is_tutorial = True)
+            elif filter.lower() == 'active':
+                users = models.User.objects.filter(is_active = True)
+            elif filter.lower() == 'inactive':
+                users = models.User.objects.filter(is_active = False)
+            elif filter.lower() == 'all':
+                users = models.User.objects.all()
+            else:
+                communications.standard_email.send_email(curiousweb.settings.ADMIN_EMAILS, 'certconlinereview ERROR', 'unhandled user type in main_app.views UserListFilterView class')
+
+            context = {
+                'users': users,
+                'nav_admin': 'active',
+                'active_filter': filter,
+            }
+            template_name = 'main_app/users_list.html'
+            if self.request.user.is_superuser:
+                return render(self.request, template_name, context)
+            else:
+                return HttpResponseRedirect(reverse('login'))
+        except:
+            communications.standard_email.send_email(curiousweb.settings.ADMIN_EMAILS, 'certconlinereview ERROR', 'error in main_app.views.UserListFilterView')
 
 class UserView(View):
     def get(self, *args, **kwargs):
@@ -54,7 +89,7 @@ class UserView(View):
             'tickets': tickets,
         }
         template_name = 'main_app/user_detail.html'
-        if self.request.user.is_teacher:
+        if self.request.user.is_superuser:
             return render(self.request, template_name, context)
         else:
             return HttpResponseRedirect(reverse('login'))

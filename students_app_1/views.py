@@ -22,7 +22,8 @@ from django.contrib.auth.hashers import make_password
 import requests
 import random
 import string
-
+import communications
+import datetime
 
 class StudentSuccessEnrollment(TemplateView):
     template_name = 'students_app_1/enrollment_success.html'
@@ -73,38 +74,48 @@ class StudentCreateView(CreateView):
     success_url = reverse_lazy('students_app_1:success')
 
     def form_valid(self, form):
-        self.object = form.save(commit=False)
-
-        recaptcha_response = self.request.POST['g-recaptcha-response'] #get google recapthcha response from form
-        r = requests.post('https://www.google.com/recaptcha/api/siteverify', data = {
-            'secret':'6Lc1CO4UAAAAACs9XqPf35SGvdtP-0QmDM0n0K6V',
-            'response': recaptcha_response,
-        })
-        r = r.json()
-        if r['success'] == 'false':
-            return HttpResponseRedirect(reverse('students_app_1:fail'))
-
-        #then we create a user account for the student
-        temp_password = ''.join(random.choice(string.ascii_lowercase + string.digits) for _ in range(10))
-        new_user = User.objects.create(
-            first_name = self.request.POST['first_name'],
-            last_name = self.request.POST['last_name'],
-            username = (self.request.POST['first_name'].lower() + self.request.POST['last_name'].lower() + ''.join(random.choice(string.ascii_lowercase + string.digits) for _ in range(3))).replace(' ',''),
-            password = make_password(temp_password),
-            email = self.request.POST['email'],
-            is_student = True,
-            is_ece = True,
-        )
-
-        self.object.user = new_user
-        self.object.save()
-
         try:
-            emailing.send_email(self.object, temp_password) #send an email with enrollment details
-        except:
-            pass
+            self.object = form.save(commit=False)
 
-        return super().form_valid(form)
+            recaptcha_response = self.request.POST['g-recaptcha-response'] #get google recapthcha response from form
+            r = requests.post('https://www.google.com/recaptcha/api/siteverify', data = {
+                'secret':'6Lc1CO4UAAAAACs9XqPf35SGvdtP-0QmDM0n0K6V',
+                'response': recaptcha_response,
+            })
+            r = r.json()
+            if r['success'] == 'false':
+                return HttpResponseRedirect(reverse('students_app_1:fail'))
+
+            #then we create a user account for the student
+            temp_password = ''.join(random.choice(string.ascii_lowercase + string.digits) for _ in range(10))
+            new_user = User.objects.create(
+                first_name = self.request.POST['first_name'],
+                last_name = self.request.POST['last_name'],
+                username = (self.request.POST['first_name'].lower() + self.request.POST['last_name'].lower() + ''.join(random.choice(string.ascii_lowercase + string.digits) for _ in range(3))).replace(' ',''),
+                password = make_password(temp_password),
+                email = self.request.POST['email'],
+                is_student = True,
+                is_ece = True,
+                is_active = False,
+                date_created = datetime.date.today(),
+            )
+
+            self.object.user = new_user
+            self.object.save()
+
+            try:
+                emailing.send_email(self.object, temp_password) #send an email with enrollment details
+            except:
+                pass
+
+            return super().form_valid(form)
+        except:
+            communications.standard_email.send_email(ADMIN_EMAILS, 'ERROR REPORT',
+            """site: certconlinereview.com
+app: students_app_1
+view: student_create_view
+            """)
+
 
 class StudentUpdateView(PermissionRequiredMixin, UpdateView):
     permission_required = ('students_app_1.change_student')

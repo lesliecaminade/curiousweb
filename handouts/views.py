@@ -12,6 +12,8 @@ from . import models
 from . import forms
 from PIL import Image
 from .image_helpers import resize_image_field
+from communications.standard_email import send_email
+
 
 class Handouts(View):
     def get(self, *args, **kwargs):
@@ -25,9 +27,11 @@ class Handouts(View):
             elif self.request.user.is_tutorial:
                 handouts = models.Handout.objects.filter(is_tutorial = True)
             else:
-                pass
-
-
+                send_email(ADMIN_EMAILS, 'ERROR REPORT',
+                """Site: certconlinereview
+                App: handouts
+                View: Handouts"""
+                )
 
             context = {
                 'handouts': handouts,
@@ -47,10 +51,6 @@ class AddHandout(View):
 
     def post(self, *args, **kwargs):
         if self.request.user.is_superuser:
-            try:
-                file = self.request.FILES['file']
-            except:
-                file = None
 
             try:
                 image_file = self.request.FILES['image']
@@ -80,7 +80,6 @@ class AddHandout(View):
             new_handout = models.Handout(
                 name = self.request.POST.get('name'),
                 description = self.request.POST.get('description'),
-                file = file,
                 image = image_file,
                 is_ece = is_ece,
                 is_ee = is_ee,
@@ -90,11 +89,64 @@ class AddHandout(View):
             new_handout.save()
             resize_image_field(new_handout.image, height = 300)
 
-            return HttpResponseRedirect(reverse('handouts:main'))
+            return HttpResponseRedirect(reverse('handouts:detail', kwargs = {'handoutpk': new_handout.pk,}))
 
-class DownloadHandout(View):
+class DownloadHandoutFile(View):
     def get(self, *args, **kwargs):
         if self.request.user.is_authenticated:
-            handout = models.Handout.objects.get(pk = int(self.kwargs['handout']))
-            filepath = handout.file.path
-            return serve(self.request, os.path.basename(filepath), os.path.dirname(filepath))
+            handoutfile = models.HandoutFile.objects.get(pk = int(self.kwargs['filepk']))
+            if handoutfile.is_accessible and ((self.request.user.is_ece and handoutfile.is_ece) or (self.request.user.is_ee and handoutfile.is_ee) or (self.request.user.is_tutorial and handoutfile.is_tutorial)) :
+                filepath = handoutfile.file.path
+                return serve(self.request, os.path.basename(filepath), os.path.dirname(filepath))
+            else:
+                return HttpResponse('Sorry, download not accessible.')
+
+class AddHandoutFile(View):
+    def get(self, *args, **kwargs):
+        handoutpk = int(self.kwargs['handoutpk'])
+        form = forms.HandoutFileForm
+        template_name = 'handouts/addfile.html'
+        context = {
+            'form': form,
+            'handoutpk': handoutpk,
+        }
+        return render(self.request, template_name, context)
+
+    def post(self, *args, **kwargs):
+        handoutpk = int(self.request.POST.get('handoutpk'))
+        handout = models.Handout.objects.get(pk = handoutpk)
+
+        new_handoutfile = models.HandoutFile(
+            name = self.request.POST.get('name'),
+            file = self.request.POST.get('file'),
+            is_ece = handout.is_ece,
+            is_ee = handout.is_ee,
+            is_tutorial = handout.is_tutorial,
+            is_accessible = handout.is_accessible,
+        )
+        new_handoutfile.save()
+
+
+        handout.files.add(new_handoutfile)
+
+        return HttpResponseRedirect(reverse('handouts:detail', kwargs = {'handoutpk': handoutpk, }))
+
+class HandoutDetail(View):
+    def get(self, *args, **kwargs):
+        handoutpk = int(self.kwargs['handoutpk'])
+        handout = models.Handout.objects.get(pk = handoutpk)
+        template_name = 'handouts/handout_view.html'
+        context = {
+            'handout': handout,
+        }
+        return render(self.request, template_name, context)
+
+class HandoutDelete(View):
+    def get(self, *args, **kwargs):
+        if self.request.user.is_superuser:
+            handoutpk = int(self.kwargs['handoutpk'])
+            handout = models.Handout.objects.get(pk = handoutpk)
+            handout.delete()
+            return HttpResponseRedirect(reverse('handouts:main'))
+        else:
+            return HttpResponse('Not allowed.')
