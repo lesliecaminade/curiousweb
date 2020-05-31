@@ -24,11 +24,10 @@
 
   <dt class="col-sm-3">Exams Taken</dt>
   <dd class="col-sm-9">
-    {%for ticket in tickets %}
-      {{ticket}}<br>
+    {%for answer_sheet in answer_sheets %}
+      {{answer_sheet.name}}, {{answer_sheet.date_submitted}}, <strong>{{answer_sheet.score}}</strong>, {%if answer_sheet.first_take%}FIRST TAKE{%endif%} <a class="btn btn-danger btn-sm" href="{%url 'exams_app_2:sheet_delete' answersheetpk=answer_sheet.pk userpk=user.pk%}" role="button">Del</a> <br>
     {%endfor%}
   </dd>
-
 
 </dl>
 

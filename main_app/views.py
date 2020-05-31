@@ -14,6 +14,7 @@ from . import models
 from . import forms
 from django.contrib import messages
 import exams_app
+import exams_app_2
 import communications
 import curiousweb
 
@@ -83,10 +84,12 @@ class UserView(View):
     def get(self, *args, **kwargs):
         user = models.User.objects.get(pk = self.kwargs['pk'])
         tickets = exams_app.models.ExamTicket.objects.filter(user = user)
+        answer_sheets = exams_app_2.models.AnswerSheet.objects.filter(user = user)
         context = {
             'user': user,
             'nav_admin': 'active',
             'tickets': tickets,
+            'answer_sheets': answer_sheets,
         }
         template_name = 'main_app/user_detail.html'
         if self.request.user.is_superuser:

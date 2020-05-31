@@ -13,7 +13,11 @@
   <div class="media mb-4">
     <img src="{{handout.image.url}}" class="mr-3" alt="" width='200px' >
     <div class="media-body">
+      {%if user.is_superuser%}
       <h5 class="mt-0"><a href="{%url 'handouts:detail' handoutpk=handout.pk%}">{{handout.name}}</a></h5>
+      {%else%}
+      <h5 class="mt-0">{{handout.name}}</h5>
+      {%endif%}
       <p>{{handout.description}}
 
         {%if user.is_superuser %}
@@ -26,9 +30,10 @@
           {%if handout.is_tutorial%}
           <span class="badge badge-info">Tutorial</span>
           {%endif%}
-          {%if not handout.is_accessible%}
-          <span class="badge badge-danger">Locked</span>
-          {%endif%}
+
+        {%endif%}
+        {%if not handout.is_accessible%}
+        <small class='text-muted'>Not available</small>
         {%endif%}
 
 
@@ -40,11 +45,27 @@
         {%endfor%}
 
       {%else%}
-      <a class="btn btn-primary disabled" href="#" role="button" disabled>Available Soon</a>
+
+      {%for file in handout.files.all %}
+      <a class="btn btn-primary disabled" href="#" role="button" disabled>Download File {{forloop.counter}}</a>
+      {%endfor%}
+
       {%endif%}
 
       {%if user.is_superuser%}
+        <a class="btn btn-warning" href="{%url 'handouts:addhandoutfile' handoutpk=handout.pk%}" role="button">Add Handout File</a>
+
+        {%if handout.is_accessible%}
+        <a class="btn btn-danger" href="{%url 'handouts:handout_lock' handoutpk=handout.pk%}" role="button">Lock</a>
+        {%else%}
+        <a class="btn btn-success" href="{%url 'handouts:handout_unlock' handoutpk=handout.pk%}" role="button">Unlock</a>
+        {%endif%}
+
         <a class="btn btn-danger" href="{%url 'handouts:delete' handoutpk=handout.pk%}" role="button">Delete</a>
+
+
+
+
       {%endif%}
 
     </div>

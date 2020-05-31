@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h1 class='display-4'>Exams</h1>
+
+{%if user.is_superuser%}
+<div class="container mb-4">
+  <a class="btn btn-warning" href="{%url 'exams_app_2:add_exam'%}" role="button">Add Exam</a>
+</div>
+{%endif%}
+
+
+<div class="container mb-4">
+  {%for exam in exams%}
+  <div class="media mb-4">
+    <img src="{{exam.thumbnail.url}}" class="mr-3" alt="" width='200px' >
+    <div class="media-body">
+      {%if user.is_superuser%}
+      <h5 class="mt-0"><a href="{%url 'exams_app_2:exam_detail' exampk=exam.pk%}">{{exam.name}}</a></h5>
+      {%else%}
+      <h5 class="mt-0">{{exam.name}}</h5>
+      {%endif%}
+      <p>{{exam.description}}
+
+        {%if user.is_superuser %}
+          {%if exam.is_ece%}
+          <span class="badge badge-primary">ECE</span>
+          {%endif%}
+          {%if exam.is_ee%}
+          <span class="badge badge-success">EE</span>
+          {%endif%}
+          {%if exam.is_tutorial%}
+          <span class="badge badge-info">Tutorial</span>
+          {%endif%}
+
+        {%endif%}
+        {%if not exam.is_accessible%}
+        <small class='text-muted'>Not available</small>
+        {%endif%}
+       </p>
+
+      {%if exam.is_accessible%}
+      {%for file in exam.files.all%}
+          <a class="btn btn-primary" href="{%url 'exams_app_2:exam_download' filepk=file.pk%}" role="button">Download {{file.name}}</a>
+      {%endfor%}
+          <a class="btn btn-primary" href="{%url 'exams_app_2:submit' exampk=exam.pk%}" role="button">Take Exam</a>
+
+      {%else%}
+      {%for file in exam.files.all%}
+          <a class="btn btn-primary disabled" href="#" role="button">Download {{file.name}}</a>
+
+      {%endfor%}
+          <a class="btn btn-primary disabled" href="#" role="button">Submit Answers</a>
+      {%endif%}
+
+
+      {%if user.is_superuser%}
+        <a class="btn btn-warning" href="{%url 'exams_app_2:file' exampk=exam.pk%}" role="button">Add Exam File</a>
+
+        <a class="btn btn-danger" href="{%url 'exams_app_2:exam_delete' exampk=exam.pk%}" role="button">Delete</a>
+        {%if exam.is_accessible%}
+        <a class="btn btn-danger" href="{%url 'exams_app_2:exam_lock' exampk=exam.pk%}" role="button">Lock</a>
+        {%else%}
+        <a class="btn btn-success" href="{%url 'exams_app_2:exam_unlock' exampk=exam.pk%}" role="button">Unlock</a>
+        {%endif%}
+      {%endif%}
+
+    </div>
+  </div>
+  {%endfor%}
+
+
+</div>
+
+
+{% endblock %}
