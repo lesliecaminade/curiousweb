@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load bootstrap4 %}
+
+
+<form method="POST" enctype="multipart/form-data">
+  <h1 class='display-4'>Answer Sheet</h1>
+
+  <dl class="row">
+    <dt class="col-sm-3">Exam Taker</dt>
+    <dd class="col-sm-9">{{user.last_name}}, {{user.first_name}}</dd>
+
+    <dt class="col-sm-3">Exam</dt>
+    <dd class="col-sm-9">{{exam.name}}</dd>
+  </dl>
+
+  {%if has_taken%}
+  <div class="alert alert-warning" role="alert">
+  You have already taken this exam.
+</div>
+  {%endif%}
+
+  {%csrf_token%}
+  <input type="hidden" name="exampk" value="{{exampk}}">
+
+
+
+{%include 'exams_app_2/answer_sheet.html'%}
+
+  <!-- <button type="submit" class="btn btn-primary mt-4">Submit Answers</button> -->
+
+  <!-- Button trigger modal -->
+  {%if not has_taken%}
+  <button type="button" class="btn btn-primary mt-4" data-toggle="modal" data-target="#exampleModal">
+    Submit Answers
+  </button>
+
+  <!-- Modal -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Are you sure?</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          You can only submit your answer sheet <strong>once</strong>, so please make sure of your answers before submitting.
+          <p><small class='text-muted'>When you press submit, there will be a few seconds wait time before the results appear.</small></p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Back</button>
+          <button type="submit" class="btn btn-primary">Yes. Submit my Answers.</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {%else%}
+  <button type="button" class="btn btn-primary mt-4" disabled>
+    Exam Already Taken
+  </button>
+  {%endif%}
+
+
+
+</form>
+
+
+{% endblock %}

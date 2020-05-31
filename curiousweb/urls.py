@@ -37,6 +37,6 @@ urlpatterns = [
     path('exams_app/',include('exams_app.urls', namespace='exams_app')),
     path('staticpages/', include('staticpages.urls', namespace='staticpages')),
     path('handouts/', include('handouts.urls', namespace='handouts')),
-
+    path('exams_app_2/',include('exams_app_2.urls', namespace='exams_app_2')),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -1,0 +1,50 @@
+<table>
+{%for i in answer_key_looper%}
+<tr>
+
+<td>{{i}}.</td>
+<td><div class="form-check mr-4">
+  <input class="form-check-input" type="radio" name="answer_{{forloop.counter}}" id="exampleRadios_{{forloop.counter}}_1" value="a" checked>
+        <label class="form-check-label" for="exampleRadios1">
+          A
+        </label>
+</div>
+
+      </td>
+
+<td>
+<div class="form-check mr-4">
+  <input class="form-check-input" type="radio" name="answer_{{forloop.counter}}" id="exampleRadios_{{forloop.counter}}_2" value="b">
+        <label class="form-check-label" for="exampleRadios2">
+          B
+        </label>
+</div>
+
+</td>
+
+
+
+<td>
+
+  <div class="form-check mr-4">
+    <input class="form-check-input" type="radio" name="answer_{{forloop.counter}}" id="exampleRadios_{{forloop.counter}}_3" value="c">
+          <label class="form-check-label" for="exampleRadios3">
+            C
+          </label>
+</div>
+
+</td>
+
+<td>        <div class="form-check mr-4">
+
+<input class="form-check-input" type="radio" name="answer_{{forloop.counter}}" id="exampleRadios_{{forloop.counter}}_4" value="d">
+        <label class="form-check-label" for="exampleRadios4">
+          D
+        </label>
+  </div>
+      </td>
+
+
+</tr>
+{%endfor%}
+</table>

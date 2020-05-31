@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{%load bootstrap4 %}
+{% block content %}
+
+<h1 class='display-4'>{{exam.name}}</h1>
+
+<dl class="row">
+  <dt class="col-sm-3">Exam Name</dt>
+  <dd class="col-sm-9">{{exam.name}}</dd>
+
+  <dt class="col-sm-3">Exam Description</dt>
+  <dd class="col-sm-9">{{exam.description}}</dd>
+
+  <dt class="col-sm-3">Exam Thumbnail</dt>
+  <dd class="col-sm-9"><img src="{{exam.thumbnail.url}}" class="img-fluid" alt="Responsive image" height='300px'></dd>
+
+
+{%for file in exam.files.all%}
+  <dt class="col-sm-3">File {{forloop.counter}}</dt>
+  <dd class="col-sm-9"><a class="btn btn-primary" href="{%url 'exams_app_2:exam_download' filepk=file.pk%}" role="button">{{file.name}}</a></dd>
+{%endfor%}
+
+{%if user.is_superuser%}
+<div class="container">
+  <a class="btn btn-warning" href="{%url 'exams_app_2:file' exampk=exam.pk%}" role="button">Add Exam File</a>
+
+</div>
+{%endif%}
+
+</dl>
+
+{%if user.is_superuser%}
+
+<button class="btn btn-warning dropdown-toggle" type="button" data-toggle="collapse" data-target="#answerkey" aria-expanded="false" aria-controls="answerkey">
+  Show Answer Keys
+</button>
+</p>
+<div class="collapse" id="answerkey">
+<div class="card card-body">
+      <ol>
+        {%for item in exam.answer_key.items.all %}
+        <li>{{item.answer}}</li>
+        {%endfor%}
+      </ol>
+</div>
+</div>
+
+
+<button class="btn btn-warning dropdown-toggle" type="button" data-toggle="collapse" data-target="#answersheets" aria-expanded="false" aria-controls="answersheets">
+  Show Answer Sheets Submitted
+</button>
+</p>
+<div class="collapse" id="answersheets">
+<div class="card card-body">
+      <table>
+        {%for sheet in exam.answer_sheets.all %}
+        <tr>
+          <td>{{sheet.user.last_name}}, {{sheet.user.first_name}},</td><td>{{sheet.score}}</td>
+        </tr>
+        {%endfor%}
+      </table>
+
+
+</div>
+</div>
+
+{%endif%}
+
+
+{% endblock %}

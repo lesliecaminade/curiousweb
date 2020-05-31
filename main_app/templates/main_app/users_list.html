@@ -17,12 +17,12 @@
 <table class="table table-bordered">
   <thead>
     <tr>
-      <th scope="col">ID</th>
-      <th scope="col">First</th>
-      <th scope="col">Last</th>
-      <th scope="col">Username</th>
+      <th scope="col">Name</th>
+      <th scope="col">User</th>
       <th scope="col">Flags</th>
-      <th scope="col">Details</th>
+      <th scope="col">Student Details</th>
+      <th scope="col">User Details</th>
+
     </tr>
   </thead>
   <tbody>
@@ -31,67 +31,72 @@
 
     {%for user in users%}
     <tr>
-      <th scope="row"><a href="{%url 'main_app:user' pk=user.pk%}">{{user.id}}</a></th>
-      <td>{{user.first_name}}</td>
-      <td>{{user.last_name}}</td>
+      <td>{{user.last_name}}, {{user.first_name}}</td>
       <td>{{user.username}}</td>
       <td>
       {%if not user.is_active %}<span class="badge badge-danger">Inactive</span>{%endif%}
-      {%if user.is_teacher %}<span class="badge badge-warning">Teacher</span>{%endif%}
-      {%if user.is_student %}<span class="badge badge-info">Student</span>{%endif%}
-      {%if user.is_ece %}<span class="badge badge-primary">ECE</span>{%endif%}
-      {%if user.is_ee %}<span class="badge badge-primary">EE</span>{%endif%}
-      {%if user.is_tutorial %}<span class="badge badge-primary">Tutorial</span>{%endif%}
-      {%if user.is_premium %}<span class="badge badge-warning">Premium</span>{%endif%}</td>
+
+      {%if user.is_teacher %}<span class="badge badge-warning">Teacher</span>{%else%}
+              {%if user.is_student %}<span class="badge badge-info">Student</span>
+                        {%if user.is_ece %}<span class="badge badge-primary">ECE</span>{%endif%}
+                        {%if user.is_ee %}<span class="badge badge-primary">EE</span>{%endif%}
+                        {%if user.is_tutorial %}<span class="badge badge-primary">Tutorial</span>{%endif%}
+                        {%if user.is_premium %}<span class="badge badge-warning">Premium</span>{%endif%}</td>
+              {%endif%}
+      {%endif%}
 
 
 
-      {%if user.is_ece %}
+
       <td>
+      {%if user.is_ece %}
+
         {%for student in user.students_app_1_user.all %}
-          <a class="btn btn-primary" href="{%url 'students_app_1:detail' pk=student.pk%}" role="button">Details</a>
+          <a class="btn btn-primary btn-sm" href="{%url 'students_app_1:detail' pk=student.pk%}" role="button">Student</a>
           {%if user.is_active%}
-          <a class='btn btn-danger' href="{%url 'students_app_1:deactivate' pk=student.pk%}">Deactivate</a>
+          <a class='btn btn-danger btn-sm' href="{%url 'students_app_1:deactivate' pk=student.pk%}">Deactivate</a>
           {%else%}
-          <a class='btn btn-success' href="{%url 'students_app_1:activate' pk=student.pk%}">Activate</a>
+          <a class='btn btn-success btn-sm' href="{%url 'students_app_1:activate' pk=student.pk%}">Activate</a>
           {%endif%}
 
         {%endfor%}
-        </td>
+
 
       {% endif %}
 
       {%if user.is_ee %}
-      <td>
+
         {%for student in user.students_app_2_user.all %}
-          <a class="btn btn-primary" href="{%url 'students_app_2:detail' pk=student.pk%}" role="button">Details</a>
+          <a class="btn btn-primary btn-sm" href="{%url 'students_app_2:detail' pk=student.pk%}" role="button">Student</a>
 
 
         {%if user.is_active%}
-        <a class='btn btn-danger' href="{%url 'students_app_2:deactivate' pk=student.pk%}">Deactivate</a>
+        <a class='btn btn-danger btn-sm' href="{%url 'students_app_2:deactivate' pk=student.pk%}">Deactivate</a>
         {%else%}
-        <a class='btn btn-success' href="{%url 'students_app_2:activate' pk=student.pk%}">Activate</a>
+        <a class='btn btn-success btn-sm' href="{%url 'students_app_2:activate' pk=student.pk%}">Activate</a>
         {%endif%}
 
           {%endfor%}
-          </td>
+
       {% endif %}
 
       {%if user.is_tutorial %}
-      <td>
+
         {%for student in user.students_app_3_user.all %}
-          <td><a class="btn btn-primary" href="{%url 'students_app_3:detail' pk=student.pk%}" role="button">Details</a>
+          <td><a class="btn btn-primary btn-sm" href="{%url 'students_app_3:detail' pk=student.pk%}" role="button">Student</a>
 
 
         {%if user.is_active%}
-        <a class='btn btn-danger' href="{%url 'students_app_3:deactivate' pk=student.pk%}">Deactivate</a>
+        <a class='btn btn-danger btn-sm' href="{%url 'students_app_3:deactivate' pk=student.pk%}">Deactivate</a>
         {%else%}
-        <a class='btn btn-success' href="{%url 'students_app_3:activate' pk=student.pk%}">Activate</a>
+        <a class='btn btn-success btn-sm' href="{%url 'students_app_3:activate' pk=student.pk%}">Activate</a>
         {%endif%}
 
         {%endfor%}
 </td>
       {% endif %}
+
+      <td><a class='btn btn-primary btn-sm' role='button' href="{%url 'main_app:user' pk=user.pk%}">User</a></td>
 
       <!--     path('<int:pk>/',views.StudentDetailView.as_view(),name='detail'), -->
     </tr>

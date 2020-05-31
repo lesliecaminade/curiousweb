@@ -60,6 +60,7 @@ INSTALLED_APPS = [
     'students_app_3',
     'staticpages',
     'handouts',
+    'exams_app_2',
 ]
 
 MIDDLEWARE = [
