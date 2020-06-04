@@ -13,12 +13,13 @@ urlpatterns = [
     #path('detail/<exampk>', views.ExamDetail.as_view(), name='exam_detail'),
     path('delete/<exampk>', views.ExamDelete.as_view(), name='exam_delete'),
     path('submit/<exampk>', views.ExamSubmit.as_view(), name='submit'),
-    path('download/<filepk>', views.ExamDownload.as_view(), name='exam_download'),
+    path('download/<filepk>', views.FileDownload.as_view(), name='exam_download'),
     path('detail/<exampk>', views.ExamDetail.as_view(), name='exam_detail'),
     path('file/<exampk>', views.AddExamFile.as_view(), name='file'),
     path('result/<exampk>/<answersheetpk>', views.ExamResult.as_view(), name='result'),
     path('delete_sheet/<answersheetpk>/<userpk>', views.SheetDelete.as_view(), name='sheet_delete'),
     path('lock/<exampk>', views.ExamLock.as_view(), name='exam_lock'),
     path('unlock/<exampk>', views.ExamUnlock.as_view(), name='exam_unlock'),
-
+    path('showanswerkey/<exampk>', views.ExamShowAnswerKey.as_view(), name='exam_done'),
+    path('hideanswerkey/<exampk>', views.ExamHideAnswerKey.as_view(), name='exam_undone'),
 ]

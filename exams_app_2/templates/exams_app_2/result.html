@@ -13,18 +13,6 @@
   <dt class="col-3">Score</dt>
   <dd class="col-9">{{answer_sheet.score}}</dd>
 
-  <dt class="col-3">Previous Scores</dt>
-  <dd class="col-9">
-<table>
-  {%for answer_sheet in prev_answer_sheets%}
-  <tr>
-    <td>{{answer_sheet.date_submitted}}</td><td>{{answer_sheet.score}}</td>
-  </tr>
-  {%endfor%}
-</table>
-
-  </dd>
-
 </dl>
 
 <a class="btn btn-primary" href="{%url 'exams_app_2:exam_list'%}" role="button">Exams</a>

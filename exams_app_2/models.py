@@ -10,7 +10,7 @@ class Item(models.Model):
     skip = models.BooleanField(default = False)
 
     def __str__(self):
-        return self.item_number + ' ' + self.answer
+        return str(self.item_number) + ' ' + self.answer
 
     class Meta:
         ordering = ['item_number']
@@ -24,10 +24,10 @@ class AnswerSheet(models.Model):
     first_take = models.BooleanField(default = False)
 
     def __str__(self):
-        return self.name + ' ' + str(int(self.percentage)) + '% ' + str(self.date_submitted)
+        return self.user_first_name +','+ self.user.last_name + ',' + str(self.score) + '% ' + str(self.date_submitted)
 
     class Meta:
-        ordering = ['score']
+        ordering = ['-score']
 
 class AnswerKey(models.Model):
     items = models.ManyToManyField(Item)
@@ -52,6 +52,9 @@ class Exam(models.Model):
     answer_key = models.ForeignKey(AnswerKey, on_delete = models.CASCADE, null = True)
     answer_sheets = models.ManyToManyField(AnswerSheet)
     thumbnail = models.ImageField()
+    is_done = models.BooleanField(default = False)
+    timestamp = models.DateTimeField(null=True)
+
 
     def __str__(self):
         return self.name

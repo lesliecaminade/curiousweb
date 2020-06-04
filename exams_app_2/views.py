@@ -17,17 +17,17 @@ class ExamList(View):
     def get(self, *args, **kwargs):
         if self.request.user.is_authenticated:
             if self.request.user.is_superuser:
-                exams = models.Exam.objects.all()
+                exams = models.Exam.objects.all().order_by('-pk')
             elif self.request.user.is_ece:
-                exams = models.Exam.objects.filter(is_ece = True)
+                exams = models.Exam.objects.filter(is_ece = True).order_by('-pk')
             elif self.request.user.is_ee:
-                exams = models.Exam.objects.filter(is_ee = True)
+                exams = models.Exam.objects.filter(is_ee = True).order_by('-pk')
             elif self.requets.user.is_tutorial:
-                exams = models.Exam.objects.filter(is_tutorial = True)
+                exams = models.Exam.objects.filter(is_tutorial = True).order_by('-pk')
             else:
                 send_email(curiousweb.settings.ADMIN_EMAILS, 'SITE ERROR REPORT',
                 f"""Unhandled user type at exams_app_2.views.ExamList""")
-                exams = models.Exam.objects.all()
+                exams = models.Exam.objects.all().order_by('-pk')
 
             template_name = 'exams_app_2/exams_list.html'
             context = {
@@ -75,6 +75,7 @@ class AddExam(View):
                 is_accessible = bool(self.request.POST.get('is_accessible', False)),
                 thumbnail = self.request.FILES['thumbnail'],
                 answer_key = new_answer_key,
+                timestamp = datetime.now(),
             )
             new_exam.save()
             resize_image_field(new_exam.thumbnail, height = 300)
@@ -231,9 +232,9 @@ class FileDownload(View):
         if self.request.user.is_authenticated:
             file = models.ExamFile.objects.get(pk = self.kwargs.get('filepk'))
 
-            if exam.is_accessible and ((self.request.user.is_ece and exam.is_ece) or (self.request.user.is_ee and exam.is_ee) or (self.request.user.is_tutorial and exam.is_tutorial)) :
-                filename = exam.file.name.split('/')[-1]
-                response = HttpResponse(exam.file, content_type='text/plain')
+            if file.is_accessible and ((self.request.user.is_ece and file.is_ece) or (self.request.user.is_ee and file.is_ee) or (self.request.user.is_tutorial and file.is_tutorial)) :
+                filename = file.file.name.split('/')[-1]
+                response = HttpResponse(file.file, content_type='text/plain')
                 response['Content-Disposition'] = 'attachment; filename=%s' % filename
                 return response
             else:
@@ -250,11 +251,28 @@ class SheetDelete(View):
 class ExamLock(View):
     def get(self, *args, **kwargs):
         if self.request.user.is_superuser:
-            exam = models.Exam.objects.filter(pk = int(self.kwargs.get('exampk'))).update(is_accessible=False)
+            exam = models.Exam.objects.filter(pk = int(self.kwargs.get('exampk'))).update(is_accessible=False, is_done = False)
+            exam = models.Exam.objects.get(pk = int(self.kwargs.get('exampk')))
+            exam.files.all().update(is_accessible = False)
             return HttpResponseRedirect(reverse('exams_app_2:exam_list'))
 
 class ExamUnlock(View):
     def get(self, *args, **kwargs):
         if self.request.user.is_superuser:
-            exam = models.Exam.objects.filter(pk = int(self.kwargs.get('exampk'))).update(is_accessible=True)
+            exam = models.Exam.objects.filter(pk = int(self.kwargs.get('exampk'))).update(is_accessible=True, is_done = False)
+            exam = models.Exam.objects.get(pk = int(self.kwargs.get('exampk')))
+            exam.files.all().update(is_accessible = True)
+
+            return HttpResponseRedirect(reverse('exams_app_2:exam_list'))
+
+class ExamShowAnswerKey(View):
+    def get(self, *args, **kwargs):
+        if self.request.user.is_superuser:
+            exam = models.Exam.objects.filter(pk = int(self.kwargs.get('exampk'))).update(is_done=True)
+            return HttpResponseRedirect(reverse('exams_app_2:exam_list'))
+
+class ExamHideAnswerKey(View):
+    def get(self, *args, **kwargs):
+        if self.request.user.is_superuser:
+            exam = models.Exam.objects.filter(pk = int(self.kwargs.get('exampk'))).update(is_done=False)
             return HttpResponseRedirect(reverse('exams_app_2:exam_list'))

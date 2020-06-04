@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<h1>Dashboard</h1>
+
+<div class="row mt-4">
+
+  <div class="col-lg-6 col-md-12 mb-4">
+    <h2>Announcements</h2>
+    {%for ann in announcements%}
+      <div class="alert alert-success mb-1" role="alert">
+          <strong>{{ann.title}}</strong><br>
+          {{ann.content | safe}}<br>
+          <small class='text-muted'>{{ann.timestamp}}</small><br>
+        </div>
+    {%endfor%}
+
+  </div>
+
+  <div class="col-lg-6 col-md-12 mb-4">
+    <h2><a href="{%url 'exams_app_2:exam_list'%}">Calendar</a></h2>
+
+    {%if user.is_ece%}
+      <div class="embed-responsive embed-responsive-16by9">
+        <iframe src="https://calendar.google.com/calendar/embed?src=8acboij06ststn4821ur8164m8%40group.calendar.google.com&ctz=Asia%2FManila" style="border: 0" width="800" height="600" frameborder="0" scrolling="no"></iframe>
+      </div>
+    {%endif%}
+
+    {%if user.is_ee%}
+    <div class="embed-responsive embed-responsive-16by9">
+      <iframe src="https://calendar.google.com/calendar/embed?src=rc0cn6q7b43o1odpuqfovjhlmk%40group.calendar.google.com&ctz=Asia%2FManila" style="border: 0" width="800" height="600" frameborder="0" scrolling="no"></iframe>
+    </div>
+    {%endif%}
+
+  </div>
+
+  <div class="col-lg-6 col-md-12 mb-4">
+    <h2><a href="{%url 'exams_app_2:exam_list'%}">Exams</a></h2>
+
+    {%for e in exams%}
+    <div class="col mb-1">
+      <strong>{{e.name}}</strong>
+      <br>
+      <small class='text-muted'>{{e.timestamp}}</small>
+      {%if not e.is_accessible%}<span class="badge badge-danger">Locked</span>{%endif%}
+      {%if not e.is_done%}<span class="badge badge-warning">Ongoing</span>{%endif%}
+    </div>
+    {%endfor%}
+
+  </div>
+
+  <div class="col-lg-6 col-md-12 mb-4">
+    <h2><a href="{%url 'handouts:main'%}">Handouts</a></h2>
+
+    {%for h in handouts%}
+    <div class="col mb-1">
+      <strong>{{h.name}}</strong>
+      <br>
+      <small class='text-muted'>{{h.timestamp}}</small>
+      {%if not h.is_accessible%}<span class="badge badge-danger">Locked</span>{%endif%}
+    </div>
+    {%endfor%}
+
+  </div>
+
+</div>
+{% endblock %}

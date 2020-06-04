@@ -25,5 +25,6 @@ class Handout(models.Model):
     is_tutorial = models.BooleanField(default = False)
     is_accessible = models.BooleanField(default = False)
 
+    timestamp = models.DateTimeField(null = True)
     def __str__(self):
         return self.name
