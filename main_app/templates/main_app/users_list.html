@@ -3,17 +3,6 @@
 
 <h1 class='display-4'>Users</h1>
 
-<a class="btn btn-primary" href="{%url 'main_app:users_filter' filter='all'%}" role="button">All</a>
-<a class="btn btn-primary" href="{%url 'main_app:users_filter' filter='ece'%}" role="button">ECE only</a>
-<a class="btn btn-primary" href="{%url 'main_app:users_filter' filter='ee'%}" role="button">EE only</a>
-<a class="btn btn-primary" href="{%url 'main_app:users_filter' filter='tutorial'%}" role="button">Tutorial Only</a>
-<a class="btn btn-primary" href="{%url 'main_app:users_filter' filter='active'%}" role="button">Active Only</a>
-<a class="btn btn-primary" href="{%url 'main_app:users_filter' filter='inactive'%}" role="button">Inactive Only</a>
-
-<div class="alert alert-info" role="alert">
-  The results show {{active_filter}} users.
-</div>
-
 <table class="table table-bordered">
   <thead>
     <tr>
@@ -53,48 +42,27 @@
 
         {%for student in user.students_app_1_user.all %}
           <a class="btn btn-primary btn-sm" href="{%url 'students_app_1:detail' pk=student.pk%}" role="button">Student</a>
-          {%if user.is_active%}
-          <a class='btn btn-danger btn-sm' href="{%url 'students_app_1:deactivate' pk=student.pk%}">Deactivate</a>
-          {%else%}
-          <a class='btn btn-success btn-sm' href="{%url 'students_app_1:activate' pk=student.pk%}">Activate</a>
-          {%endif%}
-
         {%endfor%}
-
-
       {% endif %}
 
       {%if user.is_ee %}
-
         {%for student in user.students_app_2_user.all %}
           <a class="btn btn-primary btn-sm" href="{%url 'students_app_2:detail' pk=student.pk%}" role="button">Student</a>
-
-
-        {%if user.is_active%}
-        <a class='btn btn-danger btn-sm' href="{%url 'students_app_2:deactivate' pk=student.pk%}">Deactivate</a>
-        {%else%}
-        <a class='btn btn-success btn-sm' href="{%url 'students_app_2:activate' pk=student.pk%}">Activate</a>
-        {%endif%}
-
           {%endfor%}
-
       {% endif %}
 
       {%if user.is_tutorial %}
-
         {%for student in user.students_app_3_user.all %}
           <td><a class="btn btn-primary btn-sm" href="{%url 'students_app_3:detail' pk=student.pk%}" role="button">Student</a>
-
-
-        {%if user.is_active%}
-        <a class='btn btn-danger btn-sm' href="{%url 'students_app_3:deactivate' pk=student.pk%}">Deactivate</a>
-        {%else%}
-        <a class='btn btn-success btn-sm' href="{%url 'students_app_3:activate' pk=student.pk%}">Activate</a>
-        {%endif%}
-
         {%endfor%}
-</td>
       {% endif %}
+
+      {%if user.is_active %}
+      <a class="btn btn-danger btn-sm" href="{%url 'main_app:deactivate' userpk=user.pk%}" role="button">Deactivate</a>
+      {%else%}
+      <a class="btn btn-success btn-sm" href="{%url 'main_app:activate' userpk=user.pk%}" role="button">Activate</a>
+      {%endif%}
+</td>
 
       <td><a class='btn btn-primary btn-sm' role='button' href="{%url 'main_app:user' pk=user.pk%}">User</a></td>
 

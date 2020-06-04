@@ -104,6 +104,14 @@ DATABASES = {
     }
 }
 
+# DATABASES = { 'default': {
+#     'ENGINE': 'django.db.backends.mysql',
+#     'NAME': 'siliconcortex$default',
+#     'USER': 'siliconcortex',
+#     'PASSWORD': 'testpassword',
+#     'HOST': 'siliconcortex.mysql.pythonanywhere-services.com', }
+# }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators

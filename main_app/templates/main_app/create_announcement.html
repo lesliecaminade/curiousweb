@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block content %}
+{% load bootstrap4 %}
+
+<h1>Create Announcement</h1>
+
+<form method="post">
+  {%csrf_token%}
+
+  {%bootstrap_form form%}
+  <button type="submit" class='btn btn-primary' name="button">Save</button>
+</form>
+
+{% endblock %}

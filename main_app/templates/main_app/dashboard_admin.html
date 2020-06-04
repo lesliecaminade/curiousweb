@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<h1>Admin Dashboard</h1>
+
+<div class="row mt-4">
+
+  <div class="col-lg-6 col-md-12 mb-4">
+    <h2>Announcements</h2>
+    <a class="btn btn-primary mb-4" href="{%url 'main_app:create_announcement'%}" role="button">Create</a>
+
+    {%for ann in announcements%}
+      <div class="alert alert-success mb-1" role="alert">
+          <strong>{{ann.title}}</strong><br>
+          {{ann.content | safe}}<br>
+          <small class='text-muted'>{{ann.timestamp}}</small><br>
+          <a class="btn btn-danger btn-sm" href="{%url 'main_app:delete_announcement' announcementpk=ann.pk%}" role="button">Del</a>
+          {%if ann.is_ece%}<span class="badge badge-primary">ECE</span>{%endif%}
+          {%if ann.is_ee%}<span class="badge badge-success">EE</span>{%endif%}
+          {%if ann.is_tutorial%}<span class="badge badge-info">Tutorial</span>{%endif%}
+        </div>
+    {%endfor%}
+
+  </div>
+
+  <div class="col-lg-6 col-md-12 mb-4">
+    <h2><a href="{%url 'main_app:users'%}">Enrollments</a></h2>
+      {%for e in enrollments %}
+      <div class="col mb-1">
+        <p><strong>{{e.last_name}}, {{e.first_name}}</strong>
+
+        {%for student in e.students_app_1_user.all %}
+          ECE - {{student.school}}
+        {%endfor%}
+
+        {%for student in e.students_app_2_user.all %}
+          EE - {{student.school}}
+        {%endfor%}
+
+        {%for student in e.students_app_2_user.all %}
+          Tutorial - {{student.school}}
+        {%endfor%}
+        <br>
+        <small class='text-muted'>{{e.date_created}}</small>
+        {%if e.is_ece%}<span class="badge badge-primary">ECE</span>{%endif%}
+        {%if e.is_ee%}<span class="badge badge-success">EE</span>{%endif%}
+        {%if e.is_tutorial%}<span class="badge badge-info">Tutorial</span>{%endif%}
+        </p>
+
+
+
+      </div>
+      {%endfor%}
+  </div>
+
+
+
+  <div class="col-lg-6 col-md-12 mb-4">
+    <h2><a href="{%url 'exams_app_2:exam_list'%}">Exams</a></h2>
+
+    {%for e in exams%}
+    <div class="col mb-1">
+      <strong>{{e.name}}</strong>
+      <br>
+      <small class='text-muted'>{{e.timestamp}}</small>
+      {%if e.is_ece%}<span class="badge badge-primary">ECE</span>{%endif%}
+      {%if e.is_ee%}<span class="badge badge-success">EE</span>{%endif%}
+      {%if e.is_tutorial%}<span class="badge badge-info">Tutorial</span>{%endif%}
+      {%if not e.is_accessible%}<span class="badge badge-danger">Locked</span>{%endif%}
+      {%if not e.is_done%}<span class="badge badge-warning">Ongoing</span>{%endif%}
+    </div>
+    {%endfor%}
+
+  </div>
+
+  <div class="col-lg-6 col-md-12 mb-4">
+    <h2><a href="{%url 'handouts:main'%}">Handouts</a></h2>
+
+    {%for h in handouts%}
+    <div class="col mb-1">
+      <strong>{{h.name}}</strong>
+      <br>
+      <small class='text-muted'>{{h.timestamp}}</small>
+      {%if h.is_ece%}<span class="badge badge-primary">ECE</span>{%endif%}
+      {%if h.is_ee%}<span class="badge badge-success">EE</span>{%endif%}
+      {%if h.is_tutorial%}<span class="badge badge-info">Tutorial</span>{%endif%}
+      {%if not h.is_accessible%}<span class="badge badge-danger">Locked</span>{%endif%}
+    </div>
+    {%endfor%}
+
+  </div>
+
+</div>
+
+{% endblock %}

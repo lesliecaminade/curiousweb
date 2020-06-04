@@ -13,19 +13,20 @@ from . import forms
 from PIL import Image
 from .image_helpers import resize_image_field
 from communications.standard_email import send_email
+from datetime import datetime
 
 
 class Handouts(View):
     def get(self, *args, **kwargs):
         if self.request.user.is_authenticated:
             if self.request.user.is_superuser:
-                handouts = models.Handout.objects.all()
+                handouts = models.Handout.objects.all().order_by('-pk')
             elif self.request.user.is_ece:
-                handouts = models.Handout.objects.filter(is_ece = True)
+                handouts = models.Handout.objects.filter(is_ece = True).order_by('-pk')
             elif self.request.user.is_ee:
-                handouts = models.Handout.objects.filter(is_ee = True)
+                handouts = models.Handout.objects.filter(is_ee = True).order_by('-pk')
             elif self.request.user.is_tutorial:
-                handouts = models.Handout.objects.filter(is_tutorial = True)
+                handouts = models.Handout.objects.filter(is_tutorial = True).order_by('-pk')
             else:
                 send_email(ADMIN_EMAILS, 'ERROR REPORT',
                 """Site: certconlinereview
@@ -85,6 +86,7 @@ class AddHandout(View):
                 is_ee = is_ee,
                 is_tutorial = is_tutorial,
                 is_accessible = is_accessible,
+                timestamp = datetime.now(),
             )
             new_handout.save()
             resize_image_field(new_handout.image, height = 300)
