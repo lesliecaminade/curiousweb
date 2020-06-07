@@ -43,9 +43,8 @@ class AddExam(View):
             exam_form = forms.ExamForm
             context = {
                 'exam_form': exam_form,
-                'column_looper': [i for i in range(1,5)],
-                'row_looper': [i for i in range(1, 26)],
                 'answer_key_looper': [i for i in range(1,101)],
+                'number_of_files': [i for i in range(6)],
             }
             return render(self.request, template_name, context)
 
@@ -58,13 +57,12 @@ class AddExam(View):
             for i in range(1,101):
                 new_item = models.Item(
                     item_number = i,
-                    answer = self.request.POST.get('answer_' + str(i)),
+                    answer = self.request.POST.get('answer_' + str(i), 'no answer'),
                     bonus = False,
                     skip = False,
                 )
                 new_item.save()
                 new_answer_key.items.add(new_item)
-
 
             new_exam = models.Exam(
                 name = self.request.POST.get('name'),
@@ -73,14 +71,27 @@ class AddExam(View):
                 is_ee = bool(self.request.POST.get('is_ee', False)),
                 is_tutorial = bool(self.request.POST.get('is_tutorial', False)),
                 is_accessible = bool(self.request.POST.get('is_accessible', False)),
-                thumbnail = self.request.FILES['thumbnail'],
+                thumbnail = self.request.FILES.get('thumbnail'),
                 answer_key = new_answer_key,
                 timestamp = datetime.now(),
             )
             new_exam.save()
             resize_image_field(new_exam.thumbnail, height = 300)
 
-            return HttpResponseRedirect(reverse('exams_app_2:exam_detail', kwargs = {'exampk': new_exam.pk, }))
+            for i in range(6):
+                if self.request.FILES.get('exam_file_' + str(i)):
+                    new_examfile = models.ExamFile(
+                        name = 'Page ' + str(i),
+                        file = self.request.FILES.get('exam_file_' + str(i)),
+                        is_ece = bool(self.request.POST.get('is_ece', False)),
+                        is_ee = bool(self.request.POST.get('is_ee', False)),
+                        is_tutorial = bool(self.request.POST.get('is_tutorial', False)),
+                        is_accessible = bool(self.request.POST.get('is_accessible', False)),
+                    )
+                    new_examfile.save()
+                    new_exam.files.add(new_examfile)
+
+            return HttpResponseRedirect(reverse('exams_app_2:exam_list'))
 
 class ExamDetail(View):
     def get(self, *args, **kwargs):
@@ -132,7 +143,6 @@ class ExamSubmit(View):
     def post(self, *args, **kwargs):
         if self.request.user.is_authenticated:
 
-
             exam = models.Exam.objects.get(pk = int(self.request.POST.get('exampk')))
             has_taken = bool(exam.answer_sheets.filter(user = self.request.user).exists())
 
@@ -143,20 +153,19 @@ class ExamSubmit(View):
             )
             new_answer_sheet.save()
 
-            #score logic
             score = 0
             items = 100
 
             for i in range(1, 101):
                 new_item = models.Item(
                     item_number = i,
-                    answer = self.request.POST.get('answer_' + str(i)),
+                    answer = self.request.POST.get('answer_' + str(i), 'no answer'),
                     bonus = False,
                     skip = False,
                 )
                 new_item.save()
 
-                if self.request.POST.get('answer_' + str(i)) == exam.answer_key.items.get(item_number = i).answer:
+                if self.request.POST.get('answer_' + str(i), 'no answer') == exam.answer_key.items.get(item_number = i).answer:
                     score = score + 1
 
                 new_answer_sheet.items.add(new_item)

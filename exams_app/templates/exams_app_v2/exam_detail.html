@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% load bootstrap4 %}
+{% block content %}
+
+<h1 class='display-4'>{{exam.title}}</h1>
+
+{%if exam.description%}
+<p>{{exam.description}}</p>
+{%endif%}
+
+<hr class = 'my-4'>
+
+{% for item in exam.items.all %}
+{%include "exams_app_v2/item_detail.html" %}
+{%endfor%}
+
+
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+{% endblock %}

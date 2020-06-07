@@ -9,4 +9,4 @@ class HandoutFileForm(forms.ModelForm):
 class HandoutForm(forms.ModelForm):
     class Meta:
         model = models.Handout
-        exclude = ['files', ]
+        exclude = ['files', 'timestamp',]

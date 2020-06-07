@@ -2,10 +2,21 @@
 {%load bootstrap4 %}
 {% block content %}
 
-<h1 class='display-4'>Add Handout</h1>
+<h1>Add Handout</h1>
 <form method = "POST" enctype="multipart/form-data">
   {%csrf_token%}
   {% bootstrap_form form %}
+
+  {%for i in number_of_files%}
+  <div class="form-group">
+    <label for="handout_file_{{forloop.counter}}">Handout File {{forloop.counter}}</label>
+    {%if forloop.counter == 1%}
+      <input type="file" class="form-control-file" id="handout_file_{{forloop.counter}}" name='handout_file_{{forloop.counter}}' accept="image/*" required>
+    {%else%}
+      <input type="file" class="form-control-file" id="handout_file_{{forloop.counter}}" name='handout_file_{{forloop.counter}}' accept="image/*">
+    {%endif%}  </div>
+  {%endfor%}
+
 <button type="submit" name="button" class='btn btn-primary'>Add Handout</button>
 
 </form>

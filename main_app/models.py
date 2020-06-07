@@ -32,8 +32,7 @@ class Activity(models.Model):
 
 class Announcement(models.Model):
     title = models.CharField(max_length = 100)
-    type = models.CharField(max_length = 100)
-    content = models.CharField(max_length = 500)
+    content = models.CharField(max_length = 2000)
     timestamp = models.DateTimeField(null =  True)
 
     is_ece = models.BooleanField(default = False)
@@ -43,6 +42,6 @@ class Announcement(models.Model):
 
     def __str__(self):
         return self.title
-        
+
     class Meta:
         ordering = ['-timestamp']

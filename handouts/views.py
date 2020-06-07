@@ -47,6 +47,7 @@ class AddHandout(View):
             template_name = 'handouts/add.html'
             context = {
                 'form': forms.HandoutForm,
+                'number_of_files': [i for i in range(10)],
             }
             return render(self.request, template_name, context)
 
@@ -91,16 +92,26 @@ class AddHandout(View):
             new_handout.save()
             resize_image_field(new_handout.image, height = 300)
 
-            return HttpResponseRedirect(reverse('handouts:detail', kwargs = {'handoutpk': new_handout.pk,}))
+            for i in range(10):
+                if self.request.FILES.get('handout_file_' + str(i)):
+                    new_handoutfile = models.HandoutFile(
+                        name = self.request.POST.get('name'),
+                        file = self.request.FILES.get('handout_file_' + str(i)),
+                        is_ece = is_ece,
+                        is_ee = is_ee,
+                        is_tutorial = is_tutorial,
+                        is_accessible = is_accessible,
+                    )
+                    new_handoutfile.save()
+                    new_handout.files.add(new_handoutfile)
+
+            return HttpResponseRedirect(reverse('handouts:main'))
 
 class DownloadHandoutFile(View):
     def get(self, *args, **kwargs):
         if self.request.user.is_authenticated:
             handoutfile = models.HandoutFile.objects.get(pk = int(self.kwargs['filepk']))
-            if  handoutfile.is_accessible and ((self.request.user.is_ece and handoutfile.is_ece) or (self.request.user.is_ee and handoutfile.is_ee) or (self.request.user.is_tutorial and handoutfile.is_tutorial)) :
-                # filepath = handoutfile.file.path
-                # return serve(self.request, os.path.basename(filepath), os.path.dirname(filepath))
-
+            if  handoutfile.is_accessible:
                 filename = handoutfile.file.name.split('/')[-1]
                 response = HttpResponse(handoutfile.file, content_type='text/plain')
                 response['Content-Disposition'] = 'attachment; filename=%s' % filename
@@ -163,10 +174,18 @@ class HandoutLock(View):
     def get(self, *args, **kwargs):
         if self.request.user.is_superuser:
             handout = models.Handout.objects.filter(pk = int(self.kwargs.get('handoutpk'))).update(is_accessible=False)
+            handout = models.Handout.objects.get(pk = int(self.kwargs.get('handoutpk')))
+            for file in handout.files.all():
+                file.is_accessible = False
+                file.save()
             return HttpResponseRedirect(reverse('handouts:main'))
 
 class HandoutUnlock(View):
     def get(self, *args, **kwargs):
         if self.request.user.is_superuser:
             handout = models.Handout.objects.filter(pk = int(self.kwargs.get('handoutpk'))).update(is_accessible=True)
+            handout = models.Handout.objects.get(pk = int(self.kwargs.get('handoutpk')))
+            for file in handout.files.all():
+                file.is_accessible = True
+                file.save()
             return HttpResponseRedirect(reverse('handouts:main'))
