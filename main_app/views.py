@@ -26,41 +26,53 @@ class IndexView(View):
         if self.request.user.is_authenticated:
             if self.request.user.is_superuser:
                 template_name = 'main_app/dashboard_admin.html'
-                announcements = models.Announcement.objects.all()[:5]
-                enrolls = models.User.objects.all().order_by('-date_created')[:5]
-                exams = exams_app_2.models.Exam.objects.all().order_by('-pk')[:5]
-                hand = handouts.models.Handout.objects.all().order_by('-pk')[:5]
+                announcements = models.Announcement.objects.all()[:20]
+                enrolls = models.User.objects.all().order_by('-date_created')[:20]
+                exams = exams_app_2.models.Exam.objects.all().order_by('-pk')[:20]
+                hand = handouts.models.Handout.objects.all().order_by('-pk')[:20]
+                users = models.User.objects.all().order_by('-pk')[:30]
+                mcqs = exams_app.models.Exam.objects.all().order_by('-pk')[:20]
                 context = {
                     'nav_home': 'active',
                     'announcements': announcements,
                     'exams': exams,
                     'handouts': hand,
                     'enrollments': enrolls,
+                    'users': users,
+                    'mcqs': mcqs,
                     #activities
                     }
                 return render(self.request, template_name, context)
             else:
                 if self.request.user.is_ece:
-                    announcements = models.Announcement.objects.filter(is_ece = True)[:5]
-                    exams = exams_app_2.models.Exam.objects.filter(is_ece = True).order_by('-pk')[:5]
-                    hand = handouts.models.Handout.objects.filter(is_ece = True).order_by('-pk')[:5]
+                    announcements = models.Announcement.objects.filter(is_ece = True)[:10]
+                    exams = exams_app_2.models.Exam.objects.filter(is_ece = True).order_by('-pk')[:10]
+                    hand = handouts.models.Handout.objects.filter(is_ece = True).order_by('-pk')[:10]
+                    mcqs = exams_app.models.Exam.objects.filter(is_ece = True).order_by('-pk')[:10]
                 elif self.request.user.is_ee:
-                    announcements = models.Announcement.objects.filter(is_ee = True)[:5]
-                    exams = exams_app_2.models.Exam.objects.filter(is_ee = True).order_by('-pk')[:5]
-                    hand = handouts.models.Handout.objects.filter(is_ee = True).order_by('-pk')[:5]
+                    announcements = models.Announcement.objects.filter(is_ee = True)[:10]
+                    exams = exams_app_2.models.Exam.objects.filter(is_ee = True).order_by('-pk')[:10]
+                    hand = handouts.models.Handout.objects.filter(is_ee = True).order_by('-pk')[:10]
+                    mcqs = exams_app.models.Exam.objects.filter(is_ee = True).order_by('-pk')[:10]
                 elif self.request.user.is_tutorial:
-                    announcements = models.Announcement.objects.filter(is_tutorial = True)[:5]
-                    exams = exams_app_2.models.Exam.objects.filter(is_tutorial = True).order_by('-pk')[:5]
-                    hand = handouts.models.Handout.objects.filter(is_tutorial = True).order_by('-pk')[:5]
+                    announcements = models.Announcement.objects.filter(is_tutorial = True)[:10]
+                    exams = exams_app_2.models.Exam.objects.filter(is_tutorial = True).order_by('-pk')[:10]
+                    hand = handouts.models.Handout.objects.filter(is_tutorial = True).order_by('-pk')[:10]
+                    mcqs = exams_app.models.Exam.objects.filter(is_tutorial = True).order_by('-pk')[:10]
                 else:
-                    HttpResponse('unhandled user type')
-
+                    HttpResponse('Error: unhandled user type')
+                answer_sheets = exams_app_2.models.AnswerSheet.objects.filter(user = self.request.user).order_by('date_submitted')
+                exam_data = [int(answer_sheet.score) for answer_sheet in answer_sheets]
+                exam_label = [ str(answer_sheet.exam_set.all()[0].name) for answer_sheet in answer_sheets]
                 template_name = 'main_app/dashboard_student.html'
                 context = {
                     'nav_home': 'active',
                     'announcements': announcements,
                     'exams': exams,
                     'handouts': hand,
+                    'mcqs': mcqs,
+                    'exam_label': str(exam_label),
+                    'exam_data': str(exam_data),
                     }
                 return render(self.request, template_name, context)
         else:
@@ -189,7 +201,6 @@ class CreateAnnouncement(View):
         if self.request.user.is_superuser:
             new_announcement = models.Announcement(
                 title = self.request.POST.get('title'),
-                type = self.request.POST.get('type'),
                 content = self.request.POST.get('content'),
                 timestamp = datetime.now(),
                 is_ece = bool(self.request.POST.get('is_ece')),
@@ -207,3 +218,10 @@ class DeleteAnnouncement(View):
             ann = models.Announcement.objects.get(pk = int(self.kwargs.get('announcementpk')))
             ann.delete()
             return HttpResponseRedirect(reverse('index'))
+
+class UserDelete(View):
+    def get(self, *args, **kwargs):
+        if self.request.user.is_superuser:
+            user = models.User.objects.get(pk = int(self.kwargs.get('pk')))
+            user.delete()
+            return HttpResponseRedirect(reverse('main_app:users'))

@@ -5,8 +5,6 @@ class MCQForm(forms.ModelForm):
     class Meta:
         model = models.MCQ
         fields = '__all__'
-
-
         widgets = {
             'choice1': forms.RadioSelect,
             'choice2': forms.RadioSelect,

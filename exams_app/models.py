@@ -6,7 +6,9 @@ class Choice(models.Model):
     content = models.CharField(max_length = 1000)
     correct = models.BooleanField()
     image = models.ImageField(null = True, blank = True)
-    explanation = models.CharField(max_length = 1000, null = True)
+
+    class Meta:
+        ordering = ['?']
 
     def __str__(self):
         return content
@@ -15,15 +17,12 @@ class MCQ(models.Model):
     question = models.TextField(max_length = 1000, default = '', null = True, blank = True)
     choices = models.ManyToManyField(Choice)
     image = models.ImageField(blank = True, null = True)
-
-    def get_absolute_url(self):
-        return reverse("exams_app:mcq_detail",kwargs={'pk':self.pk})
+    explanation = models.CharField(max_length = 1000, null = True)
 
     def __str__(self):
         return self.question
 
 class Exam(models.Model):
-    author = models.ForeignKey(User, on_delete = models.PROTECT, null = True)
     title = models.CharField(max_length = 100)
     description = models.CharField(max_length = 100)
     is_ece = models.BooleanField(default = False)
@@ -35,9 +34,6 @@ class Exam(models.Model):
 
     def __str__(self):
         return self.title
-
-    def get_absolute_url(self):
-        return reverse('exams_app:exam', kwargs={'pk':self.pk})
 
 class CategoryA(models.Model):
     name = models.CharField(max_length = 100)

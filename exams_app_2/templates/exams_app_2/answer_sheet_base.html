@@ -4,7 +4,7 @@
 
 
 <form method="POST" enctype="multipart/form-data">
-  <h1 class='display-4'>Answer Sheet</h1>
+  <h1>Answer Sheet</h1>
 
   <dl class="row">
     <dt class="col-sm-3">Exam Taker</dt>
@@ -27,15 +27,13 @@
 
 {%include 'exams_app_2/answer_sheet.html'%}
 
-  <!-- <button type="submit" class="btn btn-primary mt-4">Submit Answers</button> -->
 
-  <!-- Button trigger modal -->
   {%if not has_taken%}
   <button type="button" class="btn btn-primary mt-4" data-toggle="modal" data-target="#exampleModal">
     Submit Answers
   </button>
 
-  <!-- Modal -->
+
   <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">

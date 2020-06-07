@@ -27,4 +27,7 @@ class AnnouncementForm(forms.ModelForm):
             ('dark', 'Dark'),
 
         )),
+
+
+        'content': forms.Textarea(),
         }

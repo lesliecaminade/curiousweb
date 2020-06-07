@@ -1,68 +1,378 @@
-{% extends 'base.html' %}
+{% extends 'base_with_chartjs.html' %}
 {% load static %}
 {% block content %}
 
 <h1>Dashboard</h1>
 
-<div class="row mt-4">
+<ul class="nav nav-tabs" id="myTab" role="tablist">
+  <li class="nav-item">
+    <a class="nav-link active" id="announcement-tab" data-toggle="tab" href="#announcement" role="tab" aria-controls="announcement" aria-selected="true">Announcements</a>
+  </li>
+  <!-- <li class="nav-item">
+    <a class="nav-link" id="users-tab" data-toggle="tab" href="#users" role="tab" aria-controls="users" aria-selected="true">Users</a>
+  </li> -->
+  <li class="nav-item">
+    <a class="nav-link" id="exams-tab" data-toggle="tab" href="#exams" role="tab" aria-controls="exams" aria-selected="true">Exams</a>
+  </li>
 
-  <div class="col-lg-6 col-md-12 mb-4">
-    <h2>Announcements</h2>
-    {%for ann in announcements%}
-      <div class="alert alert-success mb-1" role="alert">
-          <strong>{{ann.title}}</strong><br>
-          {{ann.content | safe}}<br>
-          <small class='text-muted'>{{ann.timestamp}}</small><br>
-        </div>
-    {%endfor%}
+  <li class="nav-item">
+    <a class="nav-link" id="handouts-tab" data-toggle="tab" href="#handouts" role="tab" aria-controls="handouts" aria-selected="true">Handouts</a>
+  </li>
 
+  <li class="nav-item">
+    <a class="nav-link" id="mcq-tab" data-toggle="tab" href="#mcq" role="tab" aria-controls="mcq" aria-selected="true">MCQ</a>
+  </li>
+
+  <li class="nav-item">
+    <a class="nav-link" id="calendar-tab" data-toggle="tab" href="#calendar" role="tab" aria-controls="calendar" aria-selected="true">Calendar</a>
+  </li>
+
+  <li class="nav-item">
+    <a class="nav-link" id="stats-tab" data-toggle="tab" href="#stats" role="tab" aria-controls="stats" aria-selected="true">Stats</a>
+  </li>
+
+  <li class="nav-item">
+    <a class="nav-link" id="settings-tab" data-toggle="tab" href="#settings" role="tab" aria-controls="settings" aria-selected="true">Settings</a>
+  </li>
+
+</ul>
+
+
+<div class="tab-content" id="myTabContent">
+
+  <div class="tab-pane fade show active" id="announcement" role="tabpanel" aria-labelledby="announcement-tab">
+    <p>Only showing the newest announcements. <a href="#">Show All Announcements</a></p>
+      <div class="col">
+        <div class="card-columns">
+          {%for ann in announcements%}
+
+            <div class="card">
+              <!-- <img src="..." class="card-img-top" alt="..."> -->
+              <div class="card-body">
+                <h5 class="card-title">{{ann.title}}</h5>
+                <p><small class="text-muted">{{ann.timestamp}}</small></p>
+                <p class="card-text">{{ann.content | safe | truncatewords:100}}</p>
+              </div>
+            </div>
+
+          {%endfor%}
+          </div>
+      </div>
   </div>
 
-  <div class="col-lg-6 col-md-12 mb-4">
-    <h2><a href="{%url 'exams_app_2:exam_list'%}">Calendar</a></h2>
+  <div class="tab-pane fade" id="users" role="tabpanel" aria-labelledby="users-tab">
+    <p>Only showing the newest users. <a href="{%url 'main_app:users'%}">Show All Users</a></p>
+    {%for u in users%}
+    <div class="media">
+      {%if u.is_ece %}
+        {%for student in u.students_app_1_user.all %}
+          {%if student.id_picture%}
+            <img src="{{student.id_picture.url}}" class="mr-3" alt="..." width='60px'>
+          {%else%}
+          <svg width="60" height="60" class='mr-3'>
+            <rect width="60" height="60" style="fill:rgb(100,100,100);stroke-width:3;stroke:rgb(0,0,0)" />
+          </svg>
+          {%endif%}
+        {%endfor%}
+      {% endif %}
 
+      {%if u.is_ee %}
+        {%for student in u.students_app_2_user.all %}
+          {%if student.id_picture%}
+            <img src="{{student.id_picture.url}}" class="mr-3" alt="..." width='60px'>
+          {%else%}
+          <svg width="60" height="60" class='mr-3'>
+            <rect width="60" height="60" style="fill:rgb(100,100,100);stroke-width:3;stroke:rgb(0,0,0)" />
+          </svg>
+          {%endif%}
+          {%endfor%}
+      {% endif %}
+
+      {%if u.is_tutorial %}
+        {%for student in u.students_app_3_user.all %}
+          {%if student.id_picture%}
+            <img src="{{student.id_picture.url}}" class="mr-3" alt="..." width='60px'>
+          {%else%}
+          <svg width="60" height="60" class='mr-3'>
+            <rect width="60" height="60" style="fill:rgb(100,100,100);stroke-width:3;stroke:rgb(0,0,0)" />
+          </svg>
+          {%endif%}
+        {%endfor%}
+      {% endif %}
+
+
+      <div class="media-body">
+
+        {%if u.is_ece %}
+          {%for student in u.students_app_1_user.all %}
+            <h6 class="mt-0"><a href="{%url 'students_app_1:detail' pk=student.pk%}">{{u.last_name}}, {{u.first_name}}</a></h6>
+            ECE - {{student.school}}
+          {%endfor%}
+        {% endif %}
+
+        {%if u.is_ee %}
+          {%for student in u.students_app_2_user.all %}
+          <h6 class="mt-0"><a href="{%url 'students_app_2:detail' pk=student.pk%}">{{u.last_name}}, {{u.first_name}}</a></h6>
+            EE - {{student.school}}
+            {%endfor%}
+        {% endif %}
+
+        {%if u.is_tutorial %}
+          {%for student in u.students_app_3_user.all %}
+          <h6 class="mt-0"><a href="{%url 'students_app_2:detail' pk=student.pk%}">{{u.last_name}}, {{u.first_name}}</a></h6>
+            Tutorial - {{student.school}}
+          {%endfor%}
+        {% endif %}
+      </div>
+    </div>
+    {%endfor%}
+  </div>
+
+  <div class="tab-pane fade" id="exams" role="tabpanel" aria-labelledby="exams-tab">
+    <p>Only showing the newest exams. <a href="{%url 'exams_app_2:exam_list'%}">Show All Exams</a></p>
+    {%if user.is_superuser%}
+    <div class="container mb-4">
+      <a class="btn btn-warning" href="{%url 'exams_app_2:add_exam'%}" role="button">Add Exam</a>
+    </div>
+    {%endif%}
+    <div class="container mb-4">
+      {%for exam in exams%}
+      <div class="media mb-4">
+        <img src="{{exam.thumbnail.url}}" class="mr-3" alt="" width='200px'>
+        <div class="media-body">
+          {%if user.is_superuser%}
+          <h5 class="mt-0"><a href="{%url 'exams_app_2:exam_detail' exampk=exam.pk%}">{{exam.name}}</a></h5>
+          {%else%}
+          <h5 class="mt-0">{{exam.name}}</h5>
+          {%endif%}
+          <p>{{exam.description}}
+            {%if user.is_superuser %}
+              {%if exam.is_ece%}
+              <span class="badge badge-primary">ECE</span>
+              {%endif%}
+              {%if exam.is_ee%}
+              <span class="badge badge-success">EE</span>
+              {%endif%}
+              {%if exam.is_tutorial%}
+              <span class="badge badge-info">Tutorial</span>
+              {%endif%}
+            {%endif%}
+            {%if not exam.is_accessible%}
+            <small class='text-muted'>Not available</small>
+            {%endif%}
+           </p>
+          {%if exam.is_accessible%}
+              {%for file in exam.files.all%}
+                  <a class="btn btn-secondary mb-1" href="{%url 'exams_app_2:exam_download' filepk=file.pk%}" role="button">
+                    <svg class="bi bi-download" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                      <path fill-rule="evenodd" d="M.5 8a.5.5 0 0 1 .5.5V12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8.5a.5.5 0 0 1 1 0V12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V8.5A.5.5 0 0 1 .5 8z"/>
+                      <path fill-rule="evenodd" d="M5 7.5a.5.5 0 0 1 .707 0L8 9.793 10.293 7.5a.5.5 0 1 1 .707.707l-2.646 2.647a.5.5 0 0 1-.708 0L5 8.207A.5.5 0 0 1 5 7.5z"/>
+                      <path fill-rule="evenodd" d="M8 1a.5.5 0 0 1 .5.5v8a.5.5 0 0 1-1 0v-8A.5.5 0 0 1 8 1z"/>
+                    </svg>
+                    {{forloop.counter}}
+                  </a>
+              {%endfor%}
+                  <a class="btn btn-primary mb-1" href="{%url 'exams_app_2:submit' exampk=exam.pk%}" role="button">
+                    <svg class="bi bi-pencil" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                      <path fill-rule="evenodd" d="M11.293 1.293a1 1 0 0 1 1.414 0l2 2a1 1 0 0 1 0 1.414l-9 9a1 1 0 0 1-.39.242l-3 1a1 1 0 0 1-1.266-1.265l1-3a1 1 0 0 1 .242-.391l9-9zM12 2l2 2-9 9-3 1 1-3 9-9z"/>
+                      <path fill-rule="evenodd" d="M12.146 6.354l-2.5-2.5.708-.708 2.5 2.5-.707.708zM3 10v.5a.5.5 0 0 0 .5.5H4v.5a.5.5 0 0 0 .5.5H5v.5a.5.5 0 0 0 .5.5H6v-1.5a.5.5 0 0 0-.5-.5H5v-.5a.5.5 0 0 0-.5-.5H3z"/>
+                    </svg>
+                  </a>
+          {%else%}
+              {%if exam.is_done%}
+              <button class="btn btn-primary dropdown-toggle mb-1" type="button" data-toggle="collapse" data-target="#answerkey_{{forloop.counter}}" aria-expanded="false" aria-controls="answerkey_{{forloop.counter}}">
+                <svg class="bi bi-eye" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                  <path fill-rule="evenodd" d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.134 13.134 0 0 0 1.66 2.043C4.12 11.332 5.88 12.5 8 12.5c2.12 0 3.879-1.168 5.168-2.457A13.134 13.134 0 0 0 14.828 8a13.133 13.133 0 0 0-1.66-2.043C11.879 4.668 10.119 3.5 8 3.5c-2.12 0-3.879 1.168-5.168 2.457A13.133 13.133 0 0 0 1.172 8z"/>
+                  <path fill-rule="evenodd" d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z"/>
+                </svg>
+              </button>
+              <div class="collapse" id="answerkey_{{forloop.counter}}">
+              <div class="card card-body">
+                    <ol>
+                      {%for item in exam.answer_key.items.all %}
+                      <li>{{item.answer}}</li>
+                      {%endfor%}
+                    </ol>
+              </div>
+              </div>
+              {%endif%}
+          {%endif%}
+          {%if user.is_superuser%}
+            <a class="btn btn-secondary mb-1" href="{%url 'exams_app_2:file' exampk=exam.pk%}" role="button">Add Exam File</a>
+            <a class="btn btn-danger mb-1" href="{%url 'exams_app_2:exam_delete' exampk=exam.pk%}" role="button">Delete</a>
+            {%if exam.is_accessible%}
+            <a class="btn btn-secondary mb-1" href="{%url 'exams_app_2:exam_lock' exampk=exam.pk%}" role="button">Lock</a>
+            {%else%}
+            <a class="btn btn-warning mb-1" href="{%url 'exams_app_2:exam_unlock' exampk=exam.pk%}" role="button">Unlock</a>
+            {%endif%}
+            {%if not exam.is_accessible%}
+              {%if exam.is_done%}
+              <a class="btn btn-secondary mb-1" href="{%url 'exams_app_2:exam_undone' exampk=exam.pk%}" role="button">Hide Keys</a>
+              {%else%}
+              <a class="btn btn-warning mb-1" href="{%url 'exams_app_2:exam_done' exampk=exam.pk%}" role="button">Show Keys</a>
+              {%endif%}
+            {%endif%}
+          {%endif%}
+        </div>
+      </div>
+      {%endfor%}
+    </div>
+  </div>
+
+
+<div class="tab-pane fade" id="handouts" role="tabpanel" aria-labelledby="handouts-tab">
+    <p>Only showing the newest handouts. <a href="{%url 'handouts:main'%}">Show All Handouts</a></p>
+    <div class="container mb-4">
+      {%for handout in handouts%}
+      <div class="media mb-4">
+        <img src="{{handout.image.url}}" class="mr-3" alt="" width='200px' >
+        <div class="media-body">
+
+          <h5 class="mt-0">{{handout.name}}</h5>
+
+          <p>{{handout.description}}
+
+            {%if user.is_superuser %}
+              {%if handout.is_ece%}
+              <span class="badge badge-primary">ECE</span>
+              {%endif%}
+              {%if handout.is_ee%}
+              <span class="badge badge-success">EE</span>
+              {%endif%}
+              {%if handout.is_tutorial%}
+              <span class="badge badge-info">Tutorial</span>
+              {%endif%}
+            {%endif%}
+
+            {%if not handout.is_accessible%}
+            <small class='text-muted'>Not available</small>
+            {%endif%}
+
+           </p>
+          {%if handout.is_accessible%}
+            {%for file in handout.files.all %}
+              <a class="btn btn-primary mb-1" href="{%url 'handouts:download' filepk=file.pk %}" role="button"><svg class="bi bi-download" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+  <path fill-rule="evenodd" d="M.5 8a.5.5 0 0 1 .5.5V12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8.5a.5.5 0 0 1 1 0V12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V8.5A.5.5 0 0 1 .5 8z"/>
+  <path fill-rule="evenodd" d="M5 7.5a.5.5 0 0 1 .707 0L8 9.793 10.293 7.5a.5.5 0 1 1 .707.707l-2.646 2.647a.5.5 0 0 1-.708 0L5 8.207A.5.5 0 0 1 5 7.5z"/>
+  <path fill-rule="evenodd" d="M8 1a.5.5 0 0 1 .5.5v8a.5.5 0 0 1-1 0v-8A.5.5 0 0 1 8 1z"/>
+</svg> {{forloop.counter}}</a>
+            {%endfor%}
+          {%else%}
+            {%for file in handout.files.all %}
+            <a class="btn btn-primary disabled" href="#" role="button" disabled><svg class="bi bi-download" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+  <path fill-rule="evenodd" d="M.5 8a.5.5 0 0 1 .5.5V12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8.5a.5.5 0 0 1 1 0V12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V8.5A.5.5 0 0 1 .5 8z"/>
+  <path fill-rule="evenodd" d="M5 7.5a.5.5 0 0 1 .707 0L8 9.793 10.293 7.5a.5.5 0 1 1 .707.707l-2.646 2.647a.5.5 0 0 1-.708 0L5 8.207A.5.5 0 0 1 5 7.5z"/>
+  <path fill-rule="evenodd" d="M8 1a.5.5 0 0 1 .5.5v8a.5.5 0 0 1-1 0v-8A.5.5 0 0 1 8 1z"/>
+</svg>{{forloop.counter}}</a>
+            {%endfor%}
+          {%endif%}
+
+          {%if user.is_superuser%}
+            <a class="btn btn-warning" href="{%url 'handouts:addhandoutfile' handoutpk=handout.pk%}" role="button"><svg class="bi bi-file-plus" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+  <path d="M9 1H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V8h-1v5a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1h5V1z"/>
+  <path fill-rule="evenodd" d="M13.5 1a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1H13V1.5a.5.5 0 0 1 .5-.5z"/>
+  <path fill-rule="evenodd" d="M13 3.5a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1H14v1.5a.5.5 0 0 1-1 0v-2z"/>
+</svg></a>
+              {%if handout.is_accessible%}
+              <a class="btn btn-danger" href="{%url 'handouts:handout_lock' handoutpk=handout.pk%}" role="button"><svg class="bi bi-unlock" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+  <path fill-rule="evenodd" d="M9.655 8H2.333c-.264 0-.398.068-.471.121a.73.73 0 0 0-.224.296 1.626 1.626 0 0 0-.138.59V14c0 .342.076.531.14.635.064.106.151.18.256.237a1.122 1.122 0 0 0 .436.127l.013.001h7.322c.264 0 .398-.068.471-.121a.73.73 0 0 0 .224-.296 1.627 1.627 0 0 0 .138-.59V9c0-.342-.076-.531-.14-.635a.658.658 0 0 0-.255-.237A1.122 1.122 0 0 0 9.655 8zm.012-1H2.333C.5 7 .5 9 .5 9v5c0 2 1.833 2 1.833 2h7.334c1.833 0 1.833-2 1.833-2V9c0-2-1.833-2-1.833-2zM8.5 4a3.5 3.5 0 1 1 7 0v3h-1V4a2.5 2.5 0 0 0-5 0v3h-1V4z"/>
+</svg></a>
+              {%else%}
+              <a class="btn btn-success" href="{%url 'handouts:handout_unlock' handoutpk=handout.pk%}" role="button"><svg class="bi bi-lock" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+  <path fill-rule="evenodd" d="M11.5 8h-7a1 1 0 0 0-1 1v5a1 1 0 0 0 1 1h7a1 1 0 0 0 1-1V9a1 1 0 0 0-1-1zm-7-1a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-7zm0-3a3.5 3.5 0 1 1 7 0v3h-1V4a2.5 2.5 0 0 0-5 0v3h-1V4z"/>
+</svg></a>
+              {%endif%}
+            <a class="btn btn-danger" href="{%url 'handouts:delete' handoutpk=handout.pk%}" role="button"><svg class="bi bi-trash" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+  <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
+  <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4L4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+</svg></a>
+          {%endif%}
+
+        </div>
+      </div>
+      {%endfor%}
+    </div>
+  </div>
+
+  <div class="tab-pane" id="calendar" role="tabpanel" aria-labelledby="calendar-tab">
     {%if user.is_ece%}
       <div class="embed-responsive embed-responsive-16by9">
         <iframe src="https://calendar.google.com/calendar/embed?src=8acboij06ststn4821ur8164m8%40group.calendar.google.com&ctz=Asia%2FManila" style="border: 0" width="800" height="600" frameborder="0" scrolling="no"></iframe>
       </div>
     {%endif%}
-
     {%if user.is_ee%}
-    <div class="embed-responsive embed-responsive-16by9">
-      <iframe src="https://calendar.google.com/calendar/embed?src=rc0cn6q7b43o1odpuqfovjhlmk%40group.calendar.google.com&ctz=Asia%2FManila" style="border: 0" width="800" height="600" frameborder="0" scrolling="no"></iframe>
-    </div>
+      <div class="embed-responsive embed-responsive-16by9">
+        <iframe src="https://calendar.google.com/calendar/embed?src=rc0cn6q7b43o1odpuqfovjhlmk%40group.calendar.google.com&ctz=Asia%2FManila" style="border: 0" width="800" height="600" frameborder="0" scrolling="no"></iframe>
+      </div>
     {%endif%}
-
+    {%if user.is_tutorial%}
+      No calendar yet
+    {%endif%}
   </div>
 
-  <div class="col-lg-6 col-md-12 mb-4">
-    <h2><a href="{%url 'exams_app_2:exam_list'%}">Exams</a></h2>
 
-    {%for e in exams%}
-    <div class="col mb-1">
-      <strong>{{e.name}}</strong>
-      <br>
-      <small class='text-muted'>{{e.timestamp}}</small>
-      {%if not e.is_accessible%}<span class="badge badge-danger">Locked</span>{%endif%}
-      {%if not e.is_done%}<span class="badge badge-warning">Ongoing</span>{%endif%}
+  <div class="tab-pane" id="mcq" role="tabpanel" aria-labelledby="mcq-tab">
+    <p>Only showing the newest MCQs. <a href="{%url 'exams_app:all'%}">Show All MCQs</a></p>
+      {%for m in mcqs%}
+        <div class="media mb-4">
+          <!-- <img src="..." class="mr-3" alt="..."> -->
+          <svg class="bi bi-file-text mr-1" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <path fill-rule="evenodd" d="M4 1h8a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2zm0 1a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1H4z"/>
+            <path fill-rule="evenodd" d="M4.5 10.5A.5.5 0 0 1 5 10h3a.5.5 0 0 1 0 1H5a.5.5 0 0 1-.5-.5zm0-2A.5.5 0 0 1 5 8h6a.5.5 0 0 1 0 1H5a.5.5 0 0 1-.5-.5zm0-2A.5.5 0 0 1 5 6h6a.5.5 0 0 1 0 1H5a.5.5 0 0 1-.5-.5zm0-2A.5.5 0 0 1 5 4h6a.5.5 0 0 1 0 1H5a.5.5 0 0 1-.5-.5z"/>
+          </svg>
+          <div class="media-body">
+            <h5 class="mt-0"><a href="{%url 'exams_app:exam' pk=m.pk%}">{{m.title}}</a></h5>
+            {{m.description}}
+          </div>
+        </div>
+      {%endfor%}
+  </div>
+
+
+
+  <div class="tab-pane" id="stats" role="tabpanel" aria-labelledby="stats-tab">
+    <div class="col-lg-8 col-md-12 mx-auto">
+      <canvas id="statsChart" width="200" height="200"></canvas>
+      <script>
+        var ctx = document.getElementById('statsChart').getContext('2d');
+        var myLineChart = new Chart(ctx, {
+          type: 'line',
+          data: {
+            labels: {{exam_label | safe}},
+            datasets: [{
+              label: 'Weekly Exams',
+              data: {{exam_data | safe}},
+              fill: false,
+              borderColor: 'red',
+                },]
+          },
+          options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        min: 0,
+                        max: 100
+                    }
+                }]
+            }
+        }
+        });
+
+      </script>
     </div>
-    {%endfor%}
-
   </div>
 
-  <div class="col-lg-6 col-md-12 mb-4">
-    <h2><a href="{%url 'handouts:main'%}">Handouts</a></h2>
-
-    {%for h in handouts%}
-    <div class="col mb-1">
-      <strong>{{h.name}}</strong>
+  <div class="tab-pane" id="settings" role="tabpanel" aria-labelledby="settings-tab">
+    <form method="post">
+      {%csrf_token%}
+      Username: {{user.username}}
       <br>
-      <small class='text-muted'>{{h.timestamp}}</small>
-      {%if not h.is_accessible%}<span class="badge badge-danger">Locked</span>{%endif%}
-    </div>
-    {%endfor%}
+      <a href="{%url 'main_app:change_password'%}">Change Password</a>
 
+    </form>
   </div>
+
 
 </div>
+
 {% endblock %}

@@ -16,5 +16,6 @@ urlpatterns = [
     path('activate/<userpk>', views.ActivateUser.as_view(), name='activate'),
     path('createannouncement/', views.CreateAnnouncement.as_view(), name='create_announcement'),
     path('deleteannouncement/<announcementpk>', views.DeleteAnnouncement.as_view(), name='delete_announcement'),
+    path('userdelete/<pk>', views.UserDelete.as_view(), name='user_delete'),
 
 ]

@@ -5,7 +5,7 @@ from . import models
 class ExamForm(forms.ModelForm):
     class Meta:
         model = models.Exam
-        exclude = ['answer_sheets', 'answer_key', 'files',]
+        exclude = ['answer_sheets', 'answer_key', 'files', 'timestamp',]
 
 class FileForm(forms.ModelForm):
     class Meta:
