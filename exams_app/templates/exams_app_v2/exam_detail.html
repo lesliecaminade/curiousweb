@@ -2,20 +2,24 @@
 {% load bootstrap4 %}
 {% block content %}
 
-<h1 class='display-4'>{{exam.title}}</h1>
+    <h1>{{exam.title}}</h1>
 
-{%if exam.description%}
-<p>{{exam.description}}</p>
-{%endif%}
+    {%if exam.description%}
+    <p>{{exam.description}}</p>
+    {%endif%}
 
-<hr class = 'my-4'>
+  <hr class = 'my-4'>
 
-{% for item in exam.items.all %}
-{%include "exams_app_v2/item_detail.html" %}
-{%endfor%}
+  {%include "exams_app_v2/item_detail.html" %}
 
 
-<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <a class="btn btn-primary" href="{%url 'exams_app:exam' pk=exam.pk%}" role="button">Next
+      <svg class="bi bi-play" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+        <path fill-rule="evenodd" d="M10.804 8L5 4.633v6.734L10.804 8zm.792-.696a.802.802 0 0 1 0 1.392l-6.363 3.692C4.713 12.69 4 12.345 4 11.692V4.308c0-.653.713-.998 1.233-.696l6.363 3.692z"/>
+      </svg>
+    </a>
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 
 {% endblock %}

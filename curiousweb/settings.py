@@ -61,6 +61,8 @@ INSTALLED_APPS = [
     'staticpages',
     'handouts',
     'exams_app_2',
+    'testimonials',
+    'exams_app_3',
 ]
 
 MIDDLEWARE = [

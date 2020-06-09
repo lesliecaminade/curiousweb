@@ -3,7 +3,7 @@
 {% block content %}
 
 <h1>
-  Create Exam
+  Create MCQ
 </h1>
 
 <form method="POST" enctype="multipart/form-data">
@@ -22,17 +22,23 @@
   </dd>
 </dl>
 
-{%include "exams_app/item_form.html"%}
+{%include "exams_app_v2/item_form.html"%}
 
 <input type="hidden" name="pk" value="{{exampk}}">
 <button type="submit" class="btn btn-primary">Save and Add Item </button>
-<a class="btn btn-secondary" href="{%url 'exams_app:all'%}" role="button">Save and Exit</a>
-  {% csrf_token %}
+<a class="btn btn-secondary" href="{%url 'index' activetab='mcq'%}" role="button">Save and Exit</a>
 
 {% for item in exam.items.all %}
-  {%include "exams_app_v2/item_detail_create.html"%}
+  {%include "exams_app_v2/item_detail.html"%}
 {% endfor %}
+
+
 </form>
 
-
+<script>
+    $(".ch_custom").change(function() {
+        $(".ch_custom").prop('checked', false);
+        $(this).prop('checked', true);
+    });
+</script>
 {% endblock %}

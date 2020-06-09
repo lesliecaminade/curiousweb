@@ -1,0 +1,47 @@
+<div class="card my-2" style ="font-family: courier; font-weight: bold;">
+  <div class="card-header">
+    Item {{forloop.counter}}
+  </div>
+  <div class="card-body">
+    <h5 class="card-title" style ="font-family: courier; font-weight: bold;">{{item.question}}</h5>
+    <!-- <p class="card-text">With supporting text below as a natural lead-in to additional content.</p> -->
+    <!-- <a href="#" class="btn btn-primary">Go somewhere</a> -->
+
+    {%if item.image%}
+    <div class="container col-8">
+      <img src="{{item.image.url}}" class="img-fluid" alt="Responsive image" width="400px">
+    </div>
+    {% endif%}
+
+    <hr>
+
+    {%for choice in item.choices.all %}
+
+      <div class="custom-control custom-radio">
+        {%if choice in ticket.answers.all %}
+        <input type="radio" id="item_{{item.pk}}_radio_{{choice.pk}}" name="item_{{item.pk}}_answer" class="custom-control-input" value="" checked>
+        {%else%}
+        <input type="radio" id="item_{{item.pk}}_radio_{{choice.pk}}" name="item_{{item.pk}}_answer" class="custom-control-input" value="">
+        {%endif%}
+
+        {%if choice.correct%}
+        <label class="custom-control-label" for="item_{{item.pk}}_radio_{{choice.pk}}" style="background-color: pink; font-family: courier; font-weight: normal;">{{choice.content}}</label>
+        {%else%}
+        <label class="custom-control-label" for="item_{{item.pk}}_radio_{{choice.pk}}" style="font-family: courier; font-weight: normal;">{{choice.content}}</label>
+        {%endif%}
+        
+      </div>
+
+      {%if choice.image %}
+      <div class="container col-8">
+        <img src="{{choice.image.url}}" class="img-fluid" alt="Responsive image" width="200px">
+      </div>
+      {% endif%}
+
+    {%endfor%}
+
+
+
+
+  </div>
+</div>

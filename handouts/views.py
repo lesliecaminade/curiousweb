@@ -105,7 +105,7 @@ class AddHandout(View):
                     new_handoutfile.save()
                     new_handout.files.add(new_handoutfile)
 
-            return HttpResponseRedirect(reverse('handouts:main'))
+            return HttpResponseRedirect(reverse('index', kwargs = {'activetab': 'handouts',}))
 
 class DownloadHandoutFile(View):
     def get(self, *args, **kwargs):
@@ -166,7 +166,7 @@ class HandoutDelete(View):
             handoutpk = int(self.kwargs['handoutpk'])
             handout = models.Handout.objects.get(pk = handoutpk)
             handout.delete()
-            return HttpResponseRedirect(reverse('handouts:main'))
+            return HttpResponseRedirect(reverse('index', kwargs = {'activetab': 'handouts'}))
         else:
             return HttpResponse('Not allowed.')
 
@@ -178,7 +178,7 @@ class HandoutLock(View):
             for file in handout.files.all():
                 file.is_accessible = False
                 file.save()
-            return HttpResponseRedirect(reverse('handouts:main'))
+            return HttpResponseRedirect(reverse('index', kwargs = {'activetab': 'handouts'}))
 
 class HandoutUnlock(View):
     def get(self, *args, **kwargs):
@@ -188,4 +188,18 @@ class HandoutUnlock(View):
             for file in handout.files.all():
                 file.is_accessible = True
                 file.save()
-            return HttpResponseRedirect(reverse('handouts:main'))
+            return HttpResponseRedirect(reverse('index', kwargs = {'activetab': 'handouts'}))
+
+class ToggleFlag(View):
+    def get(self, *args, **kwargs):
+        if self.request.user.is_superuser:
+            handout = models.Handout.objects.filter(pk = int(self.kwargs.get('pk')))
+            flag = self.kwargs.get('flag')
+            if self.kwargs.get('flag') == 'is_ece':
+                handout.update(is_ece = bool(self.kwargs.get('setting', False)))
+            elif self.kwargs.get('flag') == 'is_ee':
+                handout.update(is_ee = bool(self.kwargs.get('setting', False)))
+            elif self.kwargs.get('flag') == 'is_tutorial':
+                handout.update(is_tutorial = bool(self.kwargs.get('setting', False)))
+
+            return HttpResponseRedirect(reverse('index', kwargs = {'activetab': 'handouts'}))

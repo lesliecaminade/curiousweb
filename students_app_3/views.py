@@ -94,7 +94,7 @@ class StudentCreateView(CreateView):
                 password = make_password(temp_password),
                 email = self.request.POST['email'],
                 is_student = True,
-                is_ee = True,
+                is_tutorial = True,
                 is_active = False,
                 date_created = datetime.date.today(),
             )

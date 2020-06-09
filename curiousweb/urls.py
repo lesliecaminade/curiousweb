@@ -27,6 +27,7 @@ from . import settings
 urlpatterns = [
     path('controlcenter/', admin.site.urls, name='admin-login'),
     path('', views.IndexView.as_view(), name='index'),
+    path('dashboard/<activetab>', views.IndexView.as_view(), name='index'),
     path('login/', auth_views.LoginView.as_view(template_name="login.html"),name='login'),
     path('logout/', auth_views.LogoutView.as_view(), name="logout"),
     #i am starting to decide to migrate some of my work to class based view so here it is
@@ -38,5 +39,5 @@ urlpatterns = [
     path('staticpages/', include('staticpages.urls', namespace='staticpages')),
     path('handouts/', include('handouts.urls', namespace='handouts')),
     path('exams_app_2/',include('exams_app_2.urls', namespace='exams_app_2')),
-
+    path('exams_app_3/',include('exams_app_3.urls', namespace='exams_app_3')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

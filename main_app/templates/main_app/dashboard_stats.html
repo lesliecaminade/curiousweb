@@ -1,0 +1,31 @@
+<div class="tab-pane" id="stats" role="tabpanel" aria-labelledby="stats-tab">
+  <div class="col-lg-8 col-md-12 mx-auto">
+    <canvas id="statsChart" width="200" height="200"></canvas>
+    <script>
+      var ctx = document.getElementById('statsChart').getContext('2d');
+      var myLineChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: {{exam_label | safe}},
+          datasets: [{
+            label: 'Weekly Exams',
+            data: {{exam_data | safe}},
+            fill: false,
+            borderColor: 'red',
+              },]
+        },
+        options: {
+          scales: {
+              yAxes: [{
+                  ticks: {
+                      min: 0,
+                      max: 100
+                  }
+              }]
+          }
+      }
+      });
+
+    </script>
+  </div>
+</div>

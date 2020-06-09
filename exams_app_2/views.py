@@ -91,7 +91,7 @@ class AddExam(View):
                     new_examfile.save()
                     new_exam.files.add(new_examfile)
 
-            return HttpResponseRedirect(reverse('exams_app_2:exam_list'))
+            return HttpResponseRedirect(reverse('index', kwargs = {'activetab': 'exams',}))
 
 class ExamDetail(View):
     def get(self, *args, **kwargs):
@@ -110,7 +110,7 @@ class ExamDelete(View):
         if self.request.user.is_superuser:
             exam = models.Exam.objects.get(pk = self.kwargs.get('exampk'))
             exam.delete()
-            return HttpResponseRedirect(reverse('exams_app_2:exam_list'))
+            return HttpResponseRedirect(reverse('index', kwargs = {'activetab': 'exams',}))
 
 class ExamDownload(View):
     def get(self, *args, **kwargs):
@@ -240,8 +240,7 @@ class FileDownload(View):
     def get(self, *args, **kwargs):
         if self.request.user.is_authenticated:
             file = models.ExamFile.objects.get(pk = self.kwargs.get('filepk'))
-
-            if file.is_accessible and ((self.request.user.is_ece and file.is_ece) or (self.request.user.is_ee and file.is_ee) or (self.request.user.is_tutorial and file.is_tutorial)) :
+            if file.is_accessible:
                 filename = file.file.name.split('/')[-1]
                 response = HttpResponse(file.file, content_type='text/plain')
                 response['Content-Disposition'] = 'attachment; filename=%s' % filename
@@ -263,7 +262,7 @@ class ExamLock(View):
             exam = models.Exam.objects.filter(pk = int(self.kwargs.get('exampk'))).update(is_accessible=False, is_done = False)
             exam = models.Exam.objects.get(pk = int(self.kwargs.get('exampk')))
             exam.files.all().update(is_accessible = False)
-            return HttpResponseRedirect(reverse('exams_app_2:exam_list'))
+            return HttpResponseRedirect(reverse('index', kwargs = {'activetab': 'exams',}))
 
 class ExamUnlock(View):
     def get(self, *args, **kwargs):
@@ -272,16 +271,16 @@ class ExamUnlock(View):
             exam = models.Exam.objects.get(pk = int(self.kwargs.get('exampk')))
             exam.files.all().update(is_accessible = True)
 
-            return HttpResponseRedirect(reverse('exams_app_2:exam_list'))
+            return HttpResponseRedirect(reverse('index', kwargs = {'activetab': 'exams',}))
 
 class ExamShowAnswerKey(View):
     def get(self, *args, **kwargs):
         if self.request.user.is_superuser:
             exam = models.Exam.objects.filter(pk = int(self.kwargs.get('exampk'))).update(is_done=True)
-            return HttpResponseRedirect(reverse('exams_app_2:exam_list'))
+            return HttpResponseRedirect(reverse('index', kwargs = {'activetab': 'exams',}))
 
 class ExamHideAnswerKey(View):
     def get(self, *args, **kwargs):
         if self.request.user.is_superuser:
             exam = models.Exam.objects.filter(pk = int(self.kwargs.get('exampk'))).update(is_done=False)
-            return HttpResponseRedirect(reverse('exams_app_2:exam_list'))
+            return HttpResponseRedirect(reverse('index', kwargs = {'activetab': 'exams',}))

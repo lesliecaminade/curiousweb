@@ -12,9 +12,9 @@
   <div class="form-group">
     <label for="exam_file_{{forloop.counter}}">Exam File {{forloop.counter}}</label>
     {%if forloop.counter == 1%}
-      <input type="file" class="form-control-file" id="exam_file_{{forloop.counter}}" name='exam_file_{{forloop.counter}}' accept="image/*" required>
+      <input type="file" class="form-control-file" id="exam_file_{{forloop.counter}}" name='exam_file_{{forloop.counter}}' required>
     {%else%}
-      <input type="file" class="form-control-file" id="exam_file_{{forloop.counter}}" name='exam_file_{{forloop.counter}}' accept="image/*">
+      <input type="file" class="form-control-file" id="exam_file_{{forloop.counter}}" name='exam_file_{{forloop.counter}}'>
     {%endif%}
   </div>
   {%endfor%}
