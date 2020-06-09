@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<h1>Admin Dashboard</h1>
+
+<ul class="nav nav-tabs mb-4" id="myTab" role="tablist">
+  <li class="nav-item">
+    <a class="nav-link" id="announcement-tab" data-toggle="tab" href="#announcement" role="tab">Announcements</a>
+  </li>
+
+  {%if user.is_superuser%}
+  <li class="nav-item">
+    <a class="nav-link" id="users-tab" data-toggle="tab" href="#users" role="tab">Users</a>
+  </li>
+  {%endif%}
+
+  <li class="nav-item">
+    <a class="nav-link" id="exams-tab" data-toggle="tab" href="#exams" role="tab">Exams</a>
+  </li>
+
+  <li class="nav-item">
+    <a class="nav-link" id="handouts-tab" data-toggle="tab" href="#handouts" role="tab">Handouts</a>
+  </li>
+
+  <li class="nav-item">
+    <a class="nav-link" id="mcq-tab" data-toggle="tab" href="#mcq" role="tab">MCQ</a>
+  </li>
+
+  <li class="nav-item">
+    <a class="nav-link" id="problemsolving-tab" data-toggle="tab" href="#problemsolving" role="tab">Problem Solving</a>
+  </li>
+
+  <li class="nav-item">
+    <a class="nav-link" id="calendar-tab" data-toggle="tab" href="#calendar" role="tab">Calendars</a>
+  </li>
+
+  {%if not user.is_superuser%}
+  <li class="nav-item">
+    <a class="nav-link" id="stats-tab" data-toggle="tab" href="#stats" role="tab" aria-controls="stats" aria-selected="true">Stats</a>
+  </li>
+  {%endif%}
+  <li class="nav-item">
+    <a class="nav-link" id="settings-tab" data-toggle="tab" href="#settings" role="tab">Settings</a>
+  </li>
+</ul>
+
+<div class="tab-content" id="myTabContent">
+  {%include 'main_app/dashboard_announcement.html'%}
+
+  {%if user.is_superuser%}
+    {%include 'main_app/dashboard_users.html'%}
+  {%endif%}
+
+  {%include 'main_app/dashboard_exams.html'%}
+  {%include 'main_app/dashboard_handouts.html'%}
+  {%include 'main_app/dashboard_calendar.html'%}
+  {%include 'main_app/dashboard_mcq.html'%}
+  {%include 'main_app/dashboard_problemsolving.html'%}
+  {%include 'main_app/dashboard_settings.html'%}
+
+  {%if not user.is_superuser%}
+    {%include 'main_app/dashboard_stats.html'%}
+  {%endif%}
+
+</div>
+
+
+<script type="text/javascript">
+$( document ).ready(function() {
+      $('#{{active_tab | safe}}-tab').tab('show')
+});
+
+</script>
+
+{% endblock %}

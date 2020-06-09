@@ -1,0 +1,100 @@
+<div class="tab-pane " id="users" role="tabpanel" aria-labelledby="users-tab">
+  {%for u in users%}
+  {%if not u.is_superuser%}
+
+        <div class="media mb-1">
+          {%if u.is_ece %}
+            {%for student in u.students_app_1_user.all %}
+              <a  href="{%url 'students_app_1:detail' pk=student.pk%}" role="button">
+                <svg class="bi bi-person-lines-fill mx-1" width="1em" height="1em" viewBox="0 0 16 16" fill="blue" xmlns="http://www.w3.org/2000/svg">
+                  <path fill-rule="evenodd" d="M1 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm7 1.5a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5zm-2-3a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 0 1h-4a.5.5 0 0 1-.5-.5zm0-3a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 0 1h-4a.5.5 0 0 1-.5-.5zm2 9a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5z"/>
+                </svg>
+              </a>
+            {%endfor%}
+          {% endif %}
+
+          {%if u.is_ee %}
+            {%for student in u.students_app_2_user.all %}
+              <a href="{%url 'students_app_2:detail' pk=student.pk%}" role="button">
+                <svg class="bi bi-person-lines-fill mx-1" width="1em" height="1em" viewBox="0 0 16 16" fill="green" xmlns="http://www.w3.org/2000/svg">
+                  <path fill-rule="evenodd" d="M1 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm7 1.5a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5zm-2-3a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 0 1h-4a.5.5 0 0 1-.5-.5zm0-3a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 0 1h-4a.5.5 0 0 1-.5-.5zm2 9a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5z"/>
+                </svg>
+              </a>
+              {%endfor%}
+          {% endif %}
+
+          {%if u.is_tutorial %}
+            {%for student in u.students_app_3_user.all %}
+              <td><a href="{%url 'students_app_3:detail' pk=student.pk%}" role="button">
+                <svg class="bi bi-person-lines-fill mx-1" width="1em" height="1em" viewBox="0 0 16 16" fill="red" xmlns="http://www.w3.org/2000/svg">
+                  <path fill-rule="evenodd" d="M1 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm7 1.5a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5zm-2-3a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 0 1h-4a.5.5 0 0 1-.5-.5zm0-3a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 0 1h-4a.5.5 0 0 1-.5-.5zm2 9a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5z"/>
+                </svg>
+              </a>
+            {%endfor%}
+          {% endif %}
+
+          {%if u.is_active %}
+          <a href="{%url 'main_app:deactivate' userpk=u.pk%}" role="button">
+            <svg class="bi bi-unlock mx-1" width="1em" height="1em" viewBox="0 0 16 16" fill="blue" xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd" d="M9.655 8H2.333c-.264 0-.398.068-.471.121a.73.73 0 0 0-.224.296 1.626 1.626 0 0 0-.138.59V14c0 .342.076.531.14.635.064.106.151.18.256.237a1.122 1.122 0 0 0 .436.127l.013.001h7.322c.264 0 .398-.068.471-.121a.73.73 0 0 0 .224-.296 1.627 1.627 0 0 0 .138-.59V9c0-.342-.076-.531-.14-.635a.658.658 0 0 0-.255-.237A1.122 1.122 0 0 0 9.655 8zm.012-1H2.333C.5 7 .5 9 .5 9v5c0 2 1.833 2 1.833 2h7.334c1.833 0 1.833-2 1.833-2V9c0-2-1.833-2-1.833-2zM8.5 4a3.5 3.5 0 1 1 7 0v3h-1V4a2.5 2.5 0 0 0-5 0v3h-1V4z"/>
+            </svg>
+          </a>
+          {%else%}
+          <a href="{%url 'main_app:activate' userpk=u.pk%}" role="button">
+            <svg class="bi bi-lock mx-1" width="1em" height="1em" viewBox="0 0 16 16" fill="red" xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd" d="M11.5 8h-7a1 1 0 0 0-1 1v5a1 1 0 0 0 1 1h7a1 1 0 0 0 1-1V9a1 1 0 0 0-1-1zm-7-1a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-7zm0-3a3.5 3.5 0 1 1 7 0v3h-1V4a2.5 2.5 0 0 0-5 0v3h-1V4z"/>
+            </svg>
+          </a>
+          {%endif%}
+
+          <a data-toggle="modal" data-target="#deleteUserModal_{{u.pk}}">
+            <svg class="bi bi-trash mx-1" width="1em" height="1em" viewBox="0 0 16 16" fill="red" xmlns="http://www.w3.org/2000/svg">
+              <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
+              <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4L4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+            </svg>
+          </a>
+
+
+          <div class="media-body">
+            {%if u.is_ece %}
+              {%for student in u.students_app_1_user.all %}
+                <a  href="{%url 'students_app_1:detail' pk=student.pk%}">
+              {%endfor%}
+            {%elif u.is_ee %}
+              {%for student in u.students_app_2_user.all %}
+                <a href="{%url 'students_app_2:detail' pk=student.pk%}">
+                {%endfor%}
+            {%elif u.is_tutorial %}
+              {%for student in u.students_app_3_user.all %}
+                <a href="{%url 'students_app_3:detail' pk=student.pk%}">
+              {%endfor%}
+            {%else%}              {%endif%}
+              <strong>{{u.last_name}}, {{u.first_name}}</strong>
+              {{u.username}}</a>
+          </div>
+        </div>
+
+    <div class="modal " id="deleteUserModal_{{u.pk}}" tabindex="-1" role="dialog" aria-labelledby="deleteUserModalLabel_{{u.pk}}" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="deleteUserModalLabel_{{u.pk}}">Delete User?</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            The user and all data associated or dependent to the user will be deleted. This action cannot be undone. Please be sure before proceeding.
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" data-dismiss="modal">Cancel</button>
+            <a role= "button" class="btn btn-danger" href="{%url 'main_app:user_delete' pk=u.pk%}">Yes. Delete {{u.last_name}}, {{u.first_name}} - {{u.username}}</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  {%endif%}
+  {%endfor%}
+
+</div>

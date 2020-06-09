@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% load bootstrap4 %}
+{% block content %}
+<h1 class='display-4'>
+  Exam
+</h1>
+
+<form method="POST" enctype="multipart/form-data">
+{%csrf_token%}
+<dl class="row">
+  <dt class="col-sm-3">Title</dt>
+  <dd class="col-sm-9">{{exam.title}}</dd>
+  <dt class="col-sm-3">Description</dt>
+  <dd class="col-sm-9">{{exam.description}}</dd>
+  <dt class="col-sm-3">Flags</dt>
+  <dd class="col-sm-9">
+    {%if exam.is_ece %}<span class="badge badge-primary">ECE</span>{%endif%}
+    {%if exam.is_ee%}<span class="badge badge-success">EE</span>{%endif%}
+    {%if exam.is_tutorial%}<span class="badge badge-info">Tutorial</span>{%endif%}
+    {%if not exam.is_accessible%}<span class="badge badge-danger">Locked</span>{%endif%}
+  </dd>
+</dl>
+
+{%include "exams_app/item_form.html"%}
+
+<input type="hidden" name="exampk" value="{{exampk}}">
+<input type="hidden" name="categoryapk" value="{{categoryapk}}">
+<button type="submit" class="btn btn-primary">Save and Add Item </button>
+<a class="btn btn-secondary" href="{%url 'exams_app:exams_list' pk=categoryapk%}" role="button">Save and Exit</a>
+  {% csrf_token %}
+
+{% for item in exam.items.all %}
+  {%include "exams_app/item_detail_create.html"%}
+{% endfor %}
+</form>
+
+
+{% endblock %}

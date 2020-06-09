@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h1 class='display-4'>Exam Results</h1>
+
+
+<dl class="row">
+  <dt class="col-3">Examinee</dt>
+  <dd class="col-9">{{ticket.user.first_name}} {{ticket.user.last_name}}</dd>
+
+  <dt class="col-3">Score</dt>
+  <dd class="col-9">{{ticket.score}} out of {{ticket.items}}</dd>
+
+  <dt class="col-3">Percentage</dt>
+  <dd class="col-9">{{ticket.percentage}} %
+{%if ticket.percentage > 70 %} <span class="badge badge-success">Pass</span> {%else%} <span class="badge badge-warning">Fail</span> {%endif%}
+
+  </dd>
+
+  <dt class="col-3">Exam</dt>
+  <dd class="col-9">{{ticket.exam.title}}</dd>
+
+  <dt class="col-3">Date and Time Started</dt>
+  <dd class="col-9">{{ticket.date_start}}</dd>
+
+  <dt class="col-3">Date and Time Finished</dt>
+  <dd class="col-9">{{ticket.date_finish}}</dd>
+
+  <dt class="col-3">Exam ID</dt>
+  <dd class="col-9">{{ticket.exam.pk}}</dd>
+
+  <dt class="col-3">Exam Result ID</dt>
+  <dd class="col-9">{{ticket.pk}}</dd>
+
+</dl>
+
+<h2>Review</h2>
+{% for item in ticket.exam.items.all %}
+  {%include "exams_app/item_detail_review.html"%}
+{% endfor %}
+
+<a class="btn btn-primary" href="{%url 'exams_app:exams_list' pk=categoryapk %}" role="button">Back to Exams</a>
+
+
+{% endblock %}

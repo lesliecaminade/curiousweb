@@ -14,5 +14,5 @@ urlpatterns = [
     path('delete/<handoutpk>', views.HandoutDelete.as_view(), name='delete'),
     path('lock/<handoutpk>', views.HandoutLock.as_view(), name='handout_lock'),
     path('unlock/<handoutpk>', views.HandoutUnlock.as_view(), name='handout_unlock'),
-
+    path('toggle/<pk>/<flag>/<setting>', views.ToggleFlag.as_view(), name='toggle_flag'),
 ]

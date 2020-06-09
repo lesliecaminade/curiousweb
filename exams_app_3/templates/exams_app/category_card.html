@@ -1,0 +1,82 @@
+<div class="card m-2" style="width: 18rem;">
+  <!-- <img src="..." class="card-img-top" alt="..."> -->
+  <div class="card-body">
+
+      {%if category.name%}
+      <h5 class="card-title">{{category.name}}</h5>
+      {%elif category.title%}
+      <h5 class="card-title">{{category.title}}</h5>
+      {%else%}
+      <h5 class="card-title">Untitled</h5>
+      {%endif%}
+
+      {%if user.is_teacher%}
+        {%if category.is_ece%}
+        <span class="badge badge-primary">ECE</span>
+        {%endif%}
+        {%if category.is_ee%}
+        <span class="badge badge-success">EE</span>
+        {%endif%}
+        {%if category.is_tutorial%}
+        <span class="badge badge-info">Tutorial</span>
+        {%endif%}
+        {%if not category.is_accessible%}
+        <span class="badge badge-danger">Locked</span>
+        {%endif%}
+      {%endif%}
+
+      {%if category.description %}
+      <p class="card-text">{{category.description}}</p>
+      {%endif%}
+
+  {%if category_letter == 'exam'%}
+    {% if user.is_active and category.is_accessible or user.is_teacher %}
+    <a class="btn btn-primary my-1" href="{%url 'exams_app:exam' exampk=category.pk categoryapk=categorya.pk %}" role="button">Start Exam</a>
+    {%else%}
+    <a class="btn btn-primary disabled my-1"  role="button">Locked</a>
+    {%endif%}
+
+  {%elif category_letter == 'A'%}
+    {% if category.is_accessible or user.is_teacher %}
+    <a href="{%url 'exams_app:exams_list' pk=category.pk%}" class="btn btn-primary my-1">Go</a>
+    {%else%}
+    <a class="btn btn-primary disabled my-1"  role="button">Locked</a>
+    {%endif%}
+
+
+  {%elif category_letter == 'B'%}
+    <!-- this should link to the view that shows the list of categoryas -->
+    {% if category.is_accessible or user.is_teacher %}
+    <a href="{%url 'exams_app:categorya' pk=category.pk%}" class="btn btn-primary my-1">Go</a>
+    {%else%}
+    <a class="btn btn-primary disabled my-1"  role="button">Locked</a>
+    {%endif%}
+  {%endif%}
+
+
+
+
+
+
+
+
+  {%if category_letter == 'A' and user.is_teacher%}
+  <a href="{%url 'exams_app:update_categorya' pk=category.pk%}" class="btn btn-warning my-1">Edit</a>
+  {%elif category_letter == 'B' and user.is_teacher%}
+  <a href="{%url 'exams_app:update_categoryb' pk=category.pk%}" class="btn btn-warning my-1">Edit</a>
+  {%elif category_letter == 'exam' and user.is_teacher%}
+  <a href="{%url 'exams_app:update_exam' exampk=category.pk categoryapk=categorya.pk%}" class="btn btn-warning my-1">Edit</a>
+  {%endif%}
+
+
+
+  {%if category_letter == 'A' and user.is_teacher%}
+  <a href="{%url 'exams_app:delete_categorya' pk=category.pk%}" class="btn btn-danger my-1">Delete</a>
+  {%elif category_letter == 'B' and user.is_teacher%}
+  <a href="{%url 'exams_app:delete_categoryb' pk=category.pk%}" class="btn btn-danger my-1">Delete</a>
+  {%elif category_letter == 'exam' and user.is_teacher%}
+  <a href="{%url 'exams_app:delete_exam' pk=category.pk%}" class="btn btn-danger my-1">Delete</a>
+  {%endif%}
+
+  </div>
+</div>

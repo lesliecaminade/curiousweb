@@ -13,14 +13,24 @@ class Choice(models.Model):
     def __str__(self):
         return content
 
+class MCQAccessCount(models.Model):
+    count = models.IntegerField(default = 0)
+    user = models.ForeignKey(User, on_delete = models.CASCADE)
+
 class MCQ(models.Model):
     question = models.TextField(max_length = 1000, default = '', null = True, blank = True)
     choices = models.ManyToManyField(Choice)
     image = models.ImageField(blank = True, null = True)
     explanation = models.CharField(max_length = 1000, null = True)
+    access_count = models.ManyToManyField(MCQAccessCount)
 
     def __str__(self):
         return self.question
+
+    class Meta:
+        ordering = ['?']
+
+
 
 class Exam(models.Model):
     title = models.CharField(max_length = 100)

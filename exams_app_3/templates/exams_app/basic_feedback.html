@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="alert alert-{{type}}" role="alert">
+  <h4 class="alert-heading">{{title}}</h4>
+  <p>{{description}}</p>
+  <hr>
+  <p>Back to <a href="{%url 'exams_app:exams'%}" class="alert-link">{{return_link_text}}</a></p>
+</div>
+
+{% endblock %}
