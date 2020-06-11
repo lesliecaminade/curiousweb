@@ -7,9 +7,6 @@ class Choice(models.Model):
     correct = models.BooleanField()
     image = models.ImageField(null = True, blank = True)
 
-    class Meta:
-        ordering = ['?']
-
     def __str__(self):
         return content
 
@@ -22,15 +19,11 @@ class MCQ(models.Model):
     choices = models.ManyToManyField(Choice)
     image = models.ImageField(blank = True, null = True)
     explanation = models.CharField(max_length = 1000, null = True)
+    explanation_image = models.ImageField(blank = True, null = True)
     access_count = models.ManyToManyField(MCQAccessCount)
 
     def __str__(self):
         return self.question
-
-    class Meta:
-        ordering = ['?']
-
-
 
 class Exam(models.Model):
     title = models.CharField(max_length = 100)

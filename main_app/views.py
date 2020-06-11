@@ -27,12 +27,12 @@ class IndexView(View):
         if self.request.user.is_authenticated:
             if self.request.user.is_superuser:
                 template_name = 'main_app/dashboard.html'
-                announcements = models.Announcement.objects.all()[:50]
-                exams = exams_app_2.models.Exam.objects.all().order_by('-pk')[:20]
-                hand = handouts.models.Handout.objects.all().order_by('-pk')[:20]
+                announcements = models.Announcement.objects.all()
+                exams = exams_app_2.models.Exam.objects.all().order_by('-pk')
+                hand = handouts.models.Handout.objects.all().order_by('-pk')
                 users = models.User.objects.all().order_by('-pk')
-                mcqs = exams_app.models.Exam.objects.all().order_by('-pk')
-                problems = exams_app_3.models.Exam.objects.all().order_by('-pk')
+                mcqs = exams_app.models.Exam.objects.all().order_by('pk')
+                problems = exams_app_3.models.Exam.objects.all().order_by('pk')
                 active_tab = self.kwargs.get('activetab', 'announcement')
 
                 context = {
@@ -50,24 +50,24 @@ class IndexView(View):
             else:
                 if self.request.user.is_ece:
                     announcements = models.Announcement.objects.filter(is_ece = True)[:50]
-                    exams = exams_app_2.models.Exam.objects.filter(is_ece = True).order_by('-pk')[:50]
-                    hand = handouts.models.Handout.objects.filter(is_ece = True).order_by('-pk')[:50]
-                    mcqs = exams_app.models.Exam.objects.filter(is_ece = True).order_by('-pk')[:50]
-                    problems = exams_app_3.models.Exam.objects.filter(is_ece = True).order_by('-pk')
+                    exams = exams_app_2.models.Exam.objects.filter(is_ece = True).order_by('-pk')
+                    hand = handouts.models.Handout.objects.filter(is_ece = True).order_by('-pk')
+                    mcqs = exams_app.models.Exam.objects.filter(is_ece = True).order_by('pk')
+                    problems = exams_app_3.models.Exam.objects.filter(is_ece = True).order_by('pk')
 
                 elif self.request.user.is_ee:
-                    announcements = models.Announcement.objects.filter(is_ee = True)[:50]
-                    exams = exams_app_2.models.Exam.objects.filter(is_ee = True).order_by('-pk')[:50]
-                    hand = handouts.models.Handout.objects.filter(is_ee = True).order_by('-pk')[:50]
-                    mcqs = exams_app.models.Exam.objects.filter(is_ee = True).order_by('-pk')[:50]
-                    problems = exams_app_3.models.Exam.objects.filter(is_ee = True).order_by('-pk')
+                    announcements = models.Announcement.objects.filter(is_ee = True)
+                    exams = exams_app_2.models.Exam.objects.filter(is_ee = True).order_by('-pk')
+                    hand = handouts.models.Handout.objects.filter(is_ee = True).order_by('-pk')
+                    mcqs = exams_app.models.Exam.objects.filter(is_ee = True).order_by('pk')
+                    problems = exams_app_3.models.Exam.objects.filter(is_ee = True).order_by('pk')
 
                 elif self.request.user.is_tutorial:
-                    announcements = models.Announcement.objects.filter(is_tutorial = True)[:50]
-                    exams = exams_app_2.models.Exam.objects.filter(is_tutorial = True).order_by('-pk')[:50]
-                    hand = handouts.models.Handout.objects.filter(is_tutorial = True).order_by('-pk')[:50]
-                    mcqs = exams_app.models.Exam.objects.filter(is_tutorial = True).order_by('-pk')[:50]
-                    problems = exams_app_3.models.Exam.objects.filter(is_tutorial = True).order_by('-pk')
+                    announcements = models.Announcement.objects.filter(is_tutorial = True)
+                    exams = exams_app_2.models.Exam.objects.filter(is_tutorial = True).order_by('-pk')
+                    hand = handouts.models.Handout.objects.filter(is_tutorial = True).order_by('-pk')
+                    mcqs = exams_app.models.Exam.objects.filter(is_tutorial = True).order_by('pk')
+                    problems = exams_app_3.models.Exam.objects.filter(is_tutorial = True).order_by('pk')
 
                 else:
                     HttpResponse('Error: unhandled user type')

@@ -25,11 +25,13 @@
 {%include "exams_app_v2/item_form.html"%}
 
 <input type="hidden" name="pk" value="{{exampk}}">
-<button type="submit" class="btn btn-primary">Save and Add Item </button>
-<a class="btn btn-secondary" href="{%url 'index' activetab='mcq'%}" role="button">Save and Exit</a>
+<input type="hidden" name="itempk" value="{{itempk}}">
+
+<button type="submit" class="btn btn-primary">Save Item </button>
+<a class="btn btn-secondary" href="{%url 'index' activetab='mcq'%}" role="button">Exit</a>
 
 {% for item in exam.items.all %}
-  {%include "exams_app_v2/item_detail.html"%}
+  {%include "exams_app_v2/item_detail.html" with choices=item.choices.all%}
 {% endfor %}
 
 
