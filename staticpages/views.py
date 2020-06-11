@@ -29,3 +29,9 @@ class Location(View):
     def get(self, *args, **kwargs):
         template_name = 'staticpages/location.html'
         return render(self.request, template_name)
+
+class Reviewers(View):
+    def get(self, *args, **kwargs):
+        template_name = 'staticpages/reviewers.html'
+        return render(self.request, template_name)
+        

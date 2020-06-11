@@ -28,32 +28,39 @@ class ExamView(View):
             if exam.is_accessible or self.request.user.is_superuser:
                 #try to find first question that were never accessed by you
                 items = exam.items.exclude(access_count__user = self.request.user).order_by('?')
-                try:
-                    if not items.exists():
-                        #if none, find the item that has the least number of access times
-                        print('No item unaccessed,')
-                        items = exam.items.filter(access_count__user = self.request.user).order_by('access_count__count', '?')
-                        item = items[0]
-                        count_old = item.access_count.filter(user = self.request.user)[0].count
-                        print(count_old)
-                        item.access_count.filter(user = self.request.user).update(count = count_old + 1)
-                        print(item.access_count.filter(user = self.request.user)[0].count)
-                    else:
-                        item = items[0]
-                        new_mcq_access_count = models.MCQAccessCount.objects.create(
-                            user = self.request.user,
-                            count = 1,
-                        )
-                        new_mcq_access_count.save()
-                        item.access_count.add(new_mcq_access_count)
-                except:
-                    return HttpResponseRedirect(reverse('index', kwargs = {'activetab': 'problemsolving'}))
 
+                if not items.exists():
+                    items = exam.items.filter(access_count__user = self.request.user).order_by('access_count__count', '?')
+                    for item in items:
+                        access_counts = item.access_count.all()
+                        for ac in access_counts:
+                            if ac.user == self.request.user:
+                                item.access_count.remove(ac)
+
+                    """inform the student that he has finished all the questions."""
+                    template_name = 'exams_app_3/alerts.html'
+                    context = {
+                        'type': 'info',
+                        'title': 'Exam Finished',
+                        'message': 'You have already answered all the questions in this exam.'
+                    }
+                    return render(self.request, template_name, context)
+                else:
+                    item = items[0]
+                    new_mcq_access_count = models.MCQAccessCount.objects.create(
+                        user = self.request.user,
+                        count = 1,
+                    )
+                    new_mcq_access_count.save()
+                    item.access_count.add(new_mcq_access_count)
 
                 template_name = 'exams_app_3/exam_detail.html'
                 context = {
                     'exam': exam,
                     'item': item,
+                    'pk': exam.pk,
+                    'itempk': item.pk,
+                    'choices': item.choices.all().order_by('?'),
                     'access_count': item.access_count.filter(user = self.request.user)[0],
                     }
                 return render(self.request, template_name, context)
@@ -234,3 +241,68 @@ class ToggleFlag(View):
                 exam.update(is_tutorial = bool(self.kwargs.get('setting', False)))
 
             return HttpResponseRedirect(reverse('index', kwargs = {'activetab': 'problemsolving'}))
+
+class DeleteItem(View):
+    def get(self, *args, **kwargs):
+        if self.request.user.is_superuser:
+            exampk = int(self.kwargs.get('exampk'))
+            item = models.MCQ.objects.get(pk = int(self.kwargs.get('pk')))
+            item.delete()
+            return HttpResponseRedirect(reverse('exams_app:create_exam_manual_add_item', kwargs = {'pk': exampk,}))
+
+class EditItem(View):
+    def get(self, *args, **kwargs):
+        if self.request.user.is_superuser:
+            exam = models.Exam.objects.get(pk = int(self.kwargs.get('exampk')))
+            item = models.MCQ.objects.get(pk = int(self.kwargs.get('pk')))
+            choices_list = item.choices.all()
+            template_name = 'exams_app_3/exam_form.html'
+            context = {
+                'exam': exam,
+                'question': item.question,
+                'choice_1': choices_list[0],
+                'choice_2': choices_list[1],
+                'choice_3': choices_list[2],
+                'choice_4': choices_list[3],
+                'explanation': item.explanation,
+                'exampk' : exam.pk,
+                'itempk' : item.pk,
+                'upload': True,
+            }
+            return render(self.request, template_name, context)
+
+    def post(self, *args, **kwargs):
+        if self.request.user.is_superuser:
+            exampk = int(self.request.POST.get('pk'))
+            if self.request.FILES.get('explanation_image'):
+                models.MCQ.objects.filter(pk = int(self.request.POST.get('itempk'))).update(
+                    question = self.request.POST.get('question'),
+                    explanation = self.request.POST.get('explanation'),
+                    explanation_image = self.request.FILES.get('explanation_image'),
+                )
+            else:
+                models.MCQ.objects.filter(pk = int(self.request.POST.get('itempk'))).update(
+                    question = self.request.POST.get('question'),
+                    explanation = self.request.POST.get('explanation'),
+                )
+
+
+            item = models.MCQ.objects.get(pk = int(self.request.POST.get('itempk')))
+
+            letters = ['a', 'b', 'c', 'd']
+            index = 0
+            for choice in item.choices.all():
+                if self.request.FILES.get('choice_' + letters[index] + '_image'):
+                    models.Choice.objects.filter(pk=choice.pk).update(
+                        content = self.request.POST.get('choice_' + letters[index]),
+                        correct = bool(self.request.POST.get('choice_' + letters[index] + '_correct')),
+                        image = self.request.FILES.get('choice_' + letters[index] + '_image'),
+                    )
+                else:
+                    models.Choice.objects.filter(pk=choice.pk).update(
+                        content = self.request.POST.get('choice_' + letters[index]),
+                        correct = bool(self.request.POST.get('choice_' + letters[index] + '_correct')),
+                    )
+
+                index = index + 1
+        return HttpResponseRedirect(reverse('exams_app_3:create_exam_manual_add_item', kwargs = {'pk': exampk,}))

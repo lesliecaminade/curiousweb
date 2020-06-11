@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load bootstrap4 %}
 {% block content %}
+{%load static%}
 
     <h1>{{exam.title}}</h1>
 
@@ -9,8 +10,9 @@
     {%endif%}
 
   <hr class = 'my-4'>
-
-  {%include "exams_app_v2/item_detail.html" %}
+  <div class="nc">
+    {%include "exams_app_v2/item_detail.html" %}
+  </div>
 
 
     <a class="btn btn-primary" href="{%url 'exams_app:exam' pk=exam.pk%}" role="button">Next
@@ -20,6 +22,6 @@
     </a>
 
   <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="{%static 'js/exam.js'%}" type="text/javascript"></script>
   <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-
 {% endblock %}

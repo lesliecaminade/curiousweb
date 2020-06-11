@@ -16,4 +16,7 @@ urlpatterns = [
     path('lock/exam/<pk>', views.LockExamView.as_view(), name='lock_exam'),
     path('unlock/exam/<pk>', views.UnlockExamView.as_view(), name='unlock_exam'),
     path('toggle/<flag>/<pk>/<setting>', views.ToggleFlag.as_view(), name='toggle_flag'),
+    path('delete/item/<pk>/<exampk>', views.DeleteItem.as_view(), name='delete_item'),
+    path('edit/item/<pk>/<exampk>', views.EditItem.as_view(), name='edit_item'),
+
 ]

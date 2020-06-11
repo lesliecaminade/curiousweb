@@ -3,34 +3,54 @@
 
   <div class="card-body">
   <div class="form-group">
-    <textarea name= "question" class="form-control" id="question" rows="3" placeholder="Question"></textarea>
+    <textarea name= "question" class="form-control" id="question" rows="3" placeholder="Question">{{question}}</textarea>
   </div>
 
   <hr>
 
 <div class="container">
-<input class="form-check-input ch_custom" type="checkbox" name="choice_a_correct" id="choice_1_correct" checked>
-<textarea name="choice_a" class="form-control" id="choice_1" rows="1" placeholder="Choice 1"></textarea>
+{%if not upload%}
+<input class="form-check-input ch_custom" type="checkbox" name="choice_a_correct" id="choice_1_correct"  checked >
+{%else%}
+  {%if choice_1.correct%}
+  <input class="form-check-input ch_custom" type="checkbox" name="choice_a_correct" id="choice_1_correct" checked>
+  {%else%}
+  <input class="form-check-input ch_custom" type="checkbox" name="choice_a_correct" id="choice_1_correct">
+  {%endif%}
+{%endif%}
+<textarea name="choice_a" class="form-control" id="choice_1" rows="1" placeholder="Choice 1">{{choice_1.content}}</textarea>
 </div>
 
 <div class="container">
-<input class="form-check-input ch_custom" type="checkbox" name="choice_b_correct" id="choice_2_correct">
-<textarea name="choice_b" class="form-control" id="choice_2" rows="1" placeholder="Choice 2"></textarea>
+  {%if choice_2.correct%}
+  <input class="form-check-input ch_custom" type="checkbox" name="choice_b_correct" id="choice_2_correct" checked>
+  {%else%}
+  <input class="form-check-input ch_custom" type="checkbox" name="choice_b_correct" id="choice_2_correct">
+  {%endif%}
+<textarea name="choice_b" class="form-control" id="choice_2" rows="1"  placeholder="Choice 2">{{choice_2.content}}</textarea>
 </div>
 
 <div class="container">
-<input class="form-check-input ch_custom" type="checkbox" name="choice_c_correct" id="choice_3_correct">
-<textarea name="choice_c" class="form-control" id="choice_3" rows="1" placeholder="Choice 3"></textarea>
+  {%if choice_3.correct%}
+  <input class="form-check-input ch_custom" type="checkbox" name="choice_c_correct" id="choice_3_correct" checked>
+  {%else%}
+  <input class="form-check-input ch_custom" type="checkbox" name="choice_c_correct" id="choice_3_correct">
+  {%endif%}
+<textarea name="choice_c" class="form-control" id="choice_3" rows="1"  placeholder="Choice 3">{{choice_3.content}}</textarea>
 </div>
 
 <div class="container">
-<input class="form-check-input ch_custom" type="checkbox" name="choice_d_correct" id="choice_2_correct">
-<textarea name="choice_d" class="form-control" id="choice_4" rows="1" placeholder="Choice 4"></textarea>
+  {%if choice_4.correct%}
+  <input class="form-check-input ch_custom" type="checkbox" name="choice_d_correct" id="choice_4_correct" checked>
+  {%else%}
+  <input class="form-check-input ch_custom" type="checkbox" name="choice_d_correct" id="choice_4_correct">
+  {%endif%}
+  <textarea name="choice_d" class="form-control" id="choice_4" rows="1" placeholder="Choice 4">{{choice_4.content}}</textarea>
 </div>
 
 <div class="form-group">
   <label for="explanation1"></label>
-  <textarea class="form-control" id="explanation1" name="explanation" rows="3" placeholder="Explanation"></textarea>
+  <textarea class="form-control" id="explanation1" name="explanation" rows="3" placeholder="Explanation" content="{{explanation}}"></textarea>
 </div>
 
   <div class="form-group">
@@ -42,15 +62,19 @@
   <div class="collapse" id="attach_images_id">
     <div class="card card-body">
 
+      {%if edit%}
+      Note that uploading new files here overwrites the existing file (if any)
+      {%endif%}
+
       <div class="form-group">
       <label for="main_image_attach_id">Question Image</label>
       <input name="image" type="file" class="form-control-file" id="main_image_attach_id" accept="image/*">
-      </div>
+    </div>
 
-      <div class="form-group">
-      <label for="main_image_attach_id">Explanation Image</label>
-      <input name="explanation_image" type="file" class="form-control-file" id="main_image_attach_id" accept="image/*">
-      </div>
+    <div class="form-group">
+    <label for="main_image_attach_id">Explanation Image</label>
+    <input name="explanation_image" type="file" class="form-control-file" id="main_image_attach_id" accept="image/*">
+    </div>
 
     <div class="form-group">
     <label for="choice_a_image_attach_id">Choice A Image</label>

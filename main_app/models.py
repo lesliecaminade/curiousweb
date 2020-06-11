@@ -32,7 +32,7 @@ class Activity(models.Model):
 
 class Announcement(models.Model):
     title = models.CharField(max_length = 100)
-    content = models.CharField(max_length = 2000)
+    content = models.CharField(max_length = 20000)
     timestamp = models.DateTimeField(null =  True)
 
     is_ece = models.BooleanField(default = False)
