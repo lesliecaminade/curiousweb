@@ -67,9 +67,9 @@
 
   <div class="collapse" id="view_explanation_{{item.pk}}">
     {%if item.explanation or item.explanation_image%}
-    <button class="btn btn-primary" role="button" id="view_explanation_button_{{item.pk}}" href="#">View Explanation</button>
+    <button class="btn btn-primary" role="button" id="view_explanation_button_{{item.pk}}" >View Explanation</button>
     {%else%}
-    <button class="btn btn-primary disabled" role="button" href="#">No Explanation available yet</button>
+    <button class="btn btn-primary disabled" role="button">No Explanation available yet</button>
     {%endif%}
   </div>
 
@@ -79,7 +79,7 @@
       <p>{{item.explanation | safe}}</p>
       {%endif%}
       {%if item.explanation_image%}
-      <img src="{{item.explanation.url}}" class="img-fluid" alt="Explanation image">
+      <img src="{{item.explanation_image.url}}" class="img-fluid" alt="Explanation image">
       {%endif%}
     </div>
   </div>

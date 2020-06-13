@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block content %}
+{% load bootstrap4 %}
+<h1 class='display-4'>{{mode}} Testimony</h1>
+
+<form method="post" enctype="multipart/form-data">
+  {%csrf_token%}
+  <div class="form-group">
+    <label for="name">Name</label>
+    <input type="text" class="form-control" name="name" placeholder="Name" value={{testimony.name}}>
+  </div>
+
+  <div class="form-group">
+    <label for="testimony">Testimony</label>
+    <textarea class="form-control" name="testimony" rows="10">{{testimony.testimony}}</textarea>
+  </div>
+
+  <div class="form-group">
+    <label for="thumbnail">Thumbnail</label>
+    <input type="file" class="form-control-file" name="thumbnail">
+  </div>
+
+  <input type="hidden" name="pk" value="{{testimony.pk}}">
+
+  <button type="submit" name="button" class="btn btn-primary">Save</button>
+</form>
+
+{% endblock %}

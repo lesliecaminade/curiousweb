@@ -7,9 +7,6 @@ class Choice(models.Model):
     correct = models.BooleanField()
     image = models.ImageField(null = True, blank = True)
 
-    class Meta:
-        ordering = ['?']
-
     def __str__(self):
         return content
 

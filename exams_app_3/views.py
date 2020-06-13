@@ -239,7 +239,6 @@ class ToggleFlag(View):
                 exam.update(is_ee = bool(self.kwargs.get('setting', False)))
             elif self.kwargs.get('flag') == 'is_tutorial':
                 exam.update(is_tutorial = bool(self.kwargs.get('setting', False)))
-
             return HttpResponseRedirect(reverse('index', kwargs = {'activetab': 'problemsolving'}))
 
 class DeleteItem(View):
@@ -248,7 +247,7 @@ class DeleteItem(View):
             exampk = int(self.kwargs.get('exampk'))
             item = models.MCQ.objects.get(pk = int(self.kwargs.get('pk')))
             item.delete()
-            return HttpResponseRedirect(reverse('exams_app:create_exam_manual_add_item', kwargs = {'pk': exampk,}))
+            return HttpResponseRedirect(reverse('exams_app_3:create_exam_manual_add_item', kwargs = {'pk': exampk,}))
 
 class EditItem(View):
     def get(self, *args, **kwargs):
@@ -285,8 +284,6 @@ class EditItem(View):
                     question = self.request.POST.get('question'),
                     explanation = self.request.POST.get('explanation'),
                 )
-
-
             item = models.MCQ.objects.get(pk = int(self.request.POST.get('itempk')))
 
             letters = ['a', 'b', 'c', 'd']
@@ -303,6 +300,5 @@ class EditItem(View):
                         content = self.request.POST.get('choice_' + letters[index]),
                         correct = bool(self.request.POST.get('choice_' + letters[index] + '_correct')),
                     )
-
                 index = index + 1
         return HttpResponseRedirect(reverse('exams_app_3:create_exam_manual_add_item', kwargs = {'pk': exampk,}))
