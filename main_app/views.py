@@ -88,6 +88,7 @@ class IndexView(View):
                     'exams': exams,
                     'handouts': hand,
                     'mcqs': mcqs,
+                    'problems': problems,
                     'exam_label': str(exam_label),
                     'exam_data': str(exam_data),
                     'active_tab': active_tab,

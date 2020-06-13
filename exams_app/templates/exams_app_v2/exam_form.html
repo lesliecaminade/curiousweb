@@ -29,13 +29,13 @@
 
 <button type="submit" class="btn btn-primary">Save Item </button>
 <a class="btn btn-secondary" href="{%url 'index' activetab='mcq'%}" role="button">Exit</a>
-
+</form>
 {% for item in exam.items.all %}
   {%include "exams_app_v2/item_detail.html" with choices=item.choices.all%}
 {% endfor %}
 
 
-</form>
+
 
 <script>
     $(".ch_custom").change(function() {
