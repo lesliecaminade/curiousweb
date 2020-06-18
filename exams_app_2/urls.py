@@ -22,4 +22,5 @@ urlpatterns = [
     path('unlock/<exampk>', views.ExamUnlock.as_view(), name='exam_unlock'),
     path('showanswerkey/<exampk>', views.ExamShowAnswerKey.as_view(), name='exam_done'),
     path('hideanswerkey/<exampk>', views.ExamHideAnswerKey.as_view(), name='exam_undone'),
+    path('stats/<exampk>', views.ExamStats.as_view(), name='exam_stats'),
 ]

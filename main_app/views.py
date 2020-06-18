@@ -76,6 +76,8 @@ class IndexView(View):
                     answer_sheets = exams_app_2.models.AnswerSheet.objects.filter(user = self.request.user).order_by('date_submitted')
                     exam_data = [int(answer_sheet.score) for answer_sheet in answer_sheets]
                     exam_label = [ str(answer_sheet.exam_set.all()[0].name) for answer_sheet in answer_sheets]
+
+
                 except:
                     exam_label = ''
                     exam_data = ''
