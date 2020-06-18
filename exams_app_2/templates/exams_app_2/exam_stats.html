@@ -1,0 +1,128 @@
+{% extends 'base.html' %}
+{% load bootstrap4 %}
+{% block content %}
+{% load static %}
+<script src="{%static 'js/Chart.bundle.js'%}"></script>
+<h1>{{exam.name}}</h1>
+
+<dl class="row">
+  <dt class="col-sm-3">Exam Name</dt>
+  <dd class="col-sm-9">{{exam.name}}</dd>
+
+  <dt class="col-sm-3">Exam Description</dt>
+  <dd class="col-sm-9">{{exam.description}}</dd>
+
+  <dt class="col-sm-3">Exam Thumbnail</dt>
+  <dd class="col-sm-9"><img src="{{exam.thumbnail.url}}" class="img-fluid" alt="Responsive image" height='300px'></dd>
+
+</dl>
+<div class="container-fluid">
+  <canvas id="Chart2"></canvas>
+  <script>
+    var ctx = document.getElementById('Chart2').getContext('2d');
+    var barChartData = {
+      labels: {{item_labels | safe}},
+      datasets: [
+      {
+        label: 'Percent Correct',
+        backgroundColor: '#073b4c',
+        data: {{percent_corrects | safe}},
+        stack: 'stack1',
+      },
+    ],
+    };
+    var myBarChart = new Chart(ctx, {
+				type: 'bar',
+				data: barChartData,
+				options: {
+					title: {
+						display: true,
+						text: 'Exam Results Breakdown'
+					},
+					tooltips: {
+						mode: 'index',
+						intersect: false
+					},
+					responsive: true,
+					scales: {
+						xAxes: [{
+							stacked: true,
+						}],
+						yAxes: [{
+							stacked: true,
+              ticks: {
+                  min: 0,
+                  max: 100,
+              },
+						}]
+					}
+				}
+			});
+
+  </script>
+</div>
+
+<div class="container-fluid">
+  <canvas id="Chart"></canvas>
+  <script>
+    var ctx = document.getElementById('Chart').getContext('2d');
+    var barChartData = {
+      labels: {{item_labels | safe}},
+      datasets: [{
+				label: 'A',
+				backgroundColor: '#ef476f',
+				data: {{percent_as | safe}},
+        stack: 'stack0',
+			},
+      {
+				label: 'B',
+				backgroundColor: '#ffd166',
+				data: {{percent_bs | safe}},
+        stack: 'stack0',
+			},
+      {
+        label: 'C',
+        backgroundColor: '#06d6a0',
+        data: {{percent_cs | safe}},
+        stack: 'stack0',
+      },
+      {
+        label: 'D',
+        backgroundColor: '#073b4c',
+        data: {{percent_ds | safe}},
+        stack: 'stack0',
+      },
+    ],
+    };
+    var myBarChart = new Chart(ctx, {
+				type: 'bar',
+				data: barChartData,
+				options: {
+					title: {
+						display: true,
+						text: 'Exam Results Breakdown'
+					},
+					tooltips: {
+						mode: 'index',
+						intersect: false
+					},
+					responsive: true,
+					scales: {
+						xAxes: [{
+							stacked: true,
+						}],
+						yAxes: [{
+							stacked: true,
+              ticks: {
+                  min: 0,
+                  max: 100,
+              },
+						}]
+					}
+				}
+			});
+
+  </script>
+</div>
+
+{% endblock %}
