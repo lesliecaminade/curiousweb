@@ -21,6 +21,8 @@ class User(AbstractUser):
     exam_credits = models.PositiveSmallIntegerField(default = 0)
     date_created = models.DateField(null = True)
 
+    session_key = models.CharField(max_length = 1000, null = True, blank = True)
+
     def get_absolute_url(self):
         return reverse('main_app:user', kwargs = {'pk':self.pk})
 

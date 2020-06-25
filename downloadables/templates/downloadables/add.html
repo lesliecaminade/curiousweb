@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{%load bootstrap4 %}
+{% block content %}
+
+<h1>Add Downloadable</h1>
+<form method = "POST" enctype="multipart/form-data">
+  {%csrf_token%}
+  {% bootstrap_form form %}
+
+  {%for i in number_of_files%}
+  <div class="form-group">
+    <label for="downloadable_file_{{forloop.counter}}">Downloadable Files {{forloop.counter}}</label>
+    {%if forloop.counter == 1%}
+      <input type="file" class="form-control-file" id="downloadable_file_{{forloop.counter}}" name='downloadable_file_{{forloop.counter}}' required>
+    {%else%}
+      <input type="file" class="form-control-file" id="downloadable_file_{{forloop.counter}}" name='downloadable_file_{{forloop.counter}}' >
+    {%endif%}  </div>
+  {%endfor%}
+
+<button type="submit" name="button" class='btn btn-primary'>Add Downloadable</button>
+
+</form>
+
+
+
+
+{% endblock %}

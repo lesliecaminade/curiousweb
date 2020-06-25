@@ -17,7 +17,7 @@
   <div class="container mb-4">
     {%for exam in exams%}
     <div class="media mb-4">
-      <img src="{{exam.thumbnail.url}}" class="mr-3" alt="" width='200px'>
+      <img src="{{exam.thumbnail.url}}" class="mr-3 w-25" alt="">
       <div class="media-body">
         {%if user.is_superuser%}
         <h5 class="mt-0"><a href="{%url 'exams_app_2:exam_detail' exampk=exam.pk%}">{{exam.name}}</a></h5>
@@ -59,7 +59,7 @@
                 </a>
         {%else%}
             {%if exam.is_done%}
-            <a class="btn btn-primary" href="{%url 'exams_app_2:exam_stats' exampk=exam.pk%}" role="button">
+            <a class="btn btn-primary mb-1" href="{%url 'exams_app_2:exam_stats' exampk=exam.pk%}" role="button">
               <svg class="bi bi-graph-up" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                 <path d="M0 0h1v16H0V0zm1 15h15v1H1v-1z"/>
                 <path fill-rule="evenodd" d="M14.39 4.312L10.041 9.75 7 6.707l-3.646 3.647-.708-.708L7 5.293 9.959 8.25l3.65-4.563.781.624z"/>

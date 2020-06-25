@@ -17,6 +17,7 @@ import handouts
 import exams_app
 import exams_app_2
 import exams_app_3
+import downloadables
 import communications
 import curiousweb
 from datetime import datetime
@@ -33,6 +34,7 @@ class IndexView(View):
                 users = models.User.objects.all().order_by('-pk')
                 mcqs = exams_app.models.Exam.objects.all().order_by('pk')
                 problems = exams_app_3.models.Exam.objects.all().order_by('pk')
+                downloads = downloadables.models.Downloadable.objects.all().order_by('pk')
                 active_tab = self.kwargs.get('activetab', 'announcement')
 
                 context = {
@@ -43,6 +45,7 @@ class IndexView(View):
                     'users': users,
                     'mcqs': mcqs,
                     'problems': problems,
+                    'downloadables': downloads,
                     'active_tab': active_tab,
                     #activities
                     }
@@ -54,6 +57,7 @@ class IndexView(View):
                     hand = handouts.models.Handout.objects.filter(is_ece = True).order_by('-pk')
                     mcqs = exams_app.models.Exam.objects.filter(is_ece = True).order_by('pk')
                     problems = exams_app_3.models.Exam.objects.filter(is_ece = True).order_by('pk')
+                    downloads = downloadables.models.Downloadable.objects.filter(is_ece = True).order_by('pk')
 
                 elif self.request.user.is_ee:
                     announcements = models.Announcement.objects.filter(is_ee = True)
@@ -61,6 +65,7 @@ class IndexView(View):
                     hand = handouts.models.Handout.objects.filter(is_ee = True).order_by('-pk')
                     mcqs = exams_app.models.Exam.objects.filter(is_ee = True).order_by('pk')
                     problems = exams_app_3.models.Exam.objects.filter(is_ee = True).order_by('pk')
+                    downloads = downloadables.models.Downloadable.objects.filter(is_ee = True).order_by('pk')
 
                 elif self.request.user.is_tutorial:
                     announcements = models.Announcement.objects.filter(is_tutorial = True)
@@ -68,6 +73,7 @@ class IndexView(View):
                     hand = handouts.models.Handout.objects.filter(is_tutorial = True).order_by('-pk')
                     mcqs = exams_app.models.Exam.objects.filter(is_tutorial = True).order_by('pk')
                     problems = exams_app_3.models.Exam.objects.filter(is_tutorial = True).order_by('pk')
+                    downloads = downloadables.models.Downloadable.objects.filter(is_tutorial = True).order_by('pk')
 
                 else:
                     HttpResponse('Error: unhandled user type')
@@ -76,7 +82,6 @@ class IndexView(View):
                     answer_sheets = exams_app_2.models.AnswerSheet.objects.filter(user = self.request.user).order_by('date_submitted')
                     exam_data = [int(answer_sheet.score) for answer_sheet in answer_sheets]
                     exam_label = [ str(answer_sheet.exam_set.all()[0].name) for answer_sheet in answer_sheets]
-
 
                 except:
                     exam_label = ''
@@ -91,6 +96,7 @@ class IndexView(View):
                     'handouts': hand,
                     'mcqs': mcqs,
                     'problems': problems,
+                    'downloadables': downloads,
                     'exam_label': str(exam_label),
                     'exam_data': str(exam_data),
                     'active_tab': active_tab,
