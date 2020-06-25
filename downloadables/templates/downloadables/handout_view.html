@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{%load bootstrap4 %}
+{% block content %}
+
+<h1>{{downloadable.name}}</h1>
+
+<dl class="row">
+  <dt class="col-sm-3">Downloadable Name</dt>
+  <dd class="col-sm-9">{{downloadable.name}}</dd>
+
+  <dt class="col-sm-3">Downloadable Description</dt>
+  <dd class="col-sm-9">{{downloadable.description}}</dd>
+
+  <dt class="col-sm-3">Downloadable Thumbnail</dt>
+  <dd class="col-sm-9"><img src="{{downloadable.image.url}}" class="img-fluid" alt="Responsive image" height='300px'></dd>
+
+
+{%for file in downloadable.files.all %}
+  <dt class="col-sm-3">File {{forloop.counter}}</dt>
+  <dd class="col-sm-9"><a class="btn btn-primary" href="{%url 'downloadables:download' filepk=file.pk%}" role="button">File {{forloop.counter}}</a></dd>
+{%endfor%}
+
+{%if user.is_superuser%}
+<a class="btn btn-warning" href="{%url 'downloadables:adddownloadablefile' downloadablepk=downloadable.pk%}" role="button">Add Downloadable File</a>
+{%endif%}
+
+</dl>
+
+
+
+
+{% endblock %}

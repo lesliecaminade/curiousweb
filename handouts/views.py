@@ -196,10 +196,10 @@ class ToggleFlag(View):
             handout = models.Handout.objects.filter(pk = int(self.kwargs.get('pk')))
             flag = self.kwargs.get('flag')
             if self.kwargs.get('flag') == 'is_ece':
-                handout.update(is_ece = bool(self.kwargs.get('setting', False)))
+                handout.update(is_ece = not handout[0].is_ece)
             elif self.kwargs.get('flag') == 'is_ee':
-                handout.update(is_ee = bool(self.kwargs.get('setting', False)))
+                handout.update(is_ee = not handout[0].is_ee)
             elif self.kwargs.get('flag') == 'is_tutorial':
-                handout.update(is_tutorial = bool(self.kwargs.get('setting', False)))
+                handout.update(is_tutorial = not handout[0].is_tutorial)
 
             return HttpResponseRedirect(reverse('index', kwargs = {'activetab': 'handouts'}))

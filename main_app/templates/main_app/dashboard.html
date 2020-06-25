@@ -24,6 +24,10 @@
   </li>
 
   <li class="nav-item">
+    <a class="nav-link" id="downloadables-tab" data-toggle="tab" href="#downloadables" role="tab">Downloadables</a>
+  </li>
+
+  <li class="nav-item">
     <a class="nav-link" id="mcq-tab" data-toggle="tab" href="#mcq" role="tab">MCQ</a>
   </li>
 
@@ -57,6 +61,7 @@
   {%include 'main_app/dashboard_calendar.html'%}
   {%include 'main_app/dashboard_mcq.html'%}
   {%include 'main_app/dashboard_problemsolving.html'%}
+  {%include 'main_app/dashboard_downloadables.html'%}
   {%include 'main_app/dashboard_settings.html'%}
 
   {%if not user.is_superuser%}

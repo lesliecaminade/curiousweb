@@ -41,4 +41,6 @@ urlpatterns = [
     path('exams_app_2/',include('exams_app_2.urls', namespace='exams_app_2')),
     path('exams_app_3/',include('exams_app_3.urls', namespace='exams_app_3')),
     path('testimonials/', include('testimonials.urls', namespace = 'testimonials')),
+    path('downloadables/', include('downloadables.urls', namespace = 'downloadables')),
+
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

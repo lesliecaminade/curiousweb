@@ -63,6 +63,7 @@ INSTALLED_APPS = [
     'exams_app_2',
     'testimonials',
     'exams_app_3',
+    'downloadables',
 ]
 
 MIDDLEWARE = [
@@ -73,6 +74,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'main_app.middleware.OnlyOneUserMiddleware',
 ]
 
 ROOT_URLCONF = 'curiousweb.urls'
