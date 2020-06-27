@@ -1,5 +1,5 @@
 client_config_backend: file
-client_config_file: client_secret_108014880419-7040kdhtl7o6hktrhm7rj9qv1r5mm3gv.apps.googleusercontent.com.json
+client_config_file: client_secrets.json
 
 save_credentials: True
 save_credentials_backend: file

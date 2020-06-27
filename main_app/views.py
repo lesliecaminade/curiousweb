@@ -34,7 +34,7 @@ class IndexView(View):
                 users = models.User.objects.all().order_by('-pk')
                 mcqs = exams_app.models.Exam.objects.all().order_by('pk')
                 problems = exams_app_3.models.Exam.objects.all().order_by('pk')
-                downloads = downloadables.models.Downloadable.objects.all().order_by('pk')
+                downloads = downloadables.models.Downloadable.objects.all().order_by('-pk')
                 active_tab = self.kwargs.get('activetab', 'announcement')
 
                 context = {
@@ -57,7 +57,7 @@ class IndexView(View):
                     hand = handouts.models.Handout.objects.filter(is_ece = True).order_by('-pk')
                     mcqs = exams_app.models.Exam.objects.filter(is_ece = True).order_by('pk')
                     problems = exams_app_3.models.Exam.objects.filter(is_ece = True).order_by('pk')
-                    downloads = downloadables.models.Downloadable.objects.filter(is_ece = True).order_by('pk')
+                    downloads = downloadables.models.Downloadable.objects.filter(is_ece = True).order_by('-pk')
 
                 elif self.request.user.is_ee:
                     announcements = models.Announcement.objects.filter(is_ee = True)
@@ -65,7 +65,7 @@ class IndexView(View):
                     hand = handouts.models.Handout.objects.filter(is_ee = True).order_by('-pk')
                     mcqs = exams_app.models.Exam.objects.filter(is_ee = True).order_by('pk')
                     problems = exams_app_3.models.Exam.objects.filter(is_ee = True).order_by('pk')
-                    downloads = downloadables.models.Downloadable.objects.filter(is_ee = True).order_by('pk')
+                    downloads = downloadables.models.Downloadable.objects.filter(is_ee = True).order_by('-pk')
 
                 elif self.request.user.is_tutorial:
                     announcements = models.Announcement.objects.filter(is_tutorial = True)
@@ -73,7 +73,7 @@ class IndexView(View):
                     hand = handouts.models.Handout.objects.filter(is_tutorial = True).order_by('-pk')
                     mcqs = exams_app.models.Exam.objects.filter(is_tutorial = True).order_by('pk')
                     problems = exams_app_3.models.Exam.objects.filter(is_tutorial = True).order_by('pk')
-                    downloads = downloadables.models.Downloadable.objects.filter(is_tutorial = True).order_by('pk')
+                    downloads = downloadables.models.Downloadable.objects.filter(is_tutorial = True).order_by('-pk')
 
                 else:
                     HttpResponse('Error: unhandled user type')

@@ -3,7 +3,7 @@ from django.db import models
 
 class HandoutFile(models.Model):
     name = models.CharField(max_length = 100)
-    file = models.FileField()
+    file = models.FileField(upload_to = 'handouts/handoutfile')
 
     is_ece = models.BooleanField(default = False)
     is_ee = models.BooleanField(default = False)
@@ -17,7 +17,7 @@ class HandoutFile(models.Model):
 class Handout(models.Model):
     name = models.CharField(max_length = 100)
     description = models.CharField(max_length = 100)
-    image = models.ImageField(null = True)
+    image = models.ImageField(null = True, upload_to = 'handouts/thumbnails')
     files = models.ManyToManyField(HandoutFile, blank = True)
 
     is_ece = models.BooleanField(default = False)

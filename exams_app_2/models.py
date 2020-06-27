@@ -34,7 +34,7 @@ class AnswerKey(models.Model):
 
 class ExamFile(models.Model):
     name = models.CharField(max_length = 50, blank = True)
-    file = models.FileField()
+    file = models.FileField(upload_to = 'exams_app_2/examfiles')
 
     is_ece = models.BooleanField(default = False)
     is_ee = models.BooleanField(default = False)
@@ -51,7 +51,7 @@ class Exam(models.Model):
     files = models.ManyToManyField(ExamFile)
     answer_key = models.ForeignKey(AnswerKey, on_delete = models.CASCADE, null = True)
     answer_sheets = models.ManyToManyField(AnswerSheet)
-    thumbnail = models.ImageField()
+    thumbnail = models.ImageField(upload_to = 'exams_app_2/thumbnails')
     is_done = models.BooleanField(default = False)
     timestamp = models.DateTimeField(null=True)
 

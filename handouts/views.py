@@ -11,9 +11,9 @@ import os
 from . import models
 from . import forms
 from PIL import Image
-from .image_helpers import resize_image_field
 from communications.standard_email import send_email
 from datetime import datetime
+from .image_helpers import Thumbnail
 
 
 class Handouts(View):
@@ -90,7 +90,11 @@ class AddHandout(View):
                 timestamp = datetime.now(),
             )
             new_handout.save()
-            resize_image_field(new_handout.image, height = 300)
+            image_generator = Thumbnail(source=new_handout.image)
+            modified_image_file = image_generator.generate()
+            dest = open(new_handout.image.path, 'wb')
+            dest.write(modified_image_file.read())
+            dest.close()
 
             for i in range(10):
                 if self.request.FILES.get('handout_file_' + str(i)):
