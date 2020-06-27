@@ -64,6 +64,7 @@ INSTALLED_APPS = [
     'testimonials',
     'exams_app_3',
     'downloadables',
+    'imagekit',
 ]
 
 MIDDLEWARE = [

@@ -25,6 +25,8 @@ import string
 import communications
 import datetime
 
+from .image_helpers import Resize_1080
+
 class StudentSuccessEnrollment(TemplateView):
     template_name = 'students_app_3/enrollment_success.html'
 
@@ -101,6 +103,18 @@ class StudentCreateView(CreateView):
 
             self.object.user = new_user
             self.object.save()
+
+            image_generator = Resize_1080(source=self.object.id_picture)
+            modified_image_file = image_generator.generate()
+            dest = open(self.object.id_picture.path, 'wb')
+            dest.write(modified_image_file.read())
+            dest.close()
+
+            image_generator = Resize_1080(source=self.object.payment_picture)
+            modified_image_file = image_generator.generate()
+            dest = open(self.object.payment_picture.path, 'wb')
+            dest.write(modified_image_file.read())
+            dest.close()
 
             try:
                 emailing.send_email(self.object, temp_password) #send an email with enrollment details

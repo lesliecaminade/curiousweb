@@ -10,7 +10,7 @@ from . import forms
 
 from datetime import datetime
 from communications.standard_email import send_email
-from .image_helpers import resize_image_field
+from .image_helpers import Thumbnail
 # Create your views here.
 
 class ExamList(View):
@@ -75,8 +75,12 @@ class AddExam(View):
                 answer_key = new_answer_key,
                 timestamp = datetime.now(),
             )
-            new_exam.save()
-            resize_image_field(new_exam.thumbnail, height = 300)
+
+            image_generator = Thumbnail(source=new_exam.thumbnail)
+            modified_image_file = image_generator.generate()
+            dest = open(new_exam.thumbnail.path, 'wb')
+            dest.write(modified_image_file.read())
+            dest.close()
 
             for i in range(6):
                 if self.request.FILES.get('exam_file_' + str(i)):

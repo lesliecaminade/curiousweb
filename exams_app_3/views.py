@@ -23,12 +23,12 @@ from openpyxl import load_workbook
 class ExamView(View):
     def get(self, *args, **kwargs):
         exam = models.Exam.objects.get(pk = int(self.kwargs.get('pk')))
-
+        item_count = exam.items.count()
         if self.request.user.is_authenticated:
             if exam.is_accessible or self.request.user.is_superuser:
                 #try to find first question that were never accessed by you
                 items = exam.items.exclude(access_count__user = self.request.user).order_by('?')
-
+                remaining_count = items.count()
                 if not items.exists():
                     items = exam.items.filter(access_count__user = self.request.user).order_by('access_count__count', '?')
                     for item in items:
@@ -62,6 +62,8 @@ class ExamView(View):
                     'itempk': item.pk,
                     'choices': item.choices.all().order_by('?'),
                     'access_count': item.access_count.filter(user = self.request.user)[0],
+                    'answered': item_count - remaining_count + 1,
+                    'total': item_count,
                     }
                 return render(self.request, template_name, context)
 

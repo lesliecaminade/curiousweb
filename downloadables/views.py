@@ -11,10 +11,9 @@ import os
 from . import models
 from . import forms
 from PIL import Image
-from .image_helpers import resize_image_field
+from .image_helpers import Thumbnail
 from communications.standard_email import send_email
 from datetime import datetime
-
 
 class Downloadables(View):
     def get(self, *args, **kwargs):
@@ -90,7 +89,12 @@ class AddDownloadable(View):
                 timestamp = datetime.now(),
             )
             new_downloadable.save()
-            resize_image_field(new_downloadable.image, height = 300)
+
+            image_generator = Thumbnail(source=new_downloadable.image)
+            modified_image_file = image_generator.generate()
+            dest = open(new_downloadable.image.path, 'wb')
+            dest.write(modified_image_file.read())
+            dest.close()
 
             for i in range(10):
                 if self.request.FILES.get('downloadable_file_' + str(i)):

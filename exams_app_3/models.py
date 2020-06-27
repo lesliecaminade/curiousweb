@@ -5,7 +5,7 @@ from django.urls import reverse_lazy, reverse
 class Choice(models.Model):
     content = models.CharField(max_length = 1000)
     correct = models.BooleanField()
-    image = models.ImageField(null = True, blank = True)
+    image = models.ImageField(null = True, blank = True, upload_to = 'exams_app_3/choice')
 
     def __str__(self):
         return content
@@ -17,7 +17,7 @@ class MCQAccessCount(models.Model):
 class MCQ(models.Model):
     question = models.TextField(max_length = 1000, default = '', null = True, blank = True)
     choices = models.ManyToManyField(Choice)
-    image = models.ImageField(blank = True, null = True)
+    image = models.ImageField(blank = True, null = True, upload_to = 'exams_app_3/item')
     explanation = models.CharField(max_length = 1000, null = True)
     explanation_image = models.ImageField(blank = True, null = True)
     access_count = models.ManyToManyField(MCQAccessCount)

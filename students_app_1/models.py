@@ -33,8 +33,8 @@ class Student(models.Model):
     mobile_number_contact_person = models.CharField(max_length = 1000)
 
     conditional_subject = models.CharField(max_length = 50) #remove for tutorial and EE
-    id_picture = models.ImageField(blank = True)
-    payment_picture = models.ImageField()
+    id_picture = models.ImageField(blank = True,upload_to = 'students_app_1/id')
+    payment_picture = models.ImageField(upload_to = 'students_app_1/payment')
 
     def get_absolute_url(self):
         return reverse("students_app_1:detail",kwargs={'pk':self.pk})

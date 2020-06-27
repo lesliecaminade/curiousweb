@@ -3,7 +3,7 @@ from django.db import models
 
 class DownloadableFile(models.Model):
     name = models.CharField(max_length = 100)
-    file = models.FileField()
+    file = models.FileField(upload_to = 'downloadables/files')
 
     is_ece = models.BooleanField(default = False)
     is_ee = models.BooleanField(default = False)
@@ -17,7 +17,7 @@ class DownloadableFile(models.Model):
 class Downloadable(models.Model):
     name = models.CharField(max_length = 100)
     description = models.CharField(max_length = 100)
-    image = models.ImageField(null = True)
+    image = models.ImageField(null = True, upload_to = 'downloadables/thumbnails')
     files = models.ManyToManyField(DownloadableFile, blank = True)
 
     is_ece = models.BooleanField(default = False)
