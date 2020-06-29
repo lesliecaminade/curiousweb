@@ -18,7 +18,7 @@ from django.contrib.auth import views as auth_views
 from django.urls import include, path
 from main_app import views as views
 from django.conf.urls.static import static
-
+from django.views.decorators.csrf import csrf_exempt
 """edit this to match projectname
 optionally, using a "." makes the import at the same directory as this file is"""
 from . import settings
@@ -28,7 +28,7 @@ urlpatterns = [
     path('controlcenter/', admin.site.urls, name='admin-login'),
     path('', views.IndexView.as_view(), name='index'),
     path('dashboard/<activetab>', views.IndexView.as_view(), name='index'),
-    path('login/', auth_views.LoginView.as_view(template_name="login.html"),name='login'),
+    path('login/', csrf_exempt(auth_views.LoginView.as_view(template_name="login.html")),name='login'),
     path('logout/', auth_views.LogoutView.as_view(), name="logout"),
     #i am starting to decide to migrate some of my work to class based view so here it is
     path('main_app/', include('main_app.urls', namespace='main_app')),
