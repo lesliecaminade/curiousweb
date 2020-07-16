@@ -12,7 +12,7 @@ class UserCreateForm(UserCreationForm):
 
 class AnnouncementForm(forms.ModelForm):
     class Meta:
-        exclude = ['timestamp',]
+        exclude = ['timestamp', 'author']
         model = models.Announcement
 
         widgets = {
@@ -30,4 +30,9 @@ class AnnouncementForm(forms.ModelForm):
 
 
         'content': forms.Textarea(),
+        }
+
+
+        help_texts = {
+            'content': 'To format the content, use HTML tags',
         }

@@ -7,10 +7,13 @@ from django.views.generic import (View,TemplateView,
                                 UpdateView)
 from . import models
 from . import forms
+from . import proc
 
 from datetime import datetime
 from communications.standard_email import send_email
 from .image_helpers import Thumbnail
+
+
 # Create your views here.
 
 class ExamList(View):
@@ -51,9 +54,11 @@ class AddExam(View):
     def post(self, *args, **kwargs):
         if self.request.user.is_superuser:
 
+            """creating a blank answerkey object"""
             new_answer_key = models.AnswerKey()
             new_answer_key.save()
 
+            """adding data to the answer key object"""
             for i in range(1,101):
                 new_item = models.Item(
                     item_number = i,
@@ -64,24 +69,29 @@ class AddExam(View):
                 new_item.save()
                 new_answer_key.items.add(new_item)
 
+            """creating new exam object"""
             new_exam = models.Exam(
+                author = self.request.user,
                 name = self.request.POST.get('name'),
                 description = self.request.POST.get('description'),
                 is_ece = bool(self.request.POST.get('is_ece', False)),
                 is_ee = bool(self.request.POST.get('is_ee', False)),
                 is_tutorial = bool(self.request.POST.get('is_tutorial', False)),
-                is_accessible = bool(self.request.POST.get('is_accessible', False)),
+                is_accessible = False,
                 thumbnail = self.request.FILES.get('thumbnail'),
                 answer_key = new_answer_key,
                 timestamp = datetime.now(),
             )
+            new_exam.save()
 
+            """applying a thumbnail to the exam object"""
             image_generator = Thumbnail(source=new_exam.thumbnail)
             modified_image_file = image_generator.generate()
             dest = open(new_exam.thumbnail.path, 'wb')
             dest.write(modified_image_file.read())
             dest.close()
 
+            """importing the examfile objects to the exam object"""
             for i in range(6):
                 if self.request.FILES.get('exam_file_' + str(i)):
                     new_examfile = models.ExamFile(
@@ -103,61 +113,67 @@ class ExamDetail(View):
             exampk = int(self.kwargs.get('exampk'))
             exam = models.Exam.objects.get(pk = exampk)
 
-            percent_as = []
-            percent_bs = []
-            percent_cs = []
-            percent_ds = []
-            percent_corrects = []
-            item_labels = []
-
-            for i in range(1,101):
-                count_a = 0
-                count_b = 0
-                count_c = 0
-                count_d = 0
-                count_correct = 0
-                for sheet in exam.answer_sheets.all():
-                    for item in sheet.items.filter(item_number = i):
-                        if item.answer == 'a':
-                            count_a = count_a + 1
-                        elif item.answer == 'b':
-                            count_b = count_b + 1
-                        elif item.answer == 'c':
-                            count_c = count_c + 1
-                        elif item.answer == 'd':
-                            count_d = count_d + 1
-                        else:
-                            pass
-
-                        answer = exam.answer_key.items.filter(item_number = i)[0].answer
-                        if item.answer == answer:
-                            count_correct = count_correct + 1
-
-                total = count_a + count_b + count_c + count_d
-                percent_as.append(int(count_a * 100/ total))
-                percent_bs.append(int(count_b * 100/ total))
-                percent_cs.append(int(count_c * 100/ total))
-                percent_ds.append(int(count_d * 100/ total))
-                percent_corrects.append(int(count_correct * 100/ total))
-
-
-            i = 1
-            for item in exam.answer_key.items.all():
-                item_labels.append(str(i) + ', '+ str(item.answer))
-                i = i + 1
+            if not exam.has_stats:
+                exam.compute_stats()
 
             context = {
                 'exam': exam,
                 'exampk': exampk,
-                'percent_as': percent_as,
-                'percent_bs': percent_bs,
-                'percent_cs': percent_cs,
-                'percent_ds': percent_ds,
-                'percent_corrects': percent_corrects,
-                'item_labels': item_labels,
+                'percent_as': exam.percent_as,
+                'percent_bs': exam.percent_bs,
+                'percent_cs': exam.percent_cs,
+                'percent_ds': exam.percent_ds,
+                'percent_corrects': exam.percent_corrects,
+                'item_labels': exam.item_labels,
             }
+
             template_name = 'exams_app_2/exam_detail.html'
             return render(self.request, template_name, context)
+
+            # """exam = models.Exam.objects.get(pk = exampk)
+            #
+            # percent_as = []
+            # percent_bs = []
+            # percent_cs = []
+            # percent_ds = []
+            # percent_corrects = []
+            # item_labels = []
+            #
+            # for i in range(1,101):
+            #     count_a = 0
+            #     count_b = 0
+            #     count_c = 0
+            #     count_d = 0
+            #     count_correct = 0
+            #     for sheet in exam.answer_sheets.all():
+            #         for item in sheet.items.filter(item_number = i):
+            #             if item.answer == 'a':
+            #                 count_a = count_a + 1
+            #             elif item.answer == 'b':
+            #                 count_b = count_b + 1
+            #             elif item.answer == 'c':
+            #                 count_c = count_c + 1
+            #             elif item.answer == 'd':
+            #                 count_d = count_d + 1
+            #             else:
+            #                 pass
+            #
+            #             answer = exam.answer_key.items.filter(item_number = i)[0].answer
+            #             if item.answer == answer:
+            #                 count_correct = count_correct + 1
+            #
+            #     total = count_a + count_b + count_c + count_d
+            #     percent_as.append(int(count_a * 100/ total))
+            #     percent_bs.append(int(count_b * 100/ total))
+            #     percent_cs.append(int(count_c * 100/ total))
+            #     percent_ds.append(int(count_d * 100/ total))
+            #     percent_corrects.append(int(count_correct * 100/ total))
+            #
+            #
+            # i = 1
+            # for item in exam.answer_key.items.all():
+            #     item_labels.append(str(i) + ', '+ str(item.answer))
+            #     i = i + 1"""
 
 class ExamDelete(View):
     def get(self, *args, **kwargs):
@@ -316,6 +332,7 @@ class ExamLock(View):
             exam = models.Exam.objects.filter(pk = int(self.kwargs.get('exampk'))).update(is_accessible=False, is_done = False)
             exam = models.Exam.objects.get(pk = int(self.kwargs.get('exampk')))
             exam.files.all().update(is_accessible = False)
+            exam.compute_stats()
             return HttpResponseRedirect(reverse('index', kwargs = {'activetab': 'exams',}))
 
 class ExamUnlock(View):
@@ -339,10 +356,10 @@ class ExamHideAnswerKey(View):
             exam = models.Exam.objects.filter(pk = int(self.kwargs.get('exampk'))).update(is_done=False)
             return HttpResponseRedirect(reverse('index', kwargs = {'activetab': 'exams',}))
 
-
 class ExamStats(View):
     def get(self, *args, **kwargs):
         if self.request.user.is_authenticated:
+
             exampk = int(self.kwargs.get('exampk'))
             exam = models.Exam.objects.get(pk = exampk)
 
@@ -377,11 +394,12 @@ class ExamStats(View):
                             count_correct = count_correct + 1
 
                 total = count_a + count_b + count_c + count_d
-                percent_as.append(int(count_a * 100/ total))
-                percent_bs.append(int(count_b * 100/ total))
-                percent_cs.append(int(count_c * 100/ total))
-                percent_ds.append(int(count_d * 100/ total))
-                percent_corrects.append(int(count_correct * 100/ total))
+                if not total == 0:
+                    percent_as.append(int(count_a * 100/ total))
+                    percent_bs.append(int(count_b * 100/ total))
+                    percent_cs.append(int(count_c * 100/ total))
+                    percent_ds.append(int(count_d * 100/ total))
+                    percent_corrects.append(int(count_correct * 100/ total))
 
 
             i = 1
@@ -399,5 +417,156 @@ class ExamStats(View):
                 'percent_corrects': percent_corrects,
                 'item_labels': item_labels,
             }
+
             template_name = 'exams_app_2/exam_stats.html'
             return render(self.request, template_name, context)
+
+class ExamRepeat(View):
+    def get(self, *args, **kwargs):
+        if self.request.user.is_superuser:
+            exampk = self.kwargs.get('exampk')
+            source_exam = models.Exam.objects.get(pk = int(exampk))
+            template_name = 'exams_app_2/exam_repeat.html'
+            form = forms.RepeatForm(
+                initial = {
+                    'name': source_exam.name,
+                    'description': source_exam.description,
+                }
+            )
+            context = {
+                'exam_form': form,
+                'exampk': exampk,
+            }
+
+            return render(self.request, template_name, context)
+
+    def post(self, *args, **kwargs):
+        if self.request.user.is_superuser:
+            exampk = self.request.POST.get('exampk')
+            source_exam = models.Exam.objects.get(pk = int(exampk))
+
+            """creating a blank answerkey object"""
+
+            """adding data to the answer key object"""
+            # for i in range(1,101):
+            #     new_item = models.Item(
+            #         item_number = i,
+            #         answer = self.request.POST.get('answer_' + str(i), 'no answer'),
+            #         bonus = False,
+            #         skip = False,
+            #     )
+            #     new_item.save()
+            #     new_answer_key.items.add(new_item)
+
+            """creating new exam object"""
+            new_exam = models.Exam(
+                author = source_exam.user,
+                name = self.request.POST.get('name'),
+                description = self.request.POST.get('description'),
+                is_ece = source_exam.is_ece,
+                is_ee = source_exam.is_ee,
+                is_tutorial = source_exam.is_tutorial,
+                is_accessible = False,
+                thumbnail = source_exam.thumbnail,
+                answer_key = source_exam.answer_key,
+                timestamp = datetime.now(),
+            )
+            new_exam.save()
+
+            """applying a thumbnail to the exam object"""
+            # image_generator = Thumbnail(source=new_exam.thumbnail)
+            # modified_image_file = image_generator.generate()
+            # dest = open(new_exam.thumbnail.path, 'wb')
+            # dest.write(modified_image_file.read())
+            # dest.close()
+
+            """importing the examfile objects to the exam object"""
+            new_exam.files.add(*source_exam.files.all())
+            # for i in range(6):
+            #     if self.request.FILES.get('exam_file_' + str(i)):
+            #         new_examfile = models.ExamFile(
+            #             name = 'Page ' + str(i),
+            #             file = self.request.FILES.get('exam_file_' + str(i)),
+            #             is_ece = bool(self.request.POST.get('is_ece', False)),
+            #             is_ee = bool(self.request.POST.get('is_ee', False)),
+            #             is_tutorial = bool(self.request.POST.get('is_tutorial', False)),
+            #             is_accessible = bool(self.request.POST.get('is_accessible', False)),
+            #         )
+            #         new_examfile.save()
+            #         new_exam.files.add(new_examfile)
+
+            return HttpResponseRedirect(reverse('index', kwargs = {'activetab': 'exams',}))
+
+class ExamDiscussion(View):
+    def get(self, *args, **kwargs):
+        exampk = self.kwargs.get('exampk')
+        exam = models.Exam.objects.get(pk = exampk)
+        if exam.is_done:
+            context = {
+                'exam': exam,
+            }
+
+            template_name = 'exams_app_2/exam_discussion.html'
+            return render(self.request, template_name, context)
+
+class ExamSubmission(View):
+    def get(self, *args, **kwargs):
+        exampk = self.kwargs.get('exampk')
+        template_name = 'exams_app_2/post.html'
+        form = forms.SubmissionForm
+        context = {
+            'form': form,
+            'exampk': exampk,
+        }
+        return render(self.request, template_name, context)
+
+    def post(self, *args, **kwargs):
+        exampk = self.request.POST.get('exampk')
+        exam = models.Exam.objects.get(pk = exampk)
+        new_submission = models.Submission(
+            author = self.request.user,
+            title = self.request.POST.get('title'),
+            text = self.request.POST.get('text'),
+            image = self.request.FILES.get('image'),
+        )
+        new_submission.save()
+        new_submission.resize_image()
+        exam.submissions.add(new_submission)
+        new_submission.activity()
+        new_submission.notify()
+        return HttpResponseRedirect(reverse('exams_app_2:exam_discussion', kwargs = {'exampk': exampk,}))
+
+class SubmissionComment(View):
+    def get(self, *args, **kwargs):
+        exampk = self.kwargs.get('exampk')
+        submissionpk = self.kwargs.get('submissionpk')
+        template_name = 'exams_app_2/comment.html'
+        form = forms.CommentForm
+        context = {
+            'form': form,
+            'submissionpk': submissionpk,
+            'exampk': exampk,
+        }
+        return render(self.request, template_name, context)
+
+    def post(self, *args, **kwargs):
+        submissionpk = self.request.POST.get('submissionpk')
+        exampk = self.request.POST.get('exampk')
+        submission = models.Submission.objects.get(pk = submissionpk)
+        new_comment = models.Comment(
+            author = self.request.user,
+            text = self.request.POST.get('text'),
+            image = self.request.FILES.get('image'),
+        )
+        new_comment.save()
+        new_comment.resize_image()
+        submission.comments.add(new_comment)
+        return HttpResponseRedirect(reverse('exams_app_2:exam_discussion', kwargs = {'exampk': exampk,}))
+
+            # author = models.ForeignKey(User, on_delete = models.PROTECT)
+            # title = models.CharField(max_length=250)
+            # text = models.TextField(max_length=5000, blank=True)
+            # timestamp = models.DateTimeField(default=timezone.now)
+            # image = models.ImageField(blank = True, upload_to = 'discussion/submissions')
+            # thumbnail = models.ImageField(blank = True, upload_to = 'discussion/thumbnails')
+            # comments = models.ManyToManyField(Comment)

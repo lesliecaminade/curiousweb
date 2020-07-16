@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.utils import timezone
 # Create your models here.
 
 class Program(models.Model):
@@ -27,12 +28,19 @@ class User(AbstractUser):
         return reverse('main_app:user', kwargs = {'pk':self.pk})
 
 class Activity(models.Model):
-    user = models.ForeignKey(User, on_delete = models.CASCADE)
-    content = models.CharField(max_length = 100)
-    link = models.CharField(max_length = 100)
-    timestamp = models.DateTimeField(null = True)
+    author = models.ForeignKey(User, on_delete = models.PROTECT, null = True)
+    content = models.CharField(max_length = 1000, null = True)
+    url = models.CharField(max_length = 1000, null = True)
+    timestamp = models.DateTimeField(default = timezone.now)
+    is_ece = models.BooleanField('ece status', default = False)
+    is_ee = models.BooleanField('ee status', default = False)
+    is_tutorial = models.BooleanField('tutorial status', default = False)
+
+    class Meta:
+        ordering = ['-pk']
 
 class Announcement(models.Model):
+    author = models.ForeignKey(User, on_delete = models.PROTECT, null = True)
     title = models.CharField(max_length = 100)
     content = models.CharField(max_length = 20000)
     timestamp = models.DateTimeField(null =  True)
