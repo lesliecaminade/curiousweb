@@ -1,12 +1,17 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
+{% load avatar_tags %}
 <script src="{%static 'js/Chart.bundle.js'%}"></script>
-<h1>Dashboard</h1>
+<h1>{%avatar user 60%}    Dashboard</h1>
 
 <ul class="nav nav-tabs mb-4" id="myTab" role="tablist">
   <li class="nav-item">
-    <a class="nav-link" id="announcement-tab" data-toggle="tab" href="#announcement" role="tab">Announcements</a>
+    <a class="nav-link" id="announcement-tab" data-toggle="tab" href="#announcement" role="tab">Bulletin Board</a>
+  </li>
+
+  <li class="nav-item">
+    <a class="nav-link" id="calendar-tab" data-toggle="tab" href="#calendar" role="tab">Calendars</a>
   </li>
 
   {%if user.is_superuser%}
@@ -35,9 +40,7 @@
     <a class="nav-link" id="problemsolving-tab" data-toggle="tab" href="#problemsolving" role="tab">Problem Solving</a>
   </li>
 
-  <li class="nav-item">
-    <a class="nav-link" id="calendar-tab" data-toggle="tab" href="#calendar" role="tab">Calendars</a>
-  </li>
+
 
   {%if not user.is_superuser%}
   <li class="nav-item">

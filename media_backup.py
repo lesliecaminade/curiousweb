@@ -1,19 +1,30 @@
 from pydrive.auth import GoogleAuth
 from pydrive.drive import GoogleDrive
-import upload_folder
 
 gauth = GoogleAuth()
 gauth.LocalWebserverAuth()
 
 drive = GoogleDrive(gauth)
 
-src_folder_name = 'media'
-dst_folder_name = 'media'
-parent_folder_name = 'certconlinereview'
+def replace_or_upload(source_filename, dest_filename):
+    file_list = drive.ListFile({'q': "'root' in parents"}).GetList()
+    print(file_list)
+
+    exists = False
+    for file in file_list:
+        if file['title'] == dest_filename:
+            file.Delete()
+
+    f = drive.CreateFile()
+    f['title'] = dest_filename
+    f.SetContentFile(source_filename)
+    f.Upload()
+
+    print(f"""{dest_filename} upload success.""")
 
 def main():
-    upload_folder.main(src_folder_name, dst_folder_name, parent_folder_name)
-
+    replace_or_upload('media.zip', 'certconlinereview-media.zip')
+    replace_or_upload('data.json', 'certconlinereview-data.json')
 
 if __name__ == '__main__':
     main()

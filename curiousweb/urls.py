@@ -16,6 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from django.urls import include, path
+from django.conf.urls import url
 from main_app import views as views
 from django.conf.urls.static import static
 from django.views.decorators.csrf import csrf_exempt
@@ -42,5 +43,6 @@ urlpatterns = [
     path('exams_app_3/',include('exams_app_3.urls', namespace='exams_app_3')),
     path('testimonials/', include('testimonials.urls', namespace = 'testimonials')),
     path('downloadables/', include('downloadables.urls', namespace = 'downloadables')),
+    url('avatar/', include('avatar.urls')),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load bootstrap4 %}
+{%load avatar_tags%}
+
+<h1>Disscussion for {{exam.name}}</h1>
+
+
+{%if not exam.submissions%}
+No posts yet
+{%endif%}
+
+<a href="{%url 'exams_app_2:create_submission' exampk=exam.pk%}" class="btn btn-primary mb-1">Post Submission</a>
+
+{%for submission in exam.submissions.all %}
+<div class="media mb-4">
+  {%avatar submission.author 30 class="mr-2"%}
+  <div class="media-body">
+    <h5 class="mt-0">{{submission.title}}</h5>
+    <small class="text-muted">{{submission.author.first_name}}</small><br>
+    {{submission.text}}
+    {%if submission.image%}
+      <a href="{{submission.image.url}}">View image</a>
+    {%endif%}
+
+
+  {%for comment in submission.comments.all %}
+  <div class="media mt-3">
+       <a class="mr-3" href="#">
+         {%avatar comment.author 30 class="mr-2"%}
+       </a>
+       <div class="media-body">
+         <small class="text-muted">{{comment.author.first_name}}</small><br>
+         {{comment.text}}
+         {%if comment.image%}
+           <a href="{{comment.image.url}}">View image</a>
+         {%endif%}
+       </div>
+     </div>
+  {%endfor%}
+  <br>
+  <a href="{%url 'exams_app_2:create_comment' exampk=exam.pk submissionpk=submission.pk%}" class="btn btn-primary btn-sm mb-1">Comment</a>
+</div>
+</div>
+{%endfor%}
+
+{% endblock %}

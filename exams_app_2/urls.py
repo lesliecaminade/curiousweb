@@ -23,4 +23,8 @@ urlpatterns = [
     path('showanswerkey/<exampk>', views.ExamShowAnswerKey.as_view(), name='exam_done'),
     path('hideanswerkey/<exampk>', views.ExamHideAnswerKey.as_view(), name='exam_undone'),
     path('stats/<exampk>', views.ExamStats.as_view(), name='exam_stats'),
+    path('repeat/<exampk>', views.ExamRepeat.as_view(), name='exam_repeat'),
+    path('discussion/<exampk>', views.ExamDiscussion.as_view(), name='exam_discussion'),
+    path('create_submission/<exampk>', views.ExamSubmission.as_view(), name='create_submission'),
+    path('create_comment/<submissionpk>/<exampk>', views.SubmissionComment.as_view(), name='create_comment'),
 ]

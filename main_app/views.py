@@ -21,14 +21,19 @@ import downloadables
 import communications
 import curiousweb
 from datetime import datetime
+from django.utils import timezone
 
+
+ENTRIES_STUDENT = 20
+ENTRIES_ADMIN = 1000
 # Create your views here.
 class IndexView(View):
     def get(self, *args, **kwargs):
         if self.request.user.is_authenticated:
-            if self.request.user.is_superuser:
+            if self.request.user.username == 'leslie':
                 template_name = 'main_app/dashboard.html'
                 announcements = models.Announcement.objects.all()
+                activities = models.Activity.objects.all()
                 exams = exams_app_2.models.Exam.objects.all().order_by('-pk')
                 hand = handouts.models.Handout.objects.all().order_by('-pk')
                 users = models.User.objects.all().order_by('-pk')
@@ -39,6 +44,7 @@ class IndexView(View):
 
                 context = {
                     'nav_home': 'active',
+                    'activities' : activities,
                     'announcements': announcements,
                     'exams': exams,
                     'handouts': hand,
@@ -49,28 +55,61 @@ class IndexView(View):
                     'active_tab': active_tab,
                     #activities
                     }
+
                 return render(self.request, template_name, context)
+
+            elif self.request.user.is_superuser:
+                template_name = 'main_app/dashboard.html'
+                announcements = models.Announcement.objects.all()[:ENTRIES_ADMIN]
+                activities = models.Activity.objects.all()[:ENTRIES_ADMIN]
+                exams = exams_app_2.models.Exam.objects.all().order_by('-pk')[:ENTRIES_ADMIN]
+                hand = handouts.models.Handout.objects.all().order_by('-pk')[:ENTRIES_ADMIN]
+                users = models.User.objects.all().order_by('-pk')
+                mcqs = exams_app.models.Exam.objects.all().order_by('pk')
+                problems = exams_app_3.models.Exam.objects.all().order_by('pk')
+                downloads = downloadables.models.Downloadable.objects.all().order_by('-pk')
+                active_tab = self.kwargs.get('activetab', 'announcement')
+
+                context = {
+                    'nav_home': 'active',
+                    'activities' : activities,
+                    'announcements': announcements,
+                    'exams': exams,
+                    'handouts': hand,
+                    'users': users,
+                    'mcqs': mcqs,
+                    'problems': problems,
+                    'downloadables': downloads,
+                    'active_tab': active_tab,
+                    #activities
+                    }
+
+                return render(self.request, template_name, context)
+
             else:
                 if self.request.user.is_ece:
-                    announcements = models.Announcement.objects.filter(is_ece = True)[:50]
-                    exams = exams_app_2.models.Exam.objects.filter(is_ece = True).order_by('-pk')
-                    hand = handouts.models.Handout.objects.filter(is_ece = True).order_by('-pk')
+                    announcements = models.Announcement.objects.filter(is_ece = True)[:ENTRIES_STUDENT]
+                    activities = models.Activity.objects.filter(is_ece = True)[:ENTRIES_STUDENT]
+                    exams = exams_app_2.models.Exam.objects.filter(is_ece = True).order_by('-pk')[:ENTRIES_STUDENT]
+                    hand = handouts.models.Handout.objects.filter(is_ece = True).order_by('-pk')[:ENTRIES_STUDENT]
                     mcqs = exams_app.models.Exam.objects.filter(is_ece = True).order_by('pk')
                     problems = exams_app_3.models.Exam.objects.filter(is_ece = True).order_by('pk')
                     downloads = downloadables.models.Downloadable.objects.filter(is_ece = True).order_by('-pk')
 
                 elif self.request.user.is_ee:
-                    announcements = models.Announcement.objects.filter(is_ee = True)
-                    exams = exams_app_2.models.Exam.objects.filter(is_ee = True).order_by('-pk')
-                    hand = handouts.models.Handout.objects.filter(is_ee = True).order_by('-pk')
+                    announcements = models.Announcement.objects.filter(is_ee = True)[:ENTRIES_STUDENT]
+                    activities = models.Activity.objects.filter(is_ee = True)[:ENTRIES_STUDENT]
+                    exams = exams_app_2.models.Exam.objects.filter(is_ee = True).order_by('-pk')[:ENTRIES_STUDENT]
+                    hand = handouts.models.Handout.objects.filter(is_ee = True).order_by('-pk')[:ENTRIES_STUDENT]
                     mcqs = exams_app.models.Exam.objects.filter(is_ee = True).order_by('pk')
                     problems = exams_app_3.models.Exam.objects.filter(is_ee = True).order_by('pk')
                     downloads = downloadables.models.Downloadable.objects.filter(is_ee = True).order_by('-pk')
 
                 elif self.request.user.is_tutorial:
-                    announcements = models.Announcement.objects.filter(is_tutorial = True)
-                    exams = exams_app_2.models.Exam.objects.filter(is_tutorial = True).order_by('-pk')
-                    hand = handouts.models.Handout.objects.filter(is_tutorial = True).order_by('-pk')
+                    announcements = models.Announcement.objects.filter(is_tutorial = True)[:ENTRIES_STUDENT]
+                    activities = models.Activity.objects.filter(is_tutorial = True)[:ENTRIES_STUDENT]
+                    exams = exams_app_2.models.Exam.objects.filter(is_tutorial = True).order_by('-pk')[:ENTRIES_STUDENT]
+                    hand = handouts.models.Handout.objects.filter(is_tutorial = True).order_by('-pk')[:ENTRIES_STUDENT]
                     mcqs = exams_app.models.Exam.objects.filter(is_tutorial = True).order_by('pk')
                     problems = exams_app_3.models.Exam.objects.filter(is_tutorial = True).order_by('pk')
                     downloads = downloadables.models.Downloadable.objects.filter(is_tutorial = True).order_by('-pk')
@@ -91,6 +130,7 @@ class IndexView(View):
                 active_tab = self.kwargs.get('activetab', 'announcement')
                 context = {
                     'nav_home': 'active',
+                    'activities' : activities,
                     'announcements': announcements,
                     'exams': exams,
                     'handouts': hand,
@@ -227,9 +267,10 @@ class CreateAnnouncement(View):
     def post(self, *args, **kwargs):
         if self.request.user.is_superuser:
             new_announcement = models.Announcement(
+                author = self.request.user,
                 title = self.request.POST.get('title'),
                 content = self.request.POST.get('content'),
-                timestamp = datetime.now(),
+                timestamp = timezone.now(),
                 is_ece = bool(self.request.POST.get('is_ece')),
                 is_ee = bool(self.request.POST.get('is_ee')),
                 is_tutorial = bool(self.request.POST.get('is_tutorial')),

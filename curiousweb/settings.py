@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
-
+import hashlib
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 TEMPLATE_DIR = os.path.join(BASE_DIR, 'templates')
@@ -65,6 +65,7 @@ INSTALLED_APPS = [
     'exams_app_3',
     'downloadables',
     'imagekit',
+    'avatar',
 ]
 
 MIDDLEWARE = [
@@ -170,3 +171,5 @@ LOGOUT_REDIRECT_URL = 'index'
 AUTH_USER_MODEL = 'main_app.User'
 
 DOMAIN = "https://www.certconlinereview.com"
+AVATAR_CACHE_ENABLED = False
+AVATAR_GRAVATAR_DEFAULT = 'retro'
