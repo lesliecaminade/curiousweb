@@ -25,7 +25,7 @@ class Comment(models.Model):
         except:
             pass
 
-            
+
 class Submission(models.Model):
     author = models.ForeignKey(User)
     title = models.CharField(max_length=250)
@@ -46,3 +46,7 @@ class Submission(models.Model):
             dest.close()
         except:
             pass
+
+
+class Discussion(models.Model):
+    submissions = models.ManyToManyField(Submission)
