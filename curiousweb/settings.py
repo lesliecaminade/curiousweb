@@ -29,7 +29,7 @@ AUTH_USER_MODEL = 'main_app.models.User'
 SECRET_KEY = '-k)w3)n6$h#i*(b!kp8(y0+145syat&(&a3v&i-ptij-mla4h#'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ADMIN_EMAILS = ['lesliecaminade@gmail.com', ]
 
@@ -103,20 +103,20 @@ WSGI_APPLICATION = 'curiousweb.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-#     }
-# }
-
-DATABASES = { 'default': {
-    'ENGINE': 'django.db.backends.mysql',
-    'NAME': 'siliconcortex$default',
-    'USER': 'siliconcortex',
-    'PASSWORD': 'testpassword',
-    'HOST': 'siliconcortex.mysql.pythonanywhere-services.com', }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    }
 }
+
+# DATABASES = { 'default': {
+#     'ENGINE': 'django.db.backends.mysql',
+#     'NAME': 'siliconcortex$default',
+#     'USER': 'siliconcortex',
+#     'PASSWORD': 'testpassword',
+#     'HOST': 'siliconcortex.mysql.pythonanywhere-services.com', }
+# }
 
 
 # Password validation
