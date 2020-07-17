@@ -362,7 +362,8 @@ class ExamStats(View):
 
             exampk = int(self.kwargs.get('exampk'))
             exam = models.Exam.objects.get(pk = exampk)
-            exam.compute_stats()
+            if not exam.has_stats:
+                exam.compute_stats()
 
             context = {
                 'exam': exam,
