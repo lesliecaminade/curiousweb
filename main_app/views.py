@@ -38,8 +38,10 @@ class IndexView(View):
                 exams_truncated = exams_app_2.models.Exam.objects.filter(is_done = True).order_by('-pk')[:6]
 
                 topnotchers = []
+                exam_name = []
                 for exam in exams_truncated:
-                    topnotchers.append(exam.compute_topnotchers())
+                    topnotchers.append(exam.compute_topnotchers()[0])
+                    exam_name.append(exam.compute_topnotchers()[1])
 
                 hand = handouts.models.Handout.objects.all().order_by('-pk')
                 users = models.User.objects.all().order_by('-pk')
@@ -54,6 +56,7 @@ class IndexView(View):
                     'announcements': announcements,
                     'exams': exams,
                     'exams_truncated' : exams_truncated,
+                    'exam_names': exam_name,
                     'topnotchers': topnotchers,
                     'handouts': hand,
                     'users': users,
@@ -73,8 +76,10 @@ class IndexView(View):
                 exams = exams_app_2.models.Exam.objects.all().order_by('-pk')[:ENTRIES_ADMIN]
                 exams_truncated = exams_app_2.models.Exam.objects.filter(is_done = True).order_by('-pk')[:9]
                 topnotchers = []
+                exam_name = []
                 for exam in exams_truncated:
-                    topnotchers.append(exam.compute_topnotchers())
+                    topnotchers.append(exam.compute_topnotchers()[0])
+                    exam_name.append(exam.compute_topnotchers()[1])
                 hand = handouts.models.Handout.objects.all().order_by('-pk')[:ENTRIES_ADMIN]
                 users = models.User.objects.all().order_by('-pk')
                 mcqs = exams_app.models.Exam.objects.all().order_by('pk')
@@ -88,6 +93,7 @@ class IndexView(View):
                     'announcements': announcements,
                     'exams': exams,
                     'exams_truncated' : exams_truncated,
+                    'exam_names': exam_name,
                     'topnotchers': topnotchers,
                     'handouts': hand,
                     'users': users,
@@ -107,8 +113,10 @@ class IndexView(View):
                     exams = exams_app_2.models.Exam.objects.filter(is_ece = True).order_by('-pk')[:ENTRIES_STUDENT]
                     exams_truncated = exams_app_2.models.Exam.objects.filter(is_ece = True, is_done = True).order_by('-pk')[:9]
                     topnotchers = []
+                    exam_name = []
                     for exam in exams_truncated:
-                        topnotchers.append(exam.compute_topnotchers())
+                        topnotchers.append(exam.compute_topnotchers()[0])
+                        exam_name.append(exam.compute_topnotchers()[1])
                     hand = handouts.models.Handout.objects.filter(is_ece = True).order_by('-pk')[:ENTRIES_STUDENT]
                     mcqs = exams_app.models.Exam.objects.filter(is_ece = True).order_by('pk')
                     problems = exams_app_3.models.Exam.objects.filter(is_ece = True).order_by('pk')
@@ -120,8 +128,10 @@ class IndexView(View):
                     exams = exams_app_2.models.Exam.objects.filter(is_ee = True).order_by('-pk')[:ENTRIES_STUDENT]
                     exams_truncated = exams_app_2.models.Exam.objects.filter(is_ee = True, is_done = True).order_by('-pk')[:3]
                     topnotchers = []
+                    exam_name = []
                     for exam in exams_truncated:
-                        topnotchers.append(exam.compute_topnotchers())
+                        topnotchers.append(exam.compute_topnotchers()[0])
+                        exam_name.append(exam.compute_topnotchers()[1])
                     hand = handouts.models.Handout.objects.filter(is_ee = True).order_by('-pk')[:ENTRIES_STUDENT]
                     mcqs = exams_app.models.Exam.objects.filter(is_ee = True).order_by('pk')
                     problems = exams_app_3.models.Exam.objects.filter(is_ee = True).order_by('pk')
@@ -133,8 +143,10 @@ class IndexView(View):
                     exams = exams_app_2.models.Exam.objects.filter(is_tutorial = True).order_by('-pk')[:ENTRIES_STUDENT]
                     exams_truncated = exams_app_2.models.Exam.objects.filter(is_tutorial = True, is_done = True).order_by('-pk')[:3]
                     topnotchers = []
+                    exam_name = []
                     for exam in exams_truncated:
-                        topnotchers.append(exam.compute_topnotchers())
+                        topnotchers.append(exam.compute_topnotchers()[0])
+                        exam_name.append(exam.compute_topnotchers()[1])
                     hand = handouts.models.Handout.objects.filter(is_tutorial = True).order_by('-pk')[:ENTRIES_STUDENT]
                     mcqs = exams_app.models.Exam.objects.filter(is_tutorial = True).order_by('pk')
                     problems = exams_app_3.models.Exam.objects.filter(is_tutorial = True).order_by('pk')
@@ -160,6 +172,7 @@ class IndexView(View):
                     'announcements': announcements,
                     'exams': exams,
                     'exams_truncated' : exams_truncated,
+                    'exam_names': exam_name,
                     'topnotchers': topnotchers,
                     'handouts': hand,
                     'mcqs': mcqs,
