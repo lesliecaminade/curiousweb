@@ -187,3 +187,15 @@ class Exam(models.Model):
         self.item_labels = item_labels
         self.has_stats = True
         self.save()
+
+    def compute_topnotchers(self):
+
+        top_scores = (self.answer_sheets.all()
+                             .order_by('-score')
+                             .values_list('score', flat=True)
+                             .distinct())
+        top_records = (self.answer_sheets.all()
+                              .order_by('-score')
+                              .filter(score__in=top_scores[:10]))
+
+        return top_records
