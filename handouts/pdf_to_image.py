@@ -13,8 +13,11 @@ import random
 def save_images(pil_images):
     #This method helps in converting the images in PIL Image file format to the required image format
     index = 1
+    OUTPUT_FOLDER = os.path.join(curiousweb.settings.MEDIA_ROOT,'handouts', 'handoutfile')
+    filename = "page_" + ''.join(random.choice(string.ascii_lowercase + string.digits) for _ in range(10)) + ".jpg"
+    full_path = os.path.join(OUTPUT_FOLDER, filename)
     for image in pil_images:
-        image.save("page_" + str(index) + ".jpg")
+        image.save(full_path)
         index += 1
 
 def pdftopil(input_path):
@@ -32,8 +35,8 @@ def pdftopil(input_path):
 
     PDF_PATH = input_path
     DPI = 200
-    random_folder_name = 'temp' + ''.join(random.choice(string.ascii_lowercase + string.digits) for _ in range(10))
-    OUTPUT_FOLDER = os.path.join(curiousweb.settings.MEDIA_ROOT,random_folder_name)
+    random_folder_name = ''.join(random.choice(string.ascii_lowercase + string.digits) for _ in range(10))
+    OUTPUT_FOLDER = os.path.join(curiousweb.settings.MEDIA_ROOT,'handouts', 'temp')
     os.mkdir(OUTPUT_FOLDER)
     FIRST_PAGE = None
     LAST_PAGE = None
