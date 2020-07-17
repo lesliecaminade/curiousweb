@@ -341,7 +341,6 @@ class ExamUnlock(View):
             exam = models.Exam.objects.filter(pk = int(self.kwargs.get('exampk'))).update(is_accessible=True, is_done = False)
             exam = models.Exam.objects.get(pk = int(self.kwargs.get('exampk')))
             exam.files.all().update(is_accessible = True)
-
             return HttpResponseRedirect(reverse('index', kwargs = {'activetab': 'exams',}))
 
 class ExamShowAnswerKey(View):
