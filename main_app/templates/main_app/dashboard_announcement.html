@@ -1,5 +1,4 @@
 {%load avatar_tags%}
-{%load index%}
 <div class="tab-pane" id="announcement" role="tabpanel" aria-labelledby="announcement-tab">
     <div class="col">
       {%if user.is_superuser%}
@@ -13,8 +12,6 @@
 
 
 <div class="row">
-
-
     <div class="col-lg-3 col-md-12 mb-4">
       <h2>Activities</h2>
       {%for act in activities%}
@@ -30,9 +27,13 @@
     </div>
 
     <div class="col-lg-3 col-md-12">
-      <h2>Latest Topnotchers</h2>
+      <h2>Topnotchers</h2>
       {%for list in topnotchers%}
-        {{exams_truncated|index:forloop.counter0}}
+        {%for name in exam_names%}
+          {%if forloop.counter == forloop.parentloop.counter%}
+          {{name}}
+          {%endif%}
+        {%endfor%}
         <table class="table table-sm mb-4">
           <thead>
             <tr>

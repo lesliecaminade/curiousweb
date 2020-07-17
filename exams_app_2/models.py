@@ -198,4 +198,4 @@ class Exam(models.Model):
                               .order_by('-score')
                               .filter(score__in=top_scores[:10]))
 
-        return top_records
+        return [top_records, self.name]
