@@ -190,12 +190,12 @@ class Exam(models.Model):
 
     def compute_topnotchers(self):
 
-        top_scores = (self.answer_sheets.all()
+        top_scores = list(self.answer_sheets.all()
                              .order_by('-score')
                              .values_list('score', flat=True)
-                             .distinct())
+                             .distinct()[:10])
         top_records = (self.answer_sheets.all()
                               .order_by('-score')
-                              .filter(score__in=top_scores[:10]))
+                              .filter(score__in=top_scores))
 
         return [top_records, self.name]

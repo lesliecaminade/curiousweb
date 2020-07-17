@@ -14,7 +14,10 @@ from PIL import Image
 from communications.standard_email import send_email
 from datetime import datetime
 from .image_helpers import Thumbnail
-
+import random
+from . import pdf_to_image
+from . import images_to_zip
+from . import img_to_pdf
 
 class Handouts(View):
     def get(self, *args, **kwargs):
@@ -96,6 +99,7 @@ class AddHandout(View):
             dest.write(modified_image_file.read())
             dest.close()
 
+
             for i in range(10):
                 if self.request.FILES.get('handout_file_' + str(i)):
                     new_handoutfile = models.HandoutFile(
@@ -106,6 +110,11 @@ class AddHandout(View):
                         is_tutorial = is_tutorial,
                         is_accessible = is_accessible,
                     )
+                    new_handoutfile.save()
+
+                    images_path = pdf_to_image.pdftopil(new_handoutfile.file.path)
+                    pdf_path = img_to_pdf.convert(images_path)
+                    new_handoutfile.file = pdf_path
                     new_handoutfile.save()
                     new_handout.files.add(new_handoutfile)
 
