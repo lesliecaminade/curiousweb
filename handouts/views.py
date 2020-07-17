@@ -112,10 +112,12 @@ class AddHandout(View):
                     )
                     new_handoutfile.save()
 
-                    images_path = pdf_to_image.pdftopil(new_handoutfile.file.path)
-                    pdf_path = img_to_pdf.convert(images_path)
-                    new_handoutfile.file = pdf_path
-                    new_handoutfile.save()
+                    if new_handoutfile.file.name.lower().endswith(('.pdf')):
+                        images_path = pdf_to_image.pdftopil(new_handoutfile.file.path)
+                        pdf_path = img_to_pdf.convert(images_path)
+                        new_handoutfile.file = pdf_path
+                        new_handoutfile.save()
+
                     new_handout.files.add(new_handoutfile)
 
             return HttpResponseRedirect(reverse('index', kwargs = {'activetab': 'handouts',}))
