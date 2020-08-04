@@ -310,7 +310,7 @@ class FileDownload(View):
     def get(self, *args, **kwargs):
         if self.request.user.is_authenticated:
             file = models.ExamFile.objects.get(pk = self.kwargs.get('filepk'))
-            if file.is_accessible:
+            if file.is_accessible or self.request.user.is_superuser:
                 filename = file.file.name.split('/')[-1]
                 response = HttpResponse(file.file, content_type='text/plain')
                 response['Content-Disposition'] = 'attachment; filename=%s' % filename
