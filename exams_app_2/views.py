@@ -417,7 +417,7 @@ class ExamRepeat(View):
 
             """creating new exam object"""
             new_exam = models.Exam(
-                author = source_exam.user,
+                author = source_exam.author,
                 name = self.request.POST.get('name'),
                 description = self.request.POST.get('description'),
                 is_ece = source_exam.is_ece,
