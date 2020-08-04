@@ -120,6 +120,25 @@ class AddHandout(View):
 
                     new_handout.files.add(new_handoutfile)
 
+            #add activity for a new handout that is available
+            new_activity = main_app.models.Activity(
+                author = self.request.user,
+                content = f"""{self.request.user.first_name} published {new_handout.name} (handout)""",
+                url = "#",
+                is_ece = new_handout.is_ece,
+                is_ee = new_handout.is_ee,
+                is_tutorial = new_handout.is_tutorial,
+            )
+            new_activity.save()
+
+            """    author = models.ForeignKey(User, on_delete = models.PROTECT, null = True)
+                content = models.CharField(max_length = 1000, null = True)
+                url = models.CharField(max_length = 1000, null = True)
+                timestamp = models.DateTimeField(default = timezone.now)
+                is_ece = models.BooleanField('ece status', default = False)
+                is_ee = models.BooleanField('ee status', default = False)
+                is_tutorial = models.BooleanField('tutorial status', default = False)"""
+
             return HttpResponseRedirect(reverse('index', kwargs = {'activetab': 'handouts',}))
 
 class DownloadHandoutFile(View):

@@ -49,7 +49,7 @@ class Submission(models.Model):
         except:
             pass
 
-    def activity(self):
+    def activity(self, type = 'default'):
         new_activity = main_app.models.Activity(
             content = f"""{self.author.first_name} posted on {self.exam_set.all()[0].name} discussion page: {self.title}""",
             url = reverse('exams_app_2:exam_discussion', kwargs = {'exampk': self.exam_set.all()[0].pk,}),
