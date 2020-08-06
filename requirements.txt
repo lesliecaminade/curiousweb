@@ -22,11 +22,13 @@ google-auth-httplib2==0.0.3
 googleapis-common-protos==1.51.0
 httplib2==0.17.3
 idna==2.9
+img2pdf==0.3.6
 jdcal==1.4.1
 mpmath==1.1.0
 num2words==0.5.10
 oauth2client==4.1.3
 openpyxl==3.0.3
+pdf2image==1.13.1
 pilkit==2.0
 Pillow==7.1.1
 protobuf==3.11.3
