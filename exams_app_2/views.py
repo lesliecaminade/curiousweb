@@ -13,7 +13,7 @@ from datetime import datetime
 from communications.standard_email import send_email
 from .image_helpers import Thumbnail
 
-
+import main_app
 # Create your views here.
 
 class ExamList(View):
