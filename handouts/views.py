@@ -19,6 +19,8 @@ from . import pdf_to_image
 from . import images_to_zip
 from . import img_to_pdf
 
+import main_app
+
 class Handouts(View):
     def get(self, *args, **kwargs):
         if self.request.user.is_authenticated:
